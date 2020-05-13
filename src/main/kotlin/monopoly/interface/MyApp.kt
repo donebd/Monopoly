@@ -32,7 +32,7 @@ val data = mutableListOf<Game.Player>()
 
 var gamePlay = GamePlay()
 
-val board = Game.GameBoard()
+var board = Game.GameBoard()
 
 var motionPlayer = 0
 
@@ -289,7 +289,7 @@ class GamePlay: View("Monopoly"){
         println("Event запущен")
         if (board.fields[data[a].position].couldBuy && data[a].money >= board.fields[data[a].position].cost
             && board.fields[data[a].position].owner == null){
-            find<OfferToBuy>().openWindow()
+            find<OfferToBuy>().openModal()
         }
     }
 
@@ -329,7 +329,7 @@ class GamePlay: View("Monopoly"){
             }ui{
                 if (dice.double) find<DiceDouble>().openModal()
                 presentId = motionPlayer
-                fieldEvent(motionPlayer)
+                runAsync { Thread.sleep(100) }ui{fieldEvent(presentId)}
 
                 if (!dice.double) motionPlayer ++
                 motionPlayer %= cntPls
@@ -391,6 +391,8 @@ class GamePlay: View("Monopoly"){
     }
 
     fun newGame(){
+        motionPlayer = 0
+        board = Game.GameBoard()
         data.clear()
         replaceWith(Begin(), ViewTransition.Implode(0.5.seconds))
     }
