@@ -75,7 +75,7 @@ class Begin : View("Monopoly"){
     fun active5(){
         if (playfield5.disableProperty().value == true) {
             playfield5.disableProperty().value = false
-            playfield5.text = "Player 3"
+            playfield5.text = "Player 5"
         }
         else {
             playfield5.disableProperty().value = true
@@ -232,7 +232,7 @@ class GamePlay: View("Monopoly"){
 
     private fun diceRoll(a : Int, b : Int){
         timeline {
-            keyframe(Duration.seconds(0.5)) {
+            keyframe(Duration.seconds(0.1)) {
                 keyvalue(firstdice1.opacityProperty(), 0.0)
                 keyvalue(firstdice2.opacityProperty(), 0.0)
                 keyvalue(firstdice3.opacityProperty(), 0.0)
@@ -297,6 +297,10 @@ class GamePlay: View("Monopoly"){
         buttonRoll.disableProperty().value = true
         dice.roll()
         diceRoll(dice.first, dice.second)
+
+        runAsync {
+            Thread.sleep(500)
+        }ui{
             when(motionPlayer){
                 0 -> {
                     data[0].positionChange(dice.count)
@@ -319,13 +323,16 @@ class GamePlay: View("Monopoly"){
                     movePlayer5(data[4].position)
                 }
             }
-        presentId = motionPlayer
-        fieldEvent(motionPlayer)
-        println("when пройден")
-            if (!dice.double) motionPlayer ++
-            motionPlayer %= cntPls
-        println("motionPlayer = $motionPlayer")
-            if (dice.double) find<DiceDouble>().openModal()
+
+            runAsync {
+                Thread.sleep(500)
+            }ui{
+                if (dice.double) find<DiceDouble>().openModal()
+                presentId = motionPlayer
+                fieldEvent(motionPlayer)
+
+                if (!dice.double) motionPlayer ++
+                motionPlayer %= cntPls
                 when (motionPlayer){
                     0 -> idMotion.text = "Ход игрока ${data[0].name}"
                     1 -> idMotion.text = "Ход игрока ${data[1].name}"
@@ -334,6 +341,8 @@ class GamePlay: View("Monopoly"){
                     else -> idMotion.text = "Ход игрока ${data[4].name}"
                 }
                 buttonRoll.disableProperty().value = false
+            }
+        }
     }
 
     fun movePlayer1(a : Int){
