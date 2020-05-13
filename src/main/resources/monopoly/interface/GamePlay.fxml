@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.effect.ImageInput?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane prefHeight="1024.0" prefWidth="1024.0">
+         <top>
+            <MenuBar prefHeight="25.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+               <menus>
+                  <Menu mnemonicParsing="false" text="Game">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#newGame" text="New Game" />
+                        <MenuItem mnemonicParsing="false" onAction="#exit" text="Close" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Help">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                     </items>
+                  </Menu>
+               </menus>
+            </MenuBar>
+         </top>
+         <center>
+            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="999.0" prefWidth="1024.0">
+               <top>
+                  <HBox prefHeight="214.0" prefWidth="1024.0" style="-fx-background-color: #d2edd7;" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox prefHeight="214.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="214.0" fitWidth="212.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Start.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="field1" maxWidth="99.0" prefHeight="215.0" prefWidth="99.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="186.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true">
+                                 <VBox.margin>
+                                    <Insets bottom="17.0" top="16.0" />
+                                 </VBox.margin>
+                                 <image>
+                                    <Image url="@../fields/Chanel.png" />
+                                 </image>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #7a7996;" text="1.100K">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="field2" prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="186.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                                 <VBox.margin>
+                                    <Insets bottom="2.0" top="3.0" />
+                                 </VBox.margin>
+                                 <image>
+                                    <Image url="@../fields/Lacoste.png" />
+                                 </image>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #7a7996;" text="1.200K">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="field3" prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="186.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Adidas.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets bottom="32.0" top="31.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #2ebfe6;" text="1.300K">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="184.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Secret.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets top="40.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="100.0">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="field5" prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="168.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
+                                 <VBox.margin>
+                                    <Insets bottom="6.0" left="5.0" top="12.0" />
+                                 </VBox.margin>
+                                 <image>
+                                    <Image url="@../fields/Puma.png" />
+                                 </image>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #2ebfe6;" text="1.500K">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="field6" prefHeight="216.0" prefWidth="101.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="186.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Nike.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets bottom="13.0" top="13.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #2ebfe6;" text="1.600K">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="214.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="214.0" fitWidth="212.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Jail.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </top>
+               <left>
+                  <VBox prefHeight="571.0" prefWidth="214.0" style="-fx-background-color: #d2edd7;" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox fx:id="field27" prefHeight="96.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="93.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Apple.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets top="20.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #5b3dfe;">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.700K">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="field26" prefHeight="92.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fx:id="field25" fitHeight="92.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Microsoft.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </ImageView>
+                              <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #5b3dfe;">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.600K">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="field25" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="92.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Bmw.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="40.0" right="32.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e43c3c;">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.000K">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="field24" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="92.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Kfc.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets top="7.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #fc9032;">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.400K">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="92.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Stonks.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="36.0" right="20.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="field22" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="91.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Mcdonalds.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="33.0" right="33.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #fc9032;">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.200K">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </left>
+               <right>
+                  <VBox prefHeight="571.0" prefWidth="214.0" style="-fx-background-color: #d2edd7;" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox fx:id="field8" prefHeight="96.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e6ce2e;">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="1.800K">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <ImageView fitHeight="94.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Facebook.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets top="15.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="field9" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e6ce2e;">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="1.900K">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <ImageView fitHeight="85.0" fitWidth="154.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Twitter.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" top="3.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="field10" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e43c3c;">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="3.000K">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <ImageView fitHeight="94.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Mercedes.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="field11" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #3dab53;">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="2.100K">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <ImageView fitHeight="94.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Coca-cola.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <HBox prefHeight="96.0" prefWidth="50.0">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <ImageView fitHeight="94.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Punisment.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="field13" prefHeight="93.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #3dab53;">
+                                 <children>
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="2.300K">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <ImageView fitHeight="93.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Pepsi.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </right>
+               <center>
+                  <AnchorPane BorderPane.alignment="CENTER">
+                     <children>
+                        <BorderPane prefHeight="571.0" prefWidth="596.0" style="-fx-border-color: #000000; -fx-background-color: #d7d6d0;">
+                           <top>
+                              <HBox prefHeight="120.0" prefWidth="0.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <VBox prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: #000000;">
+                                       <children>
+                                          <Label fx:id="pl1" alignment="CENTER" prefHeight="27.0" prefWidth="201.0" style="-fx-background-color: #f13030;" text="Игрок ">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="Money:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="moneylbl1" textFill="#1d9047">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: #000000;">
+                                       <children>
+                                          <Label fx:id="pl2" alignment="CENTER" contentDisplay="TOP" prefHeight="27.0" prefWidth="241.0" style="-fx-background-color: #f27330;" text="Игрок ">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="Money:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="moneylbl2" textFill="#1d9047">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <VBox fx:id="playerField3" opacity="0.0" prefHeight="133.0" prefWidth="180.0" style="-fx-border-color: black;">
+                                       <children>
+                                          <Label fx:id="pl3" alignment="CENTER" prefHeight="27.0" prefWidth="224.0" style="-fx-background-color: green;" text="Игрок ">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="Money:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="moneylbl3" textFill="#1d9047">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <VBox fx:id="playerField4" opacity="0.0" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: black;">
+                                       <children>
+                                          <Label fx:id="pl4" alignment="CENTER" prefHeight="27.0" prefWidth="264.0" style="-fx-background-color: #03a3d1;" text="Игрок ">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="Money:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="moneylbl4" textFill="#1d9047">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <VBox fx:id="playerField5" opacity="0.0" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: black;">
+                                       <children>
+                                          <Label fx:id="pl5" alignment="CENTER" prefHeight="27.0" prefWidth="222.0" style="-fx-background-color: #eb15dc;" text="Игрок ">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="Money:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="moneylbl5" textFill="#1d9047">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </top>
+                           <center>
+                              <Label fx:id="idMotion" text="Ход игрока 1" BorderPane.alignment="TOP_CENTER">
+                                 <BorderPane.margin>
+                                    <Insets top="20.0" />
+                                 </BorderPane.margin>
+                                 <font>
+                                    <Font size="31.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <bottom>
+                              <Button fx:id="buttonRoll" mnemonicParsing="false" onAction="#motion" prefHeight="42.0" prefWidth="132.0" text="Кинуть кубики" BorderPane.alignment="TOP_CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <BorderPane.margin>
+                                    <Insets bottom="20.0" />
+                                 </BorderPane.margin>
+                              </Button>
+                           </bottom>
+                        </BorderPane>
+                        <ImageView fx:id="firstdice1" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../fields/dice1.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="firstdice2" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../fields/dice2.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="firstdice3" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../fields/dice3.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="firstdice4" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../fields/dice4.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="seconddice1" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../fields/dice1.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="seconddice2" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../fields/dice2.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="seconddice3" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../fields/dice3.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="seconddice4" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../fields/dice4.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </center>
+               <bottom>
+                  <HBox prefHeight="214.0" prefWidth="1024.0" style="-fx-background-color: #d2edd7;" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox prefHeight="214.0" prefWidth="2.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="214.0" fitWidth="213.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Arest.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="184.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Secret.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets top="15.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="field19" prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="2.900K" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="184.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Aeroflot.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets left="2.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="184.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Punisment.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="field17" prefHeight="214.0" prefWidth="101.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #e43c3c;" text="3.000K" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="184.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Audi.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="field16" prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="2.600K" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="184.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Eva%20air.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="field15" prefHeight="184.0" prefWidth="96.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="2.500K" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="184.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Lufthansa.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="214.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <ImageView fitHeight="214.0" fitWidth="212.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../fields/Free.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </bottom>
+            </BorderPane>
+         </center>
+      </BorderPane>
+      <Rectangle fx:id="model1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="85.0" layoutX="10.0" layoutY="30.0" stroke="BLACK" strokeType="INSIDE" width="74.0">
+         <effect>
+            <ImageInput>
+               <source>
+                  <Image url="file:/C:/Users/381/IdeaProjects/game/src/main/resources/monopoly/fields/Player1.png" />
+               </source>
+            </ImageInput>
+         </effect>
+      </Rectangle>
+      <Rectangle fx:id="model2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="85.0" layoutX="10.0" layoutY="40.0" stroke="BLACK" strokeType="INSIDE" width="74.0">
+         <effect>
+            <ImageInput>
+               <source>
+                  <Image url="file:/C:/Users/381/IdeaProjects/game/src/main/resources/monopoly/fields/Player2.png" />
+               </source>
+            </ImageInput>
+         </effect>
+      </Rectangle>
+      <Rectangle fx:id="model3" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="85.0" layoutX="30.0" layoutY="30.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="74.0">
+         <effect>
+            <ImageInput>
+               <source>
+                  <Image url="file:/C:/Users/381/IdeaProjects/game/src/main/resources/monopoly/fields/Player3.png" />
+               </source>
+            </ImageInput>
+         </effect>
+      </Rectangle>
+      <Rectangle fx:id="model4" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="85.0" layoutX="30.0" layoutY="40.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="74.0">
+         <effect>
+            <ImageInput>
+               <source>
+                  <Image url="file:/C:/Users/381/IdeaProjects/game/src/main/resources/monopoly/fields/Player4.png" />
+               </source>
+            </ImageInput>
+         </effect>
+      </Rectangle>
+      <Rectangle fx:id="model5" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="85.0" layoutX="10.0" layoutY="50.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="74.0">
+         <effect>
+            <ImageInput>
+               <source>
+                  <Image url="file:/C:/Users/381/IdeaProjects/game/src/main/resources/monopoly/fields/Player5.png" />
+               </source>
+            </ImageInput>
+         </effect>
+      </Rectangle>
+   </children>
+</AnchorPane>
