@@ -60,7 +60,7 @@
                                     <Image url="@../fields/Chanel.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #7a7996;" text="1.100K">
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #7a7996;" text="2.100K">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -77,7 +77,7 @@
                                     <Image url="@../fields/Lacoste.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #7a7996;" text="1.200K">
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #7a7996;" text="2.200K">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -94,7 +94,7 @@
                                     <Insets bottom="32.0" top="31.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #2ebfe6;" text="1.300K">
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #2ebfe6;" text="2.300K">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -128,7 +128,7 @@
                                     <Image url="@../fields/Puma.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #2ebfe6;" text="1.500K">
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #2ebfe6;" text="2.500K">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -145,7 +145,7 @@
                                     <Insets bottom="13.0" top="13.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #2ebfe6;" text="1.600K">
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #2ebfe6;" text="2.600K">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -179,7 +179,7 @@
                               </ImageView>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #5b3dfe;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.700K">
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.700K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -200,7 +200,7 @@
                               </ImageView>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #5b3dfe;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.600K">
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.600K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -242,7 +242,7 @@
                               </ImageView>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #fc9032;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.400K">
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.400K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -275,7 +275,7 @@
                               </ImageView>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #fc9032;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.200K">
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.200K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -294,7 +294,7 @@
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e6ce2e;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="1.800K">
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="2.800K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -315,7 +315,7 @@
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e6ce2e;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="1.900K">
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="2.900K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -354,7 +354,7 @@
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #3dab53;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="2.100K">
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="3.100K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -396,7 +396,7 @@
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #3dab53;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="2.300K">
+                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="3.300K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -419,11 +419,11 @@
                <center>
                   <AnchorPane BorderPane.alignment="CENTER">
                      <children>
-                        <BorderPane prefHeight="571.0" prefWidth="596.0" style="-fx-border-color: #000000; -fx-background-color: #d7d6d0;">
+                        <BorderPane layoutX="1.0" prefHeight="571.0" prefWidth="600.0" style="-fx-border-color: #000000; -fx-background-color: #d7d6d0;">
                            <top>
                               <HBox prefHeight="120.0" prefWidth="0.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <VBox prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: #000000;">
+                                    <VBox fx:id="playerField1" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: #000000;">
                                        <children>
                                           <Label fx:id="pl1" alignment="CENTER" prefHeight="27.0" prefWidth="201.0" style="-fx-background-color: #f13030;" text="Игрок ">
                                              <font>
@@ -442,7 +442,7 @@
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <VBox prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: #000000;">
+                                    <VBox fx:id="playerField2" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: #000000;">
                                        <children>
                                           <Label fx:id="pl2" alignment="CENTER" contentDisplay="TOP" prefHeight="27.0" prefWidth="241.0" style="-fx-background-color: #f27330;" text="Игрок ">
                                              <font>
@@ -582,6 +582,99 @@
                               <Image url="@../fields/dice4.png" />
                            </image>
                         </ImageView>
+                        <AnchorPane fx:id="offerToBuy" disable="true" layoutX="2.0" layoutY="181.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="387.0" prefWidth="598.0" style="-fx-background-color: #d7d6d0;">
+                           <children>
+                              <Label layoutX="94.0" layoutY="26.0" text="Хотите ли вы купить недвижимость?">
+                                 <font>
+                                    <Font size="27.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="73.0" layoutY="214.0" text="Тип : ">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="73.0" layoutY="165.0" text="Стоимость : ">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="offerTypeRealty" layoutX="139.0" layoutY="214.0" text="Тип">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="offerCostRealty" layoutX="208.0" layoutY="165.0" text="Цена">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="70.0" layoutY="276.0" mnemonicParsing="false" onAction="#offerAccept" prefHeight="44.0" prefWidth="125.0" text="Купить">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                              <Button layoutX="223.0" layoutY="276.0" mnemonicParsing="false" onAction="#offerReject" text="Отклонить">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                              <ImageView fitHeight="142.0" fitWidth="163.0" layoutX="431.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../dice.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="offerNotEnoughMoney" layoutX="153.0" layoutY="94.0" opacity="0.0" text="Вам не хватает средств!" textFill="#bf1b31">
+                                 <font>
+                                    <Font size="27.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="payPenalty" disable="true" layoutX="3.0" layoutY="189.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="381.0" prefWidth="597.0" style="-fx-background-color: #d7d6d0;">
+                           <children>
+                              <Label layoutX="73.0" layoutY="65.0" text="Вы платите игроку">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="73.0" layoutY="109.0" text="Штраф : ">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="penaltyCost" layoutX="167.0" layoutY="109.0" text="Цена">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="73.0" layoutY="191.0" mnemonicParsing="false" onAction="#penaltyAccept" prefHeight="44.0" prefWidth="125.0" text="Заплатить">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                              <ImageView fitHeight="142.0" fitWidth="163.0" layoutX="431.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../dice.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="penaltyOwner" layoutX="286.0" layoutY="65.0" text="Игрок">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="224.0" layoutY="191.0" mnemonicParsing="false" onAction="#penaltySurrender" prefHeight="44.0" prefWidth="125.0" text="Сдаться">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                              <Label fx:id="penaltyNotEnoughMoney" layoutX="142.0" layoutY="14.0" opacity="0.0" text="У вас не хватает денег!" textFill="#a11339">
+                                 <font>
+                                    <Font size="30.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
                      </children>
                   </AnchorPane>
                </center>
@@ -616,7 +709,7 @@
                         </VBox>
                         <VBox fx:id="field19" prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
                            <children>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="2.900K" textAlignment="CENTER">
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.900K" textAlignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -664,7 +757,7 @@
                         </VBox>
                         <VBox fx:id="field16" prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
                            <children>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="2.600K" textAlignment="CENTER">
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.600K" textAlignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -681,7 +774,7 @@
                         </VBox>
                         <VBox fx:id="field15" prefHeight="184.0" prefWidth="96.0" style="-fx-border-color: #000000;">
                            <children>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="2.500K" textAlignment="CENTER">
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.500K" textAlignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>

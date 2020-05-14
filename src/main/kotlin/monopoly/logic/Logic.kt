@@ -170,12 +170,12 @@ class Game{
             fields.addAll(initBoard(this).fields)
         }
 
-        class Field(location: Int, val type: Type){
+        class Field(val location: Int, val type: Type){
             var couldBuy = true
             var layoutX = 0.0
             var layoutY = 0.0
             var owner : Player? = null
-            var cost =  1000 + location*100
+            var cost =  2000 + location*100
             var penalty = cost / 10
 
             fun costUpdate(a : Int){
