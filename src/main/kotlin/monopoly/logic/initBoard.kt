@@ -53,6 +53,7 @@ fun initBoard(board: Game.GameBoard) : Game.GameBoard {
     board.fields[11].layoutX = 840.0
     board.fields[11].layoutY = 470.0
     board.fields.add(Field(12, Type.Punisment))
+    board.fields[12].penalty = 2000
     board.fields[12].couldBuy = false
     board.fields[12].layoutX = 840.0
     board.fields[12].layoutY = 570.0
@@ -74,6 +75,7 @@ fun initBoard(board: Game.GameBoard) : Game.GameBoard {
     board.fields[17].layoutX = 480.0
     board.fields[17].layoutY = 770.0
     board.fields.add(Field(18, Type.Punisment))
+    board.fields[18].penalty = 2000
     board.fields[18].couldBuy = false
     board.fields[18].layoutX = 380.0
     board.fields[18].layoutY = 770.0

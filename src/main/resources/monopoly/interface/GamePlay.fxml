@@ -524,7 +524,7 @@
                            <center>
                               <Label fx:id="idMotion" text="Ход игрока 1" BorderPane.alignment="TOP_CENTER">
                                  <BorderPane.margin>
-                                    <Insets top="20.0" />
+                                    <Insets top="10.0" />
                                  </BorderPane.margin>
                                  <font>
                                     <Font size="31.0" />
@@ -542,42 +542,42 @@
                               </Button>
                            </bottom>
                         </BorderPane>
-                        <ImageView fx:id="firstdice1" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="firstdice1" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="350.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../fields/dice1.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="firstdice2" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="firstdice2" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="350.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../fields/dice2.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="firstdice3" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="firstdice3" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="350.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../fields/dice3.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="firstdice4" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="firstdice4" fitHeight="120.0" fitWidth="120.0" layoutX="150.0" layoutY="350.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../fields/dice4.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="seconddice1" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="seconddice1" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="350.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../fields/dice1.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="seconddice2" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="seconddice2" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="350.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../fields/dice2.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="seconddice3" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="seconddice3" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="350.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../fields/dice3.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="seconddice4" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="300.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="seconddice4" fitHeight="120.0" fitWidth="120.0" layoutX="320.0" layoutY="350.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../fields/dice4.png" />
                            </image>
@@ -633,7 +633,7 @@
                         </AnchorPane>
                         <AnchorPane fx:id="payPenalty" disable="true" layoutX="3.0" layoutY="189.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="381.0" prefWidth="597.0" style="-fx-background-color: #d7d6d0;">
                            <children>
-                              <Label layoutX="73.0" layoutY="65.0" text="Вы платите игроку">
+                              <Label fx:id="textPunisment" layoutX="73.0" layoutY="65.0" text="Вы платите игроку">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -673,6 +673,55 @@
                                     <Font size="30.0" />
                                  </font>
                               </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="prison" disable="true" layoutX="3.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="387.0" prefWidth="595.0" style="-fx-background-color: #d7d6d0;">
+                           <children>
+                              <Label layoutX="137.0" text="Вы находитесь в тюрьме">
+                                 <font>
+                                    <Font size="27.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="12.0" layoutY="315.0" mnemonicParsing="false" onAction="#prisonPay" prefHeight="44.0" prefWidth="125.0" text="Заплатить">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="prisonTryButton" layoutX="151.0" layoutY="315.0" mnemonicParsing="false" onAction="#prisonTry" text="Бросать кубики">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                              <ImageView fitHeight="142.0" fitWidth="163.0" layoutX="431.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../dice.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="prisonMessage" layoutX="40.0" layoutY="47.0" text="Заплатите 500К, или выбейте дубль">
+                                 <font>
+                                    <Font size="27.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="40.0" layoutY="92.0" text="Осталось ходов в тюрбме:">
+                                 <font>
+                                    <Font size="27.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="prisonCountMoves" layoutX="380.0" layoutY="92.0" text="ходы">
+                                 <font>
+                                    <Font size="27.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="prisonNotEnoughMoney" layoutX="141.0" layoutY="131.0" opacity="0.0" text="У вас не хватает денег!" textFill="#a11339">
+                                 <font>
+                                    <Font size="30.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="prisonSurrenderButton" disable="true" layoutX="330.0" layoutY="315.0" mnemonicParsing="false" onAction="#prisonSurrender" opacity="0.0" prefHeight="44.0" prefWidth="125.0" text="Сдаться">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
                            </children>
                         </AnchorPane>
                      </children>

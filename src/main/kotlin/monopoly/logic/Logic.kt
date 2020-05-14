@@ -1,5 +1,6 @@
 package monopoly.logic
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import javafx.beans.property.SimpleIntegerProperty
 
 
@@ -19,6 +20,8 @@ class Game{
             moneyChange(0)
         }
 
+        fun playerInPrison() : Boolean = prisonDays != 0
+
         fun moneyChange(a : Int){
             money += a
             moneyProperty.value = money
@@ -29,10 +32,10 @@ class Game{
             position = numberOfMoves % 28
         }
 
-        private fun goToPrison(){
-            if (position <= 10)
-                positionChange(10-position)
-            else positionChange(-(position - 10))
+        fun goToPrison(){
+            if (position <= 7)
+                positionChange(7-position)
+            else positionChange(-(position - 7))
             prisonDays = 1
         }
 
@@ -183,51 +186,6 @@ class Game{
             }
         }
         }
-
-    val board = GameBoard()
-
-    fun startGame(data : MutableList<Player>){
-        println("Game starting...")
-        while (data.size > 1){
-            data.map {motion(it) }
-        }
-    }
-
-    fun motion(player: Player){
-        println()
-        println("${player.name} your turn:")
-        val dice = Dice()
-        if (player.prisonDays == 0) {
-            player.move(0, board)
-            return
-        }
-
-        println("You have to pay $500, or beat out a double. After ${3 - player.prisonDays} moves, you will be required to pay $600 if you do not get out of prison")
-        print("To pay?(y/n)")
-        if (readLine() == "y"){
-            player.moneyChange(-500)
-            player.prisonDays = 0
-            player.move(0, board)
-            return
-        }
-
-        dice.roll()
-        if (dice.double) {
-            player.prisonDays = 0
-            player.doubleInARow++
-            player.move(dice.count, board)
-            return
-        }
-
-        player.prisonDays++
-        if(player.prisonDays == 4){
-            println("You pay $600 and get out of jail")
-            player.prisonDays = 0
-            player.moneyChange(-600)
-            player.move(0, board)
-        }
-
-    }
 
     }
 

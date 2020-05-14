@@ -1,6 +1,7 @@
 package monopoly.`interface`
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
@@ -9,9 +10,11 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
+import javafx.scene.text.Text
 import javafx.stage.Stage
 import javafx.util.Duration
 import monopoly.logic.Game
+import monopoly.logic.Type
 import tornadofx.*
 
 class MyApp: App(Begin::class){
@@ -165,18 +168,27 @@ class GamePlay: View("Monopoly"){
     private val penaltyOwner : Label by fxid()
     private val penaltyCost : Label by fxid()
     private val penaltyNotEnoughMoney : Label by fxid()
+    private val textPunisment : Label by fxid()
 
     private fun payPenalty(){
+        textPunisment.text = "Вы платите игроку"
+        penaltyOwner.text = ""
         payPenalty.opacity = 1.0
         payPenalty.disableProperty().value = false
-        penaltyOwner.text = board.fields[data[gamePlay.presentId].position].owner!!.name
+        if (board.fields[data[gamePlay.presentId].position].type != Type.Punisment) {
+            penaltyOwner.text = board.fields[data[gamePlay.presentId].position].owner!!.name
+        }else {
+            textPunisment.text = "Вас уличили за неуплату налогов!"
+        }
         penaltyCost.text = "${board.fields[data[gamePlay.presentId].position].penalty}"
     }
 
     fun penaltyAccept(){
         if (data[gamePlay.presentId].money >= board.fields[data[gamePlay.presentId].position].penalty){
             data[gamePlay.presentId].moneyChange(-board.fields[data[gamePlay.presentId].position].penalty)
-            board.fields[data[gamePlay.presentId].position].owner!!.moneyChange(board.fields[data[gamePlay.presentId].position].penalty)
+            if (board.fields[data[gamePlay.presentId].position].type != Type.Punisment) {
+                board.fields[data[gamePlay.presentId].position].owner!!.moneyChange(board.fields[data[gamePlay.presentId].position].penalty)
+            }
             penaltyNotEnoughMoney.opacity = 0.0
             payPenalty.opacity = 0.0
             payPenalty.disableProperty().value = true
@@ -193,12 +205,87 @@ class GamePlay: View("Monopoly"){
         clearFieldLooser(data[presentId])
         loosers.add(presentId)
         endMotion()
+        checkEndGame()
     }
+
+    //Prison block
+    private val prison : AnchorPane by fxid()
+    private val prisonCountMoves : Label by fxid()
+    private val prisonNotEnoughMoney : Label by fxid()
+    private val prisonMessage : Label by fxid()
+    private val prisonTryButton : Button by fxid()
+    private val prisonSurrenderButton : Button by fxid()
+
+    private fun prisonInit(){
+        prisonMessage.text = "Заплатите 500К, или выбейте дубль"
+        prisonNotEnoughMoney.opacity = 0.0
+        prison.opacity = 1.0
+        prison.disableProperty().value = false
+        if (data[presentId].prisonDays == 4) {
+            prisonMessage.text = "Заплатите 750К"
+            prisonTryButton.disableProperty().value = true
+            prisonSurrenderButton.opacity = 1.0
+            prisonSurrenderButton.disableProperty().value = false
+        }
+        prisonCountMoves.text = "${4 - data[presentId].prisonDays}"
+    }
+
+    fun prisonPay(){
+        if(data[presentId].prisonDays == 4 && data[presentId].money >= 750){
+            data[presentId].prisonDays = 0
+            data[presentId].moneyChange(-750)
+            prison.opacity = 0.0
+            prison.disableProperty().value = true
+            prisonSurrenderButton.opacity = 0.0
+            prisonSurrenderButton.disableProperty().value = true
+            endMotion()
+            return
+        }
+        if (data[presentId].prisonDays != 4 && data[presentId].money >= 500){
+            data[presentId].prisonDays = 0
+            data[presentId].moneyChange(-500)
+            prison.opacity = 0.0
+            prison.disableProperty().value = true
+            endMotion()
+            return
+        }
+        prisonNotEnoughMoney.opacity = 1.0
+    }
+
+    fun prisonTry(){
+        dice.roll()
+        diceRoll(dice.first,dice.second)
+        prison.opacity = 0.0
+        prison.disableProperty().value = true
+        runAsync { Thread.sleep(1000) }ui{
+            if (dice.double) {
+                data[presentId].prisonDays = 0
+                find<DiceDouble>().openModal()
+            }else{
+                motionPlayer++
+                motionPlayer %= cntPls
+                data[presentId].prisonDays ++
+            }
+            endMotion()
+        }
+    }
+
+    fun prisonSurrender(){
+        prison.opacity = 0.0
+        prison.disableProperty().value = true
+        prisonSurrenderButton.opacity = 0.0
+        prisonSurrenderButton.disableProperty().value = true
+        clearFieldLooser(data[presentId])
+        loosers.add(presentId)
+        endMotion()
+        checkEndGame()
+    }
+
 
     //Board functional
     private val idMotion : Label by fxid()
 
-    private val buttonRoll : Button by fxid()
+    val buttonRoll : Button by fxid()
 
     //models of players & moves
     private val model1 : Rectangle by fxid()
@@ -207,43 +294,68 @@ class GamePlay: View("Monopoly"){
     private val model4 : Rectangle by fxid()
     private val model5 : Rectangle by fxid()
     //animation
-    private fun movePlayer1(a : Int){
+    private fun movePlayer1(a : Int, prison : Boolean){
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                keyvalue(model1.layoutXProperty(),player1Default.first + board.fields[a].layoutX)
-                keyvalue(model1.layoutYProperty(),player1Default.second + board.fields[a].layoutY)
+                if (prison){
+                    keyvalue(model1.layoutXProperty(), player1Default.first + prisonPosition.first)
+                    keyvalue(model1.layoutYProperty(), player1Default.second + prisonPosition.second)
+                }else {
+                    keyvalue(model1.layoutXProperty(), player1Default.first + board.fields[a].layoutX)
+                    keyvalue(model1.layoutYProperty(), player1Default.second + board.fields[a].layoutY)
+                }
             }
         }
     }
-    private fun movePlayer2(a : Int){
+    private fun movePlayer2(a : Int, prison : Boolean){
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                keyvalue(model2.layoutXProperty(),player2Default.first + board.fields[a].layoutX)
-                keyvalue(model2.layoutYProperty(),player2Default.second + board.fields[a].layoutY)
+                if (prison){
+                    keyvalue(model2.layoutXProperty(), player2Default.first + prisonPosition.first)
+                    keyvalue(model2.layoutYProperty(), player2Default.second + prisonPosition.second)
+                }else {
+                    keyvalue(model2.layoutXProperty(), player2Default.first + board.fields[a].layoutX)
+                    keyvalue(model2.layoutYProperty(), player2Default.second + board.fields[a].layoutY)
+                }
             }
         }
     }
-    private fun movePlayer3(a : Int){
+    private fun movePlayer3(a : Int, prison : Boolean){
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                keyvalue(model3.layoutXProperty(),player3Default.first + board.fields[a].layoutX)
-                keyvalue(model3.layoutYProperty(),player3Default.second + board.fields[a].layoutY)
+                if (prison){
+                    keyvalue(model3.layoutXProperty(), player3Default.first + prisonPosition.first)
+                    keyvalue(model3.layoutYProperty(), player3Default.second + prisonPosition.second)
+                }else {
+                    keyvalue(model3.layoutXProperty(), player3Default.first + board.fields[a].layoutX)
+                    keyvalue(model3.layoutYProperty(), player3Default.second + board.fields[a].layoutY)
+                }
             }
         }
     }
-    private fun movePlayer4(a : Int){
+    private fun movePlayer4(a : Int, prison : Boolean){
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                keyvalue(model4.layoutXProperty(),player4Default.first + board.fields[a].layoutX)
-                keyvalue(model4.layoutYProperty(),player4Default.second + board.fields[a].layoutY)
+                if (prison){
+                    keyvalue(model4.layoutXProperty(), player4Default.first + prisonPosition.first)
+                    keyvalue(model4.layoutYProperty(), player4Default.second + prisonPosition.second)
+                }else {
+                    keyvalue(model4.layoutXProperty(), player4Default.first + board.fields[a].layoutX)
+                    keyvalue(model4.layoutYProperty(), player4Default.second + board.fields[a].layoutY)
+                }
             }
         }
     }
-    private fun movePlayer5(a : Int){
+    private fun movePlayer5(a : Int, prison : Boolean){
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                keyvalue(model5.layoutXProperty(),player5Default.first + board.fields[a].layoutX)
-                keyvalue(model5.layoutYProperty(),player5Default.second + board.fields[a].layoutY)
+                if (prison){
+                    keyvalue(model5.layoutXProperty(), player5Default.first + prisonPosition.first)
+                    keyvalue(model5.layoutYProperty(), player5Default.second + prisonPosition.second)
+                }else {
+                    keyvalue(model5.layoutXProperty(), player5Default.first + board.fields[a].layoutX)
+                    keyvalue(model5.layoutYProperty(), player5Default.second + board.fields[a].layoutY)
+                }
             }
         }
     }
@@ -253,6 +365,7 @@ class GamePlay: View("Monopoly"){
     private val player3Default = Pair(30.0,30.0)
     private val player4Default = Pair(30.0,40.0)
     private val player5Default = Pair(10.0,50.0)
+    private val prisonPosition = Pair(810.0,50.0)
 
     //player property description
     private val playerField1 : VBox by fxid()
@@ -328,7 +441,7 @@ class GamePlay: View("Monopoly"){
     //animation
     private fun diceRoll(a : Int, b : Int){
         timeline {
-            keyframe(Duration.seconds(0.1)) {
+            keyframe(Duration.seconds(0.01)) {
                 keyvalue(firstdice1.opacityProperty(), 0.0)
                 keyvalue(firstdice2.opacityProperty(), 0.0)
                 keyvalue(firstdice3.opacityProperty(), 0.0)
@@ -361,7 +474,7 @@ class GamePlay: View("Monopoly"){
 
     private var cntPls = 0 // count of players
 
-    private var presentId = 0 // number of the player who is currently walking
+    var presentId = 0 // number of the player who is currently walking
 
     init {
         primaryStage.width = 1024.0
@@ -432,20 +545,50 @@ class GamePlay: View("Monopoly"){
         }
     }
 
+    private fun playerToPrison(current: Game.Player){
+        current.goToPrison()
+        when(current.id){
+            1 -> movePlayer1(0, true)
+            2 -> movePlayer2(0, true)
+            3 -> movePlayer3(0, true)
+            4 -> movePlayer4(0, true)
+            else -> movePlayer5(0, true)
+        }
+        find<SomeActionAlert>().openModal()
+        runAsync { Thread.sleep(50) }ui{endMotion()}
+    }
+
     private fun fieldEvent(){
         println("Event start")
         if (board.fields[data[gamePlay.presentId].position].couldBuy && board.fields[data[gamePlay.presentId].position].owner == null){
             offerToBuy()
+            if (dice.double) find<DiceDouble>().openModal()
             return
         }
-        if (board.fields[data[gamePlay.presentId].position].owner != null && board.fields[data[gamePlay.presentId].position].owner!!.id != data[gamePlay.presentId].id){
+        if (board.fields[data[gamePlay.presentId].position].type == Type.Punisment ||
+            (board.fields[data[gamePlay.presentId].position].owner != null && board.fields[data[gamePlay.presentId].position].owner!!.id != data[gamePlay.presentId].id)){
             payPenalty()
+            if (dice.double) find<DiceDouble>().openModal()
             return
         }
+        if (board.fields[data[gamePlay.presentId].position].type == Type.ToPrison){
+            playerToPrison(data[presentId])
+            if (dice.double){
+                motionPlayer++
+                motionPlayer %= cntPls
+            }
+            return
+        }
+        if (dice.double) find<DiceDouble>().openModal()
         endMotion()
     }
 
     fun motion(){
+        if (data[motionPlayer].playerInPrison()){
+            presentId = motionPlayer
+            prisonInit()
+            return
+        }
         buttonRoll.disableProperty().value = true
         dice.roll()
         diceRoll(dice.first, dice.second)
@@ -455,29 +598,28 @@ class GamePlay: View("Monopoly"){
             when(motionPlayer){
                 0 -> {
                     data[0].positionChange(dice.count)
-                    movePlayer1(data[0].position)
+                    movePlayer1(data[0].position, false)
                 }
                 1 -> {
                     data[1].positionChange(dice.count)
-                    movePlayer2(data[1].position)
+                    movePlayer2(data[1].position, false)
                 }
                 2 -> {
                     data[2].positionChange(dice.count)
-                    movePlayer3(data[2].position)
+                    movePlayer3(data[2].position, false)
                 }
                 3 -> {
                     data[3].positionChange(dice.count)
-                    movePlayer4(data[3].position)
+                    movePlayer4(data[3].position, false)
                 }
                 else -> {
                     data[4].positionChange(dice.count)
-                    movePlayer5(data[4].position)
+                    movePlayer5(data[4].position, false)
                 }
             }
             runAsync {
                 Thread.sleep(500)
             }ui{
-                if (dice.double) find<DiceDouble>().openModal()
                 presentId = motionPlayer
                 runAsync { Thread.sleep(50) }ui{fieldEvent()}
 
@@ -504,6 +646,12 @@ class GamePlay: View("Monopoly"){
         }
     }
 
+    private fun checkEndGame(){
+        if (cntPls - loosers.size == 1){
+            find<FinishGame>().openModal()
+        }
+    }
+
     fun newGame(){
         motionPlayer = 0
         board = Game.GameBoard()
@@ -521,6 +669,51 @@ class DiceDouble : Fragment(){
     override val root : AnchorPane by fxml()
 
     fun exit(){
+        close()
+    }
+}
+
+class SomeActionAlert : Fragment(){
+    override val root : AnchorPane by fxml()
+
+    private val message : Label by fxid()
+
+    private val player : Label by fxid()
+
+    private val prisonText : Text by fxid()
+
+    init {
+        player.text = data[gamePlay.presentId].name
+        if(data[gamePlay.presentId].playerInPrison()){
+            prisonText.opacity = 1.0
+            message.opacity = 0.0
+        }
+    }
+
+    fun exit(){
+        close()
+    }
+}
+
+class FinishGame : Fragment(){
+
+    override val root : AnchorPane by fxml()
+    private val winner : Label by fxid()
+
+    init {
+        winner.text = data[motionPlayer].name
+        runAsync { Thread.sleep(500) }ui{
+            gamePlay.buttonRoll.disableProperty().value = true}
+
+    }
+
+    fun newGame(){
+        gamePlay.newGame()
+        close()
+    }
+
+    fun exit(){
+        gamePlay.close()
         close()
     }
 }
