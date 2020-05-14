@@ -1,14 +1,8 @@
 package monopoly.`interface`
 
 
-import javafx.animation.KeyFrame
-import javafx.animation.Timeline
-import javafx.beans.binding.BooleanExpression
-import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.Button
 import javafx.scene.control.Label
-import javafx.scene.control.ProgressIndicator
 import javafx.scene.control.TextField
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
@@ -19,7 +13,6 @@ import javafx.stage.Stage
 import javafx.util.Duration
 import monopoly.logic.Game
 import tornadofx.*
-import kotlin.concurrent.timer
 
 class MyApp: App(Begin::class){
     override fun start(stage: Stage) {
@@ -132,11 +125,11 @@ class GamePlay: View("Monopoly"){
     private val offerTypeRealty : Label by fxid()
     private val offerNotEnoughMoney : Label by fxid()
 
-    private fun offerToBuy(a : Int){
+    private fun offerToBuy(){
         offerToBuy.opacity = 1.0
         offerToBuy.disableProperty().value = false
-        offerCostRealty.text = "${board.fields[data[a].position].cost}"
-        offerTypeRealty.text = "${board.fields[data[a].position].type}"
+        offerCostRealty.text = "${board.fields[data[gamePlay.presentId].position].cost}"
+        offerTypeRealty.text = "${board.fields[data[gamePlay.presentId].position].type}"
     }
 
     fun offerAccept(){
@@ -173,7 +166,7 @@ class GamePlay: View("Monopoly"){
     private val penaltyCost : Label by fxid()
     private val penaltyNotEnoughMoney : Label by fxid()
 
-    private fun payPenalty(a : Int){
+    private fun payPenalty(){
         payPenalty.opacity = 1.0
         payPenalty.disableProperty().value = false
         penaltyOwner.text = board.fields[data[gamePlay.presentId].position].owner!!.name
@@ -439,14 +432,14 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    private fun fieldEvent(a: Int){
+    private fun fieldEvent(){
         println("Event start")
-        if (board.fields[data[a].position].couldBuy && board.fields[data[a].position].owner == null){
-            offerToBuy(a)
+        if (board.fields[data[gamePlay.presentId].position].couldBuy && board.fields[data[gamePlay.presentId].position].owner == null){
+            offerToBuy()
             return
         }
-        if (board.fields[data[a].position].owner != null && board.fields[data[a].position].owner!!.id != data[a].id){
-            payPenalty(a)
+        if (board.fields[data[gamePlay.presentId].position].owner != null && board.fields[data[gamePlay.presentId].position].owner!!.id != data[gamePlay.presentId].id){
+            payPenalty()
             return
         }
         endMotion()
@@ -486,7 +479,7 @@ class GamePlay: View("Monopoly"){
             }ui{
                 if (dice.double) find<DiceDouble>().openModal()
                 presentId = motionPlayer
-                runAsync { Thread.sleep(50) }ui{fieldEvent(presentId)}
+                runAsync { Thread.sleep(50) }ui{fieldEvent()}
 
                 if (!dice.double) motionPlayer ++
                 motionPlayer %= cntPls

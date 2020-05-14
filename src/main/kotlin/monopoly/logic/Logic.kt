@@ -1,7 +1,6 @@
 package monopoly.logic
 
 import javafx.beans.property.SimpleIntegerProperty
-import monopoly.`interface`.GamePlay
 
 
 class Game{
