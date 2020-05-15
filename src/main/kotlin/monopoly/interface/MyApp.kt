@@ -182,15 +182,19 @@ class GamePlay: View("Monopoly"){
         penaltyCost.text = "${board.fields[data[presentId].position].penalty}"
     }
 
+    private fun penaltyClose(){
+        penaltyNotEnoughMoney.opacity = 0.0
+        payPenalty.opacity = 0.0
+        payPenalty.disableProperty().value = true
+    }
+
     fun penaltyAccept(){
         if (data[presentId].money >= board.fields[data[presentId].position].penalty){
             data[presentId].moneyChange(-board.fields[data[presentId].position].penalty)
             if (board.fields[data[presentId].position].type != Type.Punisment) {
                 board.fields[data[presentId].position].owner!!.moneyChange(board.fields[data[presentId].position].penalty)
             }
-            penaltyNotEnoughMoney.opacity = 0.0
-            payPenalty.opacity = 0.0
-            payPenalty.disableProperty().value = true
+            penaltyClose()
             endMotion()
             return
         }
@@ -198,13 +202,72 @@ class GamePlay: View("Monopoly"){
     }
 
     fun penaltySurrender(){
-        penaltyNotEnoughMoney.opacity = 0.0
-        payPenalty.opacity = 0.0
-        payPenalty.disableProperty().value = true
-        clearFieldLooser(data[presentId])
-        loosers.add(presentId)
-        endMotion()
-        checkEndGame()
+        penaltyClose()
+        playerSurrender()
+    }
+
+    //Negative secret action block
+    private val negativeAction : AnchorPane by fxid()
+    private val negativeText : Text by fxid()
+    private val negativeNotEnoughMoney : Label by fxid()
+
+    private fun negativeInit(){
+        negativeAction.opacity = 1.0
+        negativeAction.disableProperty().value = false
+        when(dice.secret.second){
+            SecretAction.Action1 -> negativeText.text = "Вас обокрали на 300К"
+            SecretAction.Action2 -> negativeText.text = "Вы попали на распродажу и потратили там 500К"
+            SecretAction.Action3 -> negativeText.text = "Вы испортили свои любимые штаны за 40К"
+            SecretAction.Action4 -> negativeText.text = "В банке произошла ошибка, и с вас списали 750К"
+            else -> negativeText.text = "Вы простудились, и потратили 250К в аптеке"
+        }
+    }
+
+    private fun negativeClose(){
+        negativeAction.opacity = 0.0
+        negativeAction.disableProperty().value = true
+        negativeNotEnoughMoney.opacity = 0.0
+    }
+
+    fun negativePay(){
+        when(dice.secret.second){
+            SecretAction.Action1 -> if (data[presentId].money >= 300){
+                data[presentId].moneyChange(-300)
+                negativeClose()
+                endMotion()
+                return
+            }
+            SecretAction.Action2 -> if (data[presentId].money >= 500){
+                data[presentId].moneyChange(-500)
+                negativeClose()
+                endMotion()
+                return
+            }
+            SecretAction.Action3 -> if (data[presentId].money >= 40){
+                data[presentId].moneyChange(-40)
+                negativeClose()
+                endMotion()
+                return
+            }
+            SecretAction.Action4 -> if (data[presentId].money >= 750){
+                data[presentId].moneyChange(-750)
+                negativeClose()
+                endMotion()
+                return
+            }
+            else -> if (data[presentId].money >= 250){
+                data[presentId].moneyChange(-250)
+                negativeClose()
+                endMotion()
+                return
+            }
+        }
+        negativeNotEnoughMoney.opacity = 1.0
+    }
+
+    fun negativeSurrender(){
+        negativeClose()
+        playerSurrender()
     }
 
     //Prison block
@@ -220,6 +283,7 @@ class GamePlay: View("Monopoly"){
         prisonNotEnoughMoney.opacity = 0.0
         prison.opacity = 1.0
         prison.disableProperty().value = false
+        prisonTryButton.disableProperty().value = false
         if (data[presentId].prisonDays == 4) {
             prisonMessage.text = "Заплатите 750К"
             prisonTryButton.disableProperty().value = true
@@ -229,22 +293,25 @@ class GamePlay: View("Monopoly"){
         prisonCountMoves.text = "${4 - data[presentId].prisonDays}"
     }
 
+    private fun prisonClose(){
+        prison.opacity = 0.0
+        prison.disableProperty().value = true
+        prisonSurrenderButton.opacity = 0.0
+        prisonSurrenderButton.disableProperty().value = true
+    }
+
     fun prisonPay(){
         if(data[presentId].prisonDays == 4 && data[presentId].money >= 750){
             data[presentId].prisonDays = 0
             data[presentId].moneyChange(-750)
-            prison.opacity = 0.0
-            prison.disableProperty().value = true
-            prisonSurrenderButton.opacity = 0.0
-            prisonSurrenderButton.disableProperty().value = true
+            prisonClose()
             endMotion()
             return
         }
         if (data[presentId].prisonDays != 4 && data[presentId].money >= 500){
             data[presentId].prisonDays = 0
             data[presentId].moneyChange(-500)
-            prison.opacity = 0.0
-            prison.disableProperty().value = true
+            prisonClose()
             endMotion()
             return
         }
@@ -271,14 +338,8 @@ class GamePlay: View("Monopoly"){
     }
 
     fun prisonSurrender(){
-        prison.opacity = 0.0
-        prison.disableProperty().value = true
-        prisonSurrenderButton.opacity = 0.0
-        prisonSurrenderButton.disableProperty().value = true
-        clearFieldLooser(data[presentId])
-        loosers.add(presentId)
-        endMotion()
-        checkEndGame()
+        prisonClose()
+        playerSurrender()
     }
 
     //Board functional
@@ -545,12 +606,21 @@ class GamePlay: View("Monopoly"){
     }
 
     private fun secretAction(){
+        dice.secretAction()
         //positive
-        if (data[presentId].secretAction().first){
+        if (dice.secret.first){
             find<SomeActionAlert>().openModal()
+            endMotion()
         }else{//negative
-
+            negativeInit()
         }
+    }
+
+    private fun playerSurrender(){
+        clearFieldLooser(data[presentId])
+        loosers.add(presentId)
+        endMotion()
+        checkEndGame()
     }
 
     private fun playerToPrison(current: Game.Player){
@@ -608,6 +678,8 @@ class GamePlay: View("Monopoly"){
         //secret action
         if (board.fields[data[presentId].position].type == Type.Secret){
             secretAction()
+            diceDoubleAlert()
+            return
         }
         //start field
         if (board.fields[data[presentId].position].type == Type.Start){
@@ -753,7 +825,7 @@ class SomeActionAlert : Fragment(){
         }
         //secret only positive
         if (board.fields[data[gamePlay.presentId].position].type == Type.Secret){
-            when(data[gamePlay.presentId].secretAction().second){
+            when(Game.Dice().secret.second){
                 SecretAction.Action1 -> {
                     data[gamePlay.presentId].moneyChange(250)
                     message.text = "Вы нашли в зимней куртке забытые 250К"

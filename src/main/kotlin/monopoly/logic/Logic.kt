@@ -37,18 +37,6 @@ class Game{
             prisonDays = 1
         }
 
-        fun secretAction() : Pair<Boolean, SecretAction>{
-            val answer1 = (1..2).random() == 1
-            val answer2 = when((1..5).random()){
-                1 -> SecretAction.Action1
-                2 -> SecretAction.Action2
-                3 -> SecretAction.Action3
-                4 -> SecretAction.Action4
-                else -> SecretAction.Action5
-            }
-            return Pair(answer1, answer2)
-        }
-
     }
 
     class Dice{
@@ -56,6 +44,11 @@ class Game{
         var first = 0
         var second = 0
         var double = false
+        var secret = Pair(true,SecretAction.Action1)
+
+        init {
+            secretAction()
+        }
 
         fun roll() {
             first = (1..4).random()
@@ -65,6 +58,18 @@ class Game{
             print("On the dice fell $count ")
             if (double) print(", double!")
             println()
+        }
+
+        fun secretAction() {
+            val answer1 = (1..2).random() == 1
+            val answer2 = when((1..5).random()){
+                1 -> SecretAction.Action1
+                2 -> SecretAction.Action2
+                3 -> SecretAction.Action3
+                4 -> SecretAction.Action4
+                else -> SecretAction.Action5
+            }
+            secret = Pair(answer1, answer2)
         }
     }
 
