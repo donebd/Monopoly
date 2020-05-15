@@ -12,6 +12,7 @@ import javafx.scene.text.Text
 import javafx.stage.Stage
 import javafx.util.Duration
 import monopoly.logic.Game
+import monopoly.logic.SecretAction
 import monopoly.logic.Type
 import tornadofx.*
 
@@ -543,9 +544,13 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    private fun stonksAction(){
-        find<SomeActionAlert>().openModal()
-        data[presentId].moneyChange(3000)
+    private fun secretAction(){
+        //positive
+        if (data[presentId].secretAction().first){
+            find<SomeActionAlert>().openModal()
+        }else{//negative
+
+        }
     }
 
     private fun playerToPrison(current: Game.Player){
@@ -597,10 +602,17 @@ class GamePlay: View("Monopoly"){
         }
         //get stonks
         if (board.fields[data[presentId].position].type == Type.Stonks){
-            stonksAction()
-            diceDoubleAlert()
-            endMotion()
-            return
+            find<SomeActionAlert>().openModal()
+            data[presentId].moneyChange(3000)
+        }
+        //secret action
+        if (board.fields[data[presentId].position].type == Type.Secret){
+            secretAction()
+        }
+        //start field
+        if (board.fields[data[presentId].position].type == Type.Start){
+            find<SomeActionAlert>().openModal()
+            data[presentId].moneyChange(1000)
         }
 
         diceDoubleAlert()
@@ -611,6 +623,11 @@ class GamePlay: View("Monopoly"){
         runAsync {
             Thread.sleep(250)
         }ui{
+            //check cycle completed
+            if (data[motionPlayer].position + dice.count > 27){
+                presentId = motionPlayer
+                runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal()}
+            }
             when(motionPlayer){
                 0 -> {
                     data[0].positionChange(dice.count)
@@ -721,6 +738,7 @@ class SomeActionAlert : Fragment(){
 
     init {
         player.text = data[gamePlay.presentId].name
+        //prison
         if (data[gamePlay.presentId].playerInPrison()){
             prisonText.opacity = 1.0
             if (data[gamePlay.presentId].doubleInARow == 2){
@@ -729,9 +747,53 @@ class SomeActionAlert : Fragment(){
                 message.text = "Вы отправляетесь в тюрьму, за неуплату налогов."
             }
         }
+        //stonks
         if (data[gamePlay.presentId].position == 23){
             message.text = "Вы выйграли 3000К в лотерее!"
         }
+        //secret only positive
+        if (board.fields[data[gamePlay.presentId].position].type == Type.Secret){
+            when(data[gamePlay.presentId].secretAction().second){
+                SecretAction.Action1 -> {
+                    data[gamePlay.presentId].moneyChange(250)
+                    message.text = "Вы нашли в зимней куртке забытые 250К"
+                }
+                SecretAction.Action2 -> {
+                    data[gamePlay.presentId].moneyChange(500)
+                    message.text = "Вы выйграли на ставках 500К"
+                }
+                SecretAction.Action3 -> {
+                    data[gamePlay.presentId].moneyChange(300)
+                    message.text = "Вам вернули долг 300К"
+                }
+                SecretAction.Action4 -> {
+                    data[gamePlay.presentId].moneyChange(750)
+                    message.text = "В банке произошла ошибка, на ваш счет перечислено 750К"
+                }
+                else -> {
+                    data[gamePlay.presentId].moneyChange(100)
+                    message.text = "Ваша собака принесла вам 100К"
+                }
+            }
+        }
+        //start bonus
+        if (data[gamePlay.presentId].position == 0) message.text = "За попадание на поле СТАРТ, вы получаете 1000К"
+    }
+
+    fun exit(){
+        close()
+    }
+}
+
+class CycleComplete : Fragment(){
+
+    override val root : AnchorPane by fxml()
+
+    private val player : Label by fxid()
+
+    init {
+        player.text = data[gamePlay.presentId].name
+        data[gamePlay.presentId].moneyChange(2000)
     }
 
     fun exit(){

@@ -37,7 +37,7 @@ class Game{
             prisonDays = 1
         }
 
-        private fun secretAction(board: GameBoard) : Pair<Boolean, SecretAction>{
+        fun secretAction() : Pair<Boolean, SecretAction>{
             val answer1 = (1..2).random() == 1
             val answer2 = when((1..5).random()){
                 1 -> SecretAction.Action1
