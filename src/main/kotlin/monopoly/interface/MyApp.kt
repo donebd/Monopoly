@@ -1,7 +1,5 @@
 package monopoly.`interface`
 
-
-import com.sun.org.apache.xpath.internal.operations.Bool
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
@@ -131,21 +129,21 @@ class GamePlay: View("Monopoly"){
     private fun offerToBuy(){
         offerToBuy.opacity = 1.0
         offerToBuy.disableProperty().value = false
-        offerCostRealty.text = "${board.fields[data[gamePlay.presentId].position].cost}"
-        offerTypeRealty.text = "${board.fields[data[gamePlay.presentId].position].type}"
+        offerCostRealty.text = "${board.fields[data[presentId].position].cost}"
+        offerTypeRealty.text = "${board.fields[data[presentId].position].type}"
     }
 
     fun offerAccept(){
-        if ( data[gamePlay.presentId].money >= board.fields[data[gamePlay.presentId].position].cost){
-            data[gamePlay.presentId].moneyChange(-board.fields[data[gamePlay.presentId].position].cost)
-            data[gamePlay.presentId].realty.add(board.fields[data[gamePlay.presentId].position])
-            board.fields[data[gamePlay.presentId].position].owner = data[gamePlay.presentId]
-            when(gamePlay.presentId){
-                0 -> gamePlay.paintField(data[gamePlay.presentId].position,c("#f13030"))
-                1 -> gamePlay.paintField(data[gamePlay.presentId].position,c("#f27330"))
-                2 -> gamePlay.paintField(data[gamePlay.presentId].position,c("green"))
-                3 -> gamePlay.paintField(data[gamePlay.presentId].position,c("#03a3d1"))
-                else -> gamePlay.paintField(data[gamePlay.presentId].position,c("#eb15dc"))
+        if ( data[presentId].money >= board.fields[data[presentId].position].cost){
+            data[presentId].moneyChange(-board.fields[data[presentId].position].cost)
+            data[presentId].realty.add(board.fields[data[presentId].position])
+            board.fields[data[presentId].position].owner = data[presentId]
+            when(presentId){
+                0 -> paintField(data[presentId].position,c("#f13030"))
+                1 -> paintField(data[presentId].position,c("#f27330"))
+                2 -> paintField(data[presentId].position,c("green"))
+                3 -> paintField(data[presentId].position,c("#03a3d1"))
+                else -> paintField(data[presentId].position,c("#eb15dc"))
             }
             offerNotEnoughMoney.opacity = 0.0
             offerToBuy.opacity = 0.0
@@ -175,19 +173,19 @@ class GamePlay: View("Monopoly"){
         penaltyOwner.text = ""
         payPenalty.opacity = 1.0
         payPenalty.disableProperty().value = false
-        if (board.fields[data[gamePlay.presentId].position].type != Type.Punisment) {
-            penaltyOwner.text = board.fields[data[gamePlay.presentId].position].owner!!.name
+        if (board.fields[data[presentId].position].type != Type.Punisment) {
+            penaltyOwner.text = board.fields[data[presentId].position].owner!!.name
         }else {
             textPunisment.text = "Вас уличили за неуплату налогов!"
         }
-        penaltyCost.text = "${board.fields[data[gamePlay.presentId].position].penalty}"
+        penaltyCost.text = "${board.fields[data[presentId].position].penalty}"
     }
 
     fun penaltyAccept(){
-        if (data[gamePlay.presentId].money >= board.fields[data[gamePlay.presentId].position].penalty){
-            data[gamePlay.presentId].moneyChange(-board.fields[data[gamePlay.presentId].position].penalty)
-            if (board.fields[data[gamePlay.presentId].position].type != Type.Punisment) {
-                board.fields[data[gamePlay.presentId].position].owner!!.moneyChange(board.fields[data[gamePlay.presentId].position].penalty)
+        if (data[presentId].money >= board.fields[data[presentId].position].penalty){
+            data[presentId].moneyChange(-board.fields[data[presentId].position].penalty)
+            if (board.fields[data[presentId].position].type != Type.Punisment) {
+                board.fields[data[presentId].position].owner!!.moneyChange(board.fields[data[presentId].position].penalty)
             }
             penaltyNotEnoughMoney.opacity = 0.0
             payPenalty.opacity = 0.0
@@ -281,7 +279,6 @@ class GamePlay: View("Monopoly"){
         endMotion()
         checkEndGame()
     }
-
 
     //Board functional
     private val idMotion : Label by fxid()
@@ -454,7 +451,7 @@ class GamePlay: View("Monopoly"){
             }
         }
         timeline {
-            keyframe(Duration.seconds(1.0)) {
+            keyframe(Duration.seconds(0.5)) {
                 when(a){
                     1 -> keyvalue(firstdice1.opacityProperty(), 1.0)
                     2 -> keyvalue(firstdice2.opacityProperty(), 1.0)
@@ -556,37 +553,54 @@ class GamePlay: View("Monopoly"){
             else -> movePlayer5(0, true)
         }
         find<SomeActionAlert>().openModal()
+        if (dice.double){
+            motionPlayer++
+            motionPlayer %= cntPls
+        }
+        data[presentId].doubleInARow = 0
         runAsync { Thread.sleep(50) }ui{endMotion()}
     }
 
     private fun fieldEvent(){
         println("Event start")
-        if (board.fields[data[gamePlay.presentId].position].couldBuy && board.fields[data[gamePlay.presentId].position].owner == null){
+        if (board.fields[data[presentId].position].couldBuy && board.fields[data[presentId].position].owner == null){
             offerToBuy()
-            if (dice.double) find<DiceDouble>().openModal()
-            return
-        }
-        if (board.fields[data[gamePlay.presentId].position].type == Type.Punisment ||
-            (board.fields[data[gamePlay.presentId].position].owner != null && board.fields[data[gamePlay.presentId].position].owner!!.id != data[gamePlay.presentId].id)){
-            payPenalty()
-            if (dice.double) find<DiceDouble>().openModal()
-            return
-        }
-        if (board.fields[data[gamePlay.presentId].position].type == Type.ToPrison){
-            playerToPrison(data[presentId])
-            if (dice.double){
-                motionPlayer++
-                motionPlayer %= cntPls
+            if (dice.double) {
+                find<DiceDouble>().openModal()
+                data[presentId].doubleInARow ++
+            }else {
+                data[presentId].doubleInARow = 0
             }
             return
         }
-        if (dice.double) find<DiceDouble>().openModal()
+        if (board.fields[data[presentId].position].type == Type.Punisment ||
+            (board.fields[data[presentId].position].owner != null && board.fields[data[presentId].position].owner!!.id != data[presentId].id)){
+            payPenalty()
+            if (dice.double) {
+                data[presentId].doubleInARow ++
+                find<DiceDouble>().openModal()
+            }else {
+                data[presentId].doubleInARow = 0
+            }
+            return
+        }
+        if (board.fields[data[presentId].position].type == Type.ToPrison){
+            playerToPrison(data[presentId])
+            return
+        }
+
+        if (dice.double) {
+            data[presentId].doubleInARow ++
+            find<DiceDouble>().openModal()
+        }else {
+            data[presentId].doubleInARow = 0
+        }
         endMotion()
     }
 
     private fun playerMove(){
         runAsync {
-            Thread.sleep(500)
+            Thread.sleep(250)
         }ui{
             when(motionPlayer){
                 0 -> {
@@ -631,7 +645,15 @@ class GamePlay: View("Monopoly"){
         }
         dice.roll()
         diceRoll(dice.first, dice.second)
-        playerMove()
+        runAsync { Thread.sleep(500) }ui {
+            if (dice.double && data[motionPlayer].doubleInARow == 2) {
+                presentId = motionPlayer
+                playerToPrison(data[presentId])
+                dice.double = false
+            } else {
+                playerMove()
+            }
+        }
     }
 
     private fun endMotion(){
@@ -682,7 +704,7 @@ class DiceDouble : Fragment(){
 class SomeActionAlert : Fragment(){
     override val root : AnchorPane by fxml()
 
-    private val message : Label by fxid()
+    private val message : Text by fxid()
 
     private val player : Label by fxid()
 
@@ -692,7 +714,11 @@ class SomeActionAlert : Fragment(){
         player.text = data[gamePlay.presentId].name
         if(data[gamePlay.presentId].playerInPrison()){
             prisonText.opacity = 1.0
-            message.opacity = 0.0
+            if (data[gamePlay.presentId].doubleInARow == 2){
+                message.text = "Вы отправляетесь в тюрьму, за махинации с кубиками."
+            }else{
+                message.text = "Вы отправляетесь в тюрьму, за неуплату налогов."
+            }
         }
     }
 

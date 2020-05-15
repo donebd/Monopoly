@@ -8,12 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="362.0" prefWidth="521.0" style="-fx-background-color: #d7d6d0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="message" layoutX="68.0" layoutY="59.0" text="Сообщение">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Button layoutX="208.0" layoutY="260.0" mnemonicParsing="false" onAction="#exit" prefHeight="31.0" prefWidth="106.0" text="Ок">
+      <Button layoutX="209.0" layoutY="265.0" mnemonicParsing="false" onAction="#exit" prefHeight="31.0" prefWidth="106.0" text="Ок">
          <font>
             <Font size="15.0" />
          </font>
@@ -23,7 +18,12 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <Text fx:id="prisonText" layoutX="68.0" layoutY="121.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Вы отправляетесь в тюрьму, для выхода из тюрьмы заплатите 500 к, или выбейте дубль в течении трех ходов, по истечению ходов вам придется заплатить 750 к!" wrappingWidth="369.3291015625">
+      <Text fx:id="prisonText" layoutX="10.0" layoutY="168.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Для выхода из тюрьмы заплатите 500К, или выбейте дубль в течении трех ходов, по истечению ходов вам придется заплатить 750К!" wrappingWidth="503.3291015625">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <Text fx:id="message" layoutX="9.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Сообщение" textAlignment="CENTER" wrappingWidth="503.3291015625">
          <font>
             <Font size="22.0" />
          </font>
