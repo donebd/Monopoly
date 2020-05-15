@@ -543,6 +543,11 @@ class GamePlay: View("Monopoly"){
         }
     }
 
+    private fun stonksAction(){
+        find<SomeActionAlert>().openModal()
+        data[presentId].moneyChange(3000)
+    }
+
     private fun playerToPrison(current: Game.Player){
         current.goToPrison()
         when(current.id){
@@ -561,40 +566,44 @@ class GamePlay: View("Monopoly"){
         runAsync { Thread.sleep(50) }ui{endMotion()}
     }
 
+    private fun diceDoubleAlert(){
+        if (dice.double) {
+            find<DiceDouble>().openModal()
+            data[presentId].doubleInARow ++
+        }else {
+            data[presentId].doubleInARow = 0
+        }
+    }
+
     private fun fieldEvent(){
         println("Event start")
+        //buy realty
         if (board.fields[data[presentId].position].couldBuy && board.fields[data[presentId].position].owner == null){
             offerToBuy()
-            if (dice.double) {
-                find<DiceDouble>().openModal()
-                data[presentId].doubleInARow ++
-            }else {
-                data[presentId].doubleInARow = 0
-            }
+            diceDoubleAlert()
             return
         }
+        //pay penalty
         if (board.fields[data[presentId].position].type == Type.Punisment ||
             (board.fields[data[presentId].position].owner != null && board.fields[data[presentId].position].owner!!.id != data[presentId].id)){
             payPenalty()
-            if (dice.double) {
-                data[presentId].doubleInARow ++
-                find<DiceDouble>().openModal()
-            }else {
-                data[presentId].doubleInARow = 0
-            }
+            diceDoubleAlert()
             return
         }
+        //player to prison
         if (board.fields[data[presentId].position].type == Type.ToPrison){
             playerToPrison(data[presentId])
             return
         }
-
-        if (dice.double) {
-            data[presentId].doubleInARow ++
-            find<DiceDouble>().openModal()
-        }else {
-            data[presentId].doubleInARow = 0
+        //get stonks
+        if (board.fields[data[presentId].position].type == Type.Stonks){
+            stonksAction()
+            diceDoubleAlert()
+            endMotion()
+            return
         }
+
+        diceDoubleAlert()
         endMotion()
     }
 
@@ -712,13 +721,16 @@ class SomeActionAlert : Fragment(){
 
     init {
         player.text = data[gamePlay.presentId].name
-        if(data[gamePlay.presentId].playerInPrison()){
+        if (data[gamePlay.presentId].playerInPrison()){
             prisonText.opacity = 1.0
             if (data[gamePlay.presentId].doubleInARow == 2){
                 message.text = "Вы отправляетесь в тюрьму, за махинации с кубиками."
             }else{
                 message.text = "Вы отправляетесь в тюрьму, за неуплату налогов."
             }
+        }
+        if (data[gamePlay.presentId].position == 23){
+            message.text = "Вы выйграли 3000К в лотерее!"
         }
     }
 

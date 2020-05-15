@@ -1,8 +1,6 @@
 package monopoly.logic
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import javafx.beans.property.SimpleIntegerProperty
-
 
 class Game{
 
@@ -39,111 +37,16 @@ class Game{
             prisonDays = 1
         }
 
-        fun move(prisonOut : Int,board: GameBoard){
-            val dice = Dice()
-            do {
-                if (prisonOut == 0) dice.roll()
-                if (dice.double) doubleInARow ++
-                else doubleInARow = 0
-
-                if ( doubleInARow == 3) break
-
-                if (numberOfMoves % 28 > (numberOfMoves + dice.count + prisonOut) % 28){
-                    moneyChange(2000)
-                    message(111)
-                }
-
-                positionChange(dice.count + prisonOut)
-                report(board)
-            }while (dice.double )
-
-            if (doubleInARow == 3) {
-                goToPrison()
-                message(228)
-                doubleInARow -= 3
+        private fun secretAction(board: GameBoard) : Pair<Boolean, SecretAction>{
+            val answer1 = (1..2).random() == 1
+            val answer2 = when((1..5).random()){
+                1 -> SecretAction.Action1
+                2 -> SecretAction.Action2
+                3 -> SecretAction.Action3
+                4 -> SecretAction.Action4
+                else -> SecretAction.Action5
             }
-            return
-        }
-
-        private fun report(board: GameBoard){
-            when(board.fields[position].type){
-                Type.Start -> {
-                    moneyChange(1000)
-                    message(123)
-                }
-                Type.Secret -> secretAction(board)
-                Type.ToPrison -> {
-                    goToPrison()
-                    message(229)
-                }
-                Type.Punisment -> {
-                    moneyChange(-2000)
-                    message(322)
-                }
-                Type.Free -> message(12)
-                else -> realtyAction(board)
-            }
-        }
-
-        private fun message(code: Int){
-            when(code){
-                12 -> println("You took a walk in the Park")
-                111 -> println("For passing the circle you get $2000")
-                228 -> println("You're going to jail for cheating with dice")
-                229 -> println("You're going to jail for tax evasion")
-                322 -> println("You were robbed of $2000")
-                123 -> println("For getting to the START field you get $1000")
-                545 -> println("You found $750 on the road")
-                546 -> println("You get a chance to roll the dice again")
-                547 -> println("You went to a sale and spent $500 there")
-                548 -> println("You won $1000 in the lottery")
-                else -> println("abc")
-            }
-            println("Balance : $$money")
-            readLine()
-        }
-
-        private fun realtyAction(board: GameBoard){
-
-            if (board.fields[position].owner == null) {
-                if ( money >= board.fields[position].cost){
-                    println("Do you want to buy a property of this type: ${board.fields[position].type}, for $${board.fields[position].cost}? You have $${money} in your account")
-                if (readLine() == "y"){
-                    board.fields[position].owner = Player(id)
-                    moneyChange(-board.fields[position].cost)
-                    realty.add(board.fields[position])
-                    return
-                    }
-                }
-                println("The property will be put up for auction")
-
-                return
-            }
-
-            if (board.fields[position].owner!!.id != id ){
-                println("You must pay to the Player - ${board.fields[position].owner!!.name }, $${board.fields[position].penalty}")
-                readLine()
-                moneyChange(-board.fields[position].penalty)
-                board.fields[position].owner!!.moneyChange(board.fields[position].penalty)
-                println("You have $${money} in your account")
-                return
-            }
-            println("You are in your own field and don't pay anything")
-        }
-
-        private fun secretAction(board: GameBoard){
-            val secret = (545..548).random()
-            when(secret){
-                545 -> moneyChange(700)
-                546 -> {
-                    message(secret)
-                    move(0, board)
-                    return
-                }
-                547 -> moneyChange(-500)
-                548 -> moneyChange(1000)
-            }
-            message(secret)
+            return Pair(answer1, answer2)
         }
 
     }

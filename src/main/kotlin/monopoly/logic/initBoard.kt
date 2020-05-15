@@ -19,6 +19,14 @@ enum class Type{
     Stonks
 }
 
+enum class SecretAction{
+    Action1,
+    Action2,
+    Action3,
+    Action4,
+    Action5,
+}
+
 fun initBoard(board: Game.GameBoard) : Game.GameBoard {
     board.fields.add(Field(0, Type.Start))
     board.fields[0].couldBuy = false
