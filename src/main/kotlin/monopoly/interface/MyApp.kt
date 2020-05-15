@@ -260,13 +260,14 @@ class GamePlay: View("Monopoly"){
         runAsync { Thread.sleep(1000) }ui{
             if (dice.double) {
                 data[presentId].prisonDays = 0
-                find<DiceDouble>().openModal()
+                dice.double = false
+                playerMove()
             }else{
                 motionPlayer++
                 motionPlayer %= cntPls
                 data[presentId].prisonDays ++
             }
-            endMotion()
+            runAsync { Thread.sleep(250) }ui{endMotion()}
         }
     }
 
@@ -583,15 +584,7 @@ class GamePlay: View("Monopoly"){
         endMotion()
     }
 
-    fun motion(){
-        if (data[motionPlayer].playerInPrison()){
-            presentId = motionPlayer
-            prisonInit()
-            return
-        }
-        buttonRoll.disableProperty().value = true
-        dice.roll()
-        diceRoll(dice.first, dice.second)
+    private fun playerMove(){
         runAsync {
             Thread.sleep(500)
         }ui{
@@ -629,6 +622,18 @@ class GamePlay: View("Monopoly"){
         }
     }
 
+    fun motion(){
+        buttonRoll.disableProperty().value = true
+        if (data[motionPlayer].playerInPrison()){
+            presentId = motionPlayer
+            prisonInit()
+            return
+        }
+        dice.roll()
+        diceRoll(dice.first, dice.second)
+        playerMove()
+    }
+
     private fun endMotion(){
         runAsync { Thread.sleep(300) }ui{
             while (motionPlayer in loosers) {
@@ -643,6 +648,7 @@ class GamePlay: View("Monopoly"){
                 else -> idMotion.text = "Ход игрока ${data[4].name}"
             }
             buttonRoll.disableProperty().value = false
+            if (data[motionPlayer].playerInPrison())motion()
         }
     }
 

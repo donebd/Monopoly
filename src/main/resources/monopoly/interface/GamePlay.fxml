@@ -702,7 +702,7 @@
                                     <Font size="27.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="40.0" layoutY="92.0" text="Осталось ходов в тюрбме:">
+                              <Label layoutX="40.0" layoutY="92.0" text="Осталось ходов в тюрьме:">
                                  <font>
                                     <Font size="27.0" />
                                  </font>
