@@ -819,6 +819,7 @@ class GamePlay: View("Monopoly"){
     }
 
     private fun endMotion(){
+        data[presentId].currentMotionUpgrade.clear()
         runAsync { Thread.sleep(300) }ui{
             while (motionPlayer in loosers) {
                 motionPlayer++
@@ -985,7 +986,8 @@ class Field1 : Fragment(){
         penaltyLabel.text = "${board.fields[1].penalty}"
         countUpgrade.text = "${board.fields[1].upgrade}"
         if (data[gamePlay.presentId].realty.filter { it.type == Type.Perfume }.size == 2){
-            upgradeButton.disableProperty().value = board.fields[1].upgrade > 4
+            upgradeButton.disableProperty().value = (board.fields[1].upgrade > 4 ||
+                    data[gamePlay.presentId].currentMotionUpgrade.contains(Type.Perfume))
             //check for count upgrade
             sellUpgradeButton.disableProperty().value = board.fields[1].upgrade == 0
         }
@@ -1006,6 +1008,7 @@ class Field1 : Fragment(){
             data[gamePlay.presentId].moneyChange(-board.fields[1].upgradeCost)
             board.fields[1].upgrade++
             board.fields[1].penaltyUpdate()
+            data[gamePlay.presentId].currentMotionUpgrade.add(Type.Perfume)
             changable()
             return
         }

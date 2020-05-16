@@ -13,6 +13,7 @@ class Game{
         var prisonDays = 0
         var doubleInARow = 0
         val realty = mutableListOf<GameBoard.Field>()
+        val currentMotionUpgrade = mutableListOf<Type>()//monitoring 1 upgrade of one of type realty in motion
 
         init {
             moneyChange(0)
@@ -58,6 +59,7 @@ class Game{
             print("On the dice fell $count ")
             if (double) print(", double!")
             println()
+            count = 1
         }
 
         fun secretAction() {
