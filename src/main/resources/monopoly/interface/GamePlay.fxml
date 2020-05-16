@@ -61,7 +61,7 @@
                                     <Image url="@../fields/Chanel.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #7a7996;" text="2.100K">
+                              <Label fx:id="field1Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #7a7996;" text="2.100K">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -78,7 +78,7 @@
                                     <Image url="@../fields/Lacoste.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #7a7996;" text="2.200K">
+                              <Label fx:id="field2Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #7a7996;" text="2.200K">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -95,7 +95,7 @@
                                     <Insets bottom="32.0" top="31.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #2ebfe6;" text="2.300K">
+                              <Label fx:id="field3Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #2ebfe6;" text="2.300K">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -129,7 +129,7 @@
                                     <Image url="@../fields/Puma.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #2ebfe6;" text="2.500K">
+                              <Label fx:id="field5Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #2ebfe6;" text="2.500K">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -146,7 +146,7 @@
                                     <Insets bottom="13.0" top="13.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #2ebfe6;" text="2.600K">
+                              <Label fx:id="field6Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #2ebfe6;" text="2.600K">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -180,7 +180,7 @@
                               </ImageView>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #5b3dfe;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.700K">
+                                    <Label fx:id="field27Penalty" prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.700K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -201,7 +201,7 @@
                               </ImageView>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #5b3dfe;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.600K">
+                                    <Label fx:id="field26Penalty" prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.600K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -222,7 +222,7 @@
                               </ImageView>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e43c3c;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.000K">
+                                    <Label fx:id="field25Penalty" prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="3.000K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -243,7 +243,7 @@
                               </ImageView>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #fc9032;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.400K">
+                                    <Label fx:id="field24Penalty" prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.400K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -276,7 +276,7 @@
                               </ImageView>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #fc9032;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.200K">
+                                    <Label fx:id="field22Penalty" prefHeight="96.0" prefWidth="50.0" rotate="-90.0" text="4.200K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -295,7 +295,7 @@
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e6ce2e;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="2.800K">
+                                    <Label fx:id="field8Penalty" prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="2.800K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -316,7 +316,7 @@
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e6ce2e;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="2.900K">
+                                    <Label fx:id="field9Penalty" prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="2.900K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -337,7 +337,7 @@
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e43c3c;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="3.000K">
+                                    <Label fx:id="field10Penalty" prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="3.000K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -355,7 +355,7 @@
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #3dab53;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="3.100K">
+                                    <Label fx:id="field11Penalty" prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="3.100K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -397,7 +397,7 @@
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #3dab53;">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="3.300K">
+                                    <Label fx:id="field13Penalty" prefHeight="96.0" prefWidth="50.0" rotate="90.0" text="3.300K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -420,7 +420,7 @@
                <center>
                   <AnchorPane BorderPane.alignment="CENTER">
                      <children>
-                        <BorderPane layoutX="1.0" prefHeight="571.0" prefWidth="600.0" style="-fx-border-color: #000000; -fx-background-color: #d7d6d0;">
+                        <BorderPane layoutX="1.0" prefHeight="575.0" prefWidth="600.0" style="-fx-border-color: #000000; -fx-background-color: #d7d6d0;">
                            <top>
                               <HBox prefHeight="120.0" prefWidth="0.0" BorderPane.alignment="CENTER">
                                  <children>
@@ -698,7 +698,7 @@
                                     <Image url="@../dice.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="prisonMessage" layoutX="40.0" layoutY="47.0" text="Заплатите 500К, или выбейте дубль">
+                              <Label fx:id="prisonMessage" layoutX="40.0" layoutY="47.0" text="Заплатите 500, или выбейте дубль">
                                  <font>
                                     <Font size="27.0" />
                                  </font>
@@ -727,7 +727,7 @@
                         </AnchorPane>
                         <AnchorPane fx:id="negativeAction" disable="true" layoutX="7.0" layoutY="208.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="369.0" prefWidth="586.0" style="-fx-background-color: #d7d6d0;">
                            <children>
-                              <Label layoutX="129.0" text="Случаилось происшетсвие!">
+                              <Label layoutX="129.0" text="Случилось происшетсвие!">
                                  <font>
                                     <Font size="27.0" />
                                  </font>
@@ -793,7 +793,7 @@
                         </VBox>
                         <VBox fx:id="field19" prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
                            <children>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.900K" textAlignment="CENTER">
+                              <Label fx:id="field19Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.900K" textAlignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -827,7 +827,7 @@
                         </VBox>
                         <VBox fx:id="field17" prefHeight="214.0" prefWidth="101.0" style="-fx-border-color: #000000;">
                            <children>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #e43c3c;" text="3.000K" textAlignment="CENTER">
+                              <Label fx:id="field17Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #e43c3c;" text="3.000K" textAlignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -841,7 +841,7 @@
                         </VBox>
                         <VBox fx:id="field16" prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
                            <children>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.600K" textAlignment="CENTER">
+                              <Label fx:id="field16Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.600K" textAlignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -858,7 +858,7 @@
                         </VBox>
                         <VBox fx:id="field15" prefHeight="184.0" prefWidth="96.0" style="-fx-border-color: #000000;">
                            <children>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.500K" textAlignment="CENTER">
+                              <Label fx:id="field15Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.500K" textAlignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>

@@ -18,7 +18,7 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <Text layoutX="32.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="За проход круга вы получаете 2000К на счет!" wrappingWidth="459.3291015625">
+      <Text layoutX="32.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="За проход круга вы получаете 2000 на счет!" wrappingWidth="459.3291015625">
          <font>
             <Font size="22.0" />
          </font>

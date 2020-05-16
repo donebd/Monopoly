@@ -28,9 +28,9 @@ class MyApp: App(Begin::class){
 
 var data = mutableListOf<Game.Player>()
 
-var gamePlay = GamePlay()
-
 var board = Game.GameBoard()
+
+var gamePlay = GamePlay()
 
 var motionPlayer = 0
 
@@ -139,6 +139,7 @@ class GamePlay: View("Monopoly"){
             data[presentId].moneyChange(-board.fields[data[presentId].position].cost)
             data[presentId].realty.add(board.fields[data[presentId].position])
             board.fields[data[presentId].position].owner = data[presentId]
+            board.fields[data[presentId].position].penaltyUpdate()
             when(presentId){
                 0 -> paintField(data[presentId].position,c("#f13030"))
                 1 -> paintField(data[presentId].position,c("#f27330"))
@@ -215,11 +216,11 @@ class GamePlay: View("Monopoly"){
         negativeAction.opacity = 1.0
         negativeAction.disableProperty().value = false
         when(dice.secret.second){
-            SecretAction.Action1 -> negativeText.text = "Вас обокрали на 300К"
-            SecretAction.Action2 -> negativeText.text = "Вы попали на распродажу и потратили там 500К"
-            SecretAction.Action3 -> negativeText.text = "Вы испортили свои любимые штаны за 40К"
-            SecretAction.Action4 -> negativeText.text = "В банке произошла ошибка, и с вас списали 750К"
-            else -> negativeText.text = "Вы простудились, и потратили 250К в аптеке"
+            SecretAction.Action1 -> negativeText.text = "Вас обокрали на 300"
+            SecretAction.Action2 -> negativeText.text = "Вы попали на распродажу и потратили там 500"
+            SecretAction.Action3 -> negativeText.text = "Вы испортили свои любимые штаны за 40"
+            SecretAction.Action4 -> negativeText.text = "В банке произошла ошибка, и с вас списали 750"
+            else -> negativeText.text = "Вы простудились, и потратили 250 в аптеке"
         }
     }
 
@@ -279,13 +280,13 @@ class GamePlay: View("Monopoly"){
     private val prisonSurrenderButton : Button by fxid()
 
     private fun prisonInit(){
-        prisonMessage.text = "Заплатите 500К, или выбейте дубль"
+        prisonMessage.text = "Заплатите 500, или выбейте дубль"
         prisonNotEnoughMoney.opacity = 0.0
         prison.opacity = 1.0
         prison.disableProperty().value = false
         prisonTryButton.disableProperty().value = false
         if (data[presentId].prisonDays == 4) {
-            prisonMessage.text = "Заплатите 750К"
+            prisonMessage.text = "Заплатите 750"
             prisonTryButton.disableProperty().value = true
             prisonSurrenderButton.opacity = 1.0
             prisonSurrenderButton.disableProperty().value = false
@@ -446,24 +447,44 @@ class GamePlay: View("Monopoly"){
 
     //game realty fields
     private val field1 : VBox by fxid()
+    private val field1Penalty : Label by fxid()
     private val field2 : VBox by fxid()
+    private val field2Penalty : Label by fxid()
     private val field3 : VBox by fxid()
+    private val field3Penalty : Label by fxid()
     private val field5 : VBox by fxid()
+    private val field5Penalty : Label by fxid()
     private val field6 : VBox by fxid()
+    private val field6Penalty : Label by fxid()
     private val field8 : HBox by fxid()
+    private val field8Penalty : Label by fxid()
     private val field9 : HBox by fxid()
+    private val field9Penalty : Label by fxid()
     private val field10 : HBox by fxid()
+    private val field10Penalty : Label by fxid()
     private val field11 : HBox by fxid()
+    private val field11Penalty : Label by fxid()
     private val field13 : HBox by fxid()
+    private val field13Penalty : Label by fxid()
     private val field15 : VBox by fxid()
+    private val field15Penalty : Label by fxid()
     private val field16 : VBox by fxid()
+    private val field16Penalty : Label by fxid()
     private val field17 : VBox by fxid()
+    private val field17Penalty : Label by fxid()
     private val field19 : VBox by fxid()
+    private val field19Penalty : Label by fxid()
     private val field22 : HBox by fxid()
+    private val field22Penalty : Label by fxid()
     private val field24 : HBox by fxid()
+    private val field24Penalty : Label by fxid()
     private val field25 : HBox by fxid()
+    private val field25Penalty : Label by fxid()
     private val field26 : HBox by fxid()
+    private val field26Penalty : Label by fxid()
     private val field27 : HBox by fxid()
+    private val field27Penalty : Label by fxid()
+
     //paint field by owner
     private fun paintField(number: Int, color : Color){
         when(number){
@@ -574,12 +595,36 @@ class GamePlay: View("Monopoly"){
             pl5.text += data[4].name
             moneylbl5.bind(data[4].moneyProperty)
         }
+        linkCostOfField()
+    }
+
+    private fun linkCostOfField(){
+        field1Penalty.bind(board.fields[1].penaltyProperty)
+        field2Penalty.bind(board.fields[2].penaltyProperty)
+        field3Penalty.bind(board.fields[3].penaltyProperty)
+        field5Penalty.bind(board.fields[5].penaltyProperty)
+        field6Penalty.bind(board.fields[6].penaltyProperty)
+        field8Penalty.bind(board.fields[8].penaltyProperty)
+        field9Penalty.bind(board.fields[9].penaltyProperty)
+        field10Penalty.bind(board.fields[10].penaltyProperty)
+        field11Penalty.bind(board.fields[11].penaltyProperty)
+        field13Penalty.bind(board.fields[13].penaltyProperty)
+        field15Penalty.bind(board.fields[15].penaltyProperty)
+        field16Penalty.bind(board.fields[16].penaltyProperty)
+        field17Penalty.bind(board.fields[17].penaltyProperty)
+        field19Penalty.bind(board.fields[19].penaltyProperty)
+        field22Penalty.bind(board.fields[22].penaltyProperty)
+        field24Penalty.bind(board.fields[24].penaltyProperty)
+        field25Penalty.bind(board.fields[25].penaltyProperty)
+        field26Penalty.bind(board.fields[26].penaltyProperty)
+        field27Penalty.bind(board.fields[27].penaltyProperty)
     }
 
     private fun clearFieldLooser(current : Game.Player){
         for (i in current.realty){
             paintField(i.location,c("#d2edd7"))
             board.fields[i.location].owner = null
+            board.fields[i.location].penaltyUpdate()
         }
         when (current.id){
             1 -> {
@@ -695,8 +740,8 @@ class GamePlay: View("Monopoly"){
         runAsync {
             Thread.sleep(250)
         }ui{
-            //check cycle completed
-            if (data[motionPlayer].position + dice.count > 27){
+            //check cycle completed and reward if count of cycles < 5
+            if (data[motionPlayer].position + dice.count > 27 && data[motionPlayer].numberOfMoves < 140){
                 presentId = motionPlayer
                 runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal()}
             }
@@ -821,35 +866,35 @@ class SomeActionAlert : Fragment(){
         }
         //stonks
         if (data[gamePlay.presentId].position == 23){
-            message.text = "Вы выйграли 3000К в лотерее!"
+            message.text = "Вы выйграли 3000 в лотерее!"
         }
         //secret only positive
         if (board.fields[data[gamePlay.presentId].position].type == Type.Secret){
             when(Game.Dice().secret.second){
                 SecretAction.Action1 -> {
                     data[gamePlay.presentId].moneyChange(250)
-                    message.text = "Вы нашли в зимней куртке забытые 250К"
+                    message.text = "Вы нашли в зимней куртке забытые 250"
                 }
                 SecretAction.Action2 -> {
                     data[gamePlay.presentId].moneyChange(500)
-                    message.text = "Вы выйграли на ставках 500К"
+                    message.text = "Вы выйграли на ставках 500"
                 }
                 SecretAction.Action3 -> {
                     data[gamePlay.presentId].moneyChange(300)
-                    message.text = "Вам вернули долг 300К"
+                    message.text = "Вам вернули долг 300"
                 }
                 SecretAction.Action4 -> {
                     data[gamePlay.presentId].moneyChange(750)
-                    message.text = "В банке произошла ошибка, на ваш счет перечислено 750К"
+                    message.text = "В банке произошла ошибка, на ваш счет перечислено 750"
                 }
                 else -> {
                     data[gamePlay.presentId].moneyChange(100)
-                    message.text = "Ваша собака принесла вам 100К"
+                    message.text = "Ваша собака принесла вам 100"
                 }
             }
         }
         //start bonus
-        if (data[gamePlay.presentId].position == 0) message.text = "За попадание на поле СТАРТ, вы получаете 1000К"
+        if (data[gamePlay.presentId].position == 0) message.text = "За попадание на поле СТАРТ, вы получаете 1000"
     }
 
     fun exit(){

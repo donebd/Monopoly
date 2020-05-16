@@ -6,7 +6,7 @@ class Game{
 
     class Player(val id: Int){
         var name = "Player$id"
-        private var numberOfMoves = 0
+        var numberOfMoves = 0
         var position = 0
         var money = 15000
         val moneyProperty = SimpleIntegerProperty()
@@ -61,7 +61,7 @@ class Game{
         }
 
         fun secretAction() {
-            val answer1 = (1..2).random() == 1
+            val answer1 = (1..3).random() == 1
             val answer2 = when((1..5).random()){
                 1 -> SecretAction.Action1
                 2 -> SecretAction.Action2
@@ -86,11 +86,22 @@ class Game{
             var layoutY = 0.0
             var owner : Player? = null
             var cost =  2000 + location*100
-            var penalty = cost / 10
+            var penalty = cost
+            val penaltyProperty = SimpleIntegerProperty()
+
+            init {
+                penaltyUpdate()
+            }
+
+            fun penaltyUpdate(){
+                penalty = if (owner != null) cost / 10
+                else cost
+                penaltyProperty.value = penalty
+            }
 
             fun costUpdate(a : Int){
                 cost = a
-                penalty = cost / 10
+                penaltyUpdate()
             }
         }
         }
