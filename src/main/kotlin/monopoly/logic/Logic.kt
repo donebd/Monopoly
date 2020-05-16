@@ -59,7 +59,6 @@ class Game{
             print("On the dice fell $count ")
             if (double) print(", double!")
             println()
-            count = 1
         }
 
         fun secretAction() {
