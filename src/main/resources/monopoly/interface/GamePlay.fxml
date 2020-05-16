@@ -51,7 +51,7 @@
                               </ImageView>
                            </children>
                         </VBox>
-                        <VBox fx:id="field1" maxWidth="99.0" prefHeight="215.0" prefWidth="99.0" style="-fx-border-color: #000000;">
+                        <VBox fx:id="field1" maxWidth="99.0" onMouseClicked="#field1Action" prefHeight="215.0" prefWidth="99.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fitHeight="186.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true">
                                  <VBox.margin>
@@ -68,7 +68,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox fx:id="field2" prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
+                        <VBox fx:id="field2" onMouseClicked="#field2Action" prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fitHeight="186.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
                                  <VBox.margin>
@@ -85,7 +85,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox fx:id="field3" prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
+                        <VBox fx:id="field3" onMouseClicked="#field3Action" prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fitHeight="186.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -119,7 +119,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox fx:id="field5" prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
+                        <VBox fx:id="field5" onMouseClicked="#field5Action" prefHeight="214.0" prefWidth="100.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fitHeight="168.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
                                  <VBox.margin>
@@ -136,7 +136,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox fx:id="field6" prefHeight="216.0" prefWidth="101.0" style="-fx-border-color: #000000;">
+                        <VBox fx:id="field6" onMouseClicked="#field6Action" prefHeight="216.0" prefWidth="101.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fitHeight="186.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -168,7 +168,7 @@
                <left>
                   <VBox prefHeight="571.0" prefWidth="214.0" style="-fx-background-color: #d2edd7;" BorderPane.alignment="CENTER">
                      <children>
-                        <HBox fx:id="field27" prefHeight="96.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox fx:id="field27" onMouseClicked="#field27Action" prefHeight="96.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fitHeight="93.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -189,7 +189,7 @@
                               </HBox>
                            </children>
                         </HBox>
-                        <HBox fx:id="field26" prefHeight="92.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox fx:id="field26" onMouseClicked="#field26Action" prefHeight="92.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fx:id="field25" fitHeight="92.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -210,7 +210,7 @@
                               </HBox>
                            </children>
                         </HBox>
-                        <HBox fx:id="field25" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox fx:id="field25" onMouseClicked="#field25Action" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fitHeight="92.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -231,7 +231,7 @@
                               </HBox>
                            </children>
                         </HBox>
-                        <HBox fx:id="field24" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox fx:id="field24" onMouseClicked="#field24Action" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fitHeight="92.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -264,7 +264,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <HBox fx:id="field22" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox fx:id="field22" onMouseClicked="#field22Action" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fitHeight="91.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -291,7 +291,7 @@
                <right>
                   <VBox prefHeight="571.0" prefWidth="214.0" style="-fx-background-color: #d2edd7;" BorderPane.alignment="CENTER">
                      <children>
-                        <HBox fx:id="field8" prefHeight="96.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox fx:id="field8" onMouseClicked="#field8Action" prefHeight="96.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e6ce2e;">
                                  <children>
@@ -312,7 +312,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <HBox fx:id="field9" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox fx:id="field9" onMouseClicked="#field9Action" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e6ce2e;">
                                  <children>
@@ -333,7 +333,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <HBox fx:id="field10" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox fx:id="field10" onMouseClicked="#field10Action" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #e43c3c;">
                                  <children>
@@ -351,7 +351,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <HBox fx:id="field11" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox fx:id="field11" onMouseClicked="#field11Action" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #3dab53;">
                                  <children>
@@ -372,7 +372,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <HBox prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox onMouseClicked="#field13Action" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0">
                                  <children>
@@ -791,7 +791,7 @@
                               </ImageView>
                            </children>
                         </VBox>
-                        <VBox fx:id="field19" prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
+                        <VBox fx:id="field19" onMouseClicked="#field19Action" prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
                            <children>
                               <Label fx:id="field19Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.900K" textAlignment="CENTER">
                                  <font>
@@ -825,7 +825,7 @@
                               </ImageView>
                            </children>
                         </VBox>
-                        <VBox fx:id="field17" prefHeight="214.0" prefWidth="101.0" style="-fx-border-color: #000000;">
+                        <VBox fx:id="field17" onMouseClicked="#field17Action" prefHeight="214.0" prefWidth="101.0" style="-fx-border-color: #000000;">
                            <children>
                               <Label fx:id="field17Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #e43c3c;" text="3.000K" textAlignment="CENTER">
                                  <font>
@@ -839,7 +839,7 @@
                               </ImageView>
                            </children>
                         </VBox>
-                        <VBox fx:id="field16" prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
+                        <VBox fx:id="field16" onMouseClicked="#field16Action" prefHeight="214.0" prefWidth="99.0" style="-fx-border-color: #000000;">
                            <children>
                               <Label fx:id="field16Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.600K" textAlignment="CENTER">
                                  <font>
@@ -856,7 +856,7 @@
                               </ImageView>
                            </children>
                         </VBox>
-                        <VBox fx:id="field15" prefHeight="184.0" prefWidth="96.0" style="-fx-border-color: #000000;">
+                        <VBox fx:id="field15" onMouseClicked="#field15Action" prefHeight="184.0" prefWidth="96.0" style="-fx-border-color: #000000;">
                            <children>
                               <Label fx:id="field15Penalty" alignment="CENTER" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #ca64cb;" text="3.500K" textAlignment="CENTER">
                                  <font>

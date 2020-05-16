@@ -81,11 +81,13 @@ class Game{
         }
 
         class Field(val location: Int, val type: Type){
+            var upgrade = 0
             var couldBuy = true
             var layoutX = 0.0
             var layoutY = 0.0
             var owner : Player? = null
             var cost =  2000 + location*100
+            val upgradeCost = cost / 4
             var penalty = cost
             val penaltyProperty = SimpleIntegerProperty()
 
@@ -94,7 +96,7 @@ class Game{
             }
 
             fun penaltyUpdate(){
-                penalty = if (owner != null) cost / 10
+                penalty = if (owner != null) (cost / 10) + (cost / 10)*upgrade*2
                 else cost
                 penaltyProperty.value = penalty
             }

@@ -448,45 +448,68 @@ class GamePlay: View("Monopoly"){
     //game realty fields
     private val field1 : VBox by fxid()
     private val field1Penalty : Label by fxid()
+    fun field1Action(){
+        if (canControl(1)) find<Field1>().openModal()
+    }
     private val field2 : VBox by fxid()
     private val field2Penalty : Label by fxid()
+    fun field2Action(){}
     private val field3 : VBox by fxid()
     private val field3Penalty : Label by fxid()
+    fun field3Action(){}
     private val field5 : VBox by fxid()
     private val field5Penalty : Label by fxid()
+    fun field5Action(){}
     private val field6 : VBox by fxid()
     private val field6Penalty : Label by fxid()
+    fun field6Action(){}
     private val field8 : HBox by fxid()
     private val field8Penalty : Label by fxid()
+    fun field8Action(){}
     private val field9 : HBox by fxid()
     private val field9Penalty : Label by fxid()
+    fun field9Action(){}
     private val field10 : HBox by fxid()
     private val field10Penalty : Label by fxid()
+    fun field10Action(){}
     private val field11 : HBox by fxid()
     private val field11Penalty : Label by fxid()
+    fun field11Action(){}
     private val field13 : HBox by fxid()
     private val field13Penalty : Label by fxid()
+    fun field13Action(){}
     private val field15 : VBox by fxid()
     private val field15Penalty : Label by fxid()
+    fun field15Action(){}
     private val field16 : VBox by fxid()
     private val field16Penalty : Label by fxid()
+    fun field16Action(){}
     private val field17 : VBox by fxid()
     private val field17Penalty : Label by fxid()
+    fun field17Action(){}
     private val field19 : VBox by fxid()
     private val field19Penalty : Label by fxid()
+    fun field19Action(){}
     private val field22 : HBox by fxid()
     private val field22Penalty : Label by fxid()
+    fun field22Action(){}
     private val field24 : HBox by fxid()
     private val field24Penalty : Label by fxid()
+    fun field24Action(){}
     private val field25 : HBox by fxid()
     private val field25Penalty : Label by fxid()
+    fun field25Action(){}
     private val field26 : HBox by fxid()
     private val field26Penalty : Label by fxid()
+    fun field26Action(){}
     private val field27 : HBox by fxid()
     private val field27Penalty : Label by fxid()
+    fun field27Action(){}
+
+    private fun canControl(number : Int) = board.fields[number].owner == data[presentId]
 
     //paint field by owner
-    private fun paintField(number: Int, color : Color){
+    fun paintField(number: Int, color : Color){
         when(number){
             1 -> field1.style(append = true){backgroundColor += color;}
             2 -> field2.style(append = true){backgroundColor += color}
@@ -741,11 +764,10 @@ class GamePlay: View("Monopoly"){
             Thread.sleep(250)
         }ui{
             //check cycle completed and reward if count of cycles < 5
-            if (data[motionPlayer].position + dice.count > 27 && data[motionPlayer].numberOfMoves < 140){
-                presentId = motionPlayer
+            if (data[presentId].position + dice.count > 27 && data[presentId].numberOfMoves < 140){
                 runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal()}
             }
-            when(motionPlayer){
+            when(presentId){
                 0 -> {
                     data[0].positionChange(dice.count)
                     movePlayer1(data[0].position, false)
@@ -770,7 +792,6 @@ class GamePlay: View("Monopoly"){
             runAsync {
                 Thread.sleep(500)
             }ui{
-                presentId = motionPlayer
                 runAsync { Thread.sleep(50) }ui{fieldEvent()}
 
                 if (!dice.double) motionPlayer ++
@@ -781,16 +802,14 @@ class GamePlay: View("Monopoly"){
 
     fun motion(){
         buttonRoll.disableProperty().value = true
-        if (data[motionPlayer].playerInPrison()){
-            presentId = motionPlayer
+        if (data[presentId].playerInPrison()){
             prisonInit()
             return
         }
         dice.roll()
         diceRoll(dice.first, dice.second)
         runAsync { Thread.sleep(500) }ui {
-            if (dice.double && data[motionPlayer].doubleInARow == 2) {
-                presentId = motionPlayer
+            if (dice.double && data[presentId].doubleInARow == 2) {
                 playerToPrison(data[presentId])
                 dice.double = false
             } else {
@@ -805,6 +824,7 @@ class GamePlay: View("Monopoly"){
                 motionPlayer++
                 motionPlayer %= cntPls
             }
+            presentId = motionPlayer
             when (motionPlayer){
                 0 -> idMotion.text = "Ход игрока ${data[0].name}"
                 1 -> idMotion.text = "Ход игрока ${data[1].name}"
@@ -938,5 +958,64 @@ class FinishGame : Fragment(){
     fun exit(){
         gamePlay.close()
         close()
+    }
+}
+
+class Field1 : Fragment(){
+
+    override val root : AnchorPane by fxml()
+
+    private val player : Label by fxid()
+    private val penaltyLabel : Label by fxid()
+    private val costLabel : Label by fxid()
+    private val countUpgrade : Label by fxid()
+    private val costOfUpgrade : Label by fxid()
+    private val notEnoughMoney : Label by fxid()
+    private val upgradeButton : Button by fxid()
+    private val sellUpgradeButton : Button by fxid()
+
+    init {
+        player.text = data[gamePlay.presentId].name
+        costLabel.text = "${board.fields[1].cost}"
+        costOfUpgrade.text = "${board.fields[1].upgradeCost}"
+        changable()
+    }
+
+    private fun changable(){
+        penaltyLabel.text = "${board.fields[1].penalty}"
+        countUpgrade.text = "${board.fields[1].upgrade}"
+        if (data[gamePlay.presentId].realty.filter { it.type == Type.Perfume }.size == 2){
+            upgradeButton.disableProperty().value = board.fields[1].upgrade > 4
+            //check for count upgrade
+            sellUpgradeButton.disableProperty().value = board.fields[1].upgrade == 0
+        }
+    }
+
+    fun sellByHalf(){
+        data[gamePlay.presentId].moneyChange(board.fields[1].cost/2)
+        data[gamePlay.presentId].realty.remove( board.fields[1])
+        board.fields[1].owner = null
+        board.fields[1].upgrade = 0
+        board.fields[1].penaltyUpdate()
+        gamePlay.paintField(1,c("#d2edd7"))
+        close()
+    }
+
+    fun buildUpgrade(){
+        if (data[gamePlay.presentId].money >= board.fields[1].upgradeCost){
+            data[gamePlay.presentId].moneyChange(-board.fields[1].upgradeCost)
+            board.fields[1].upgrade++
+            board.fields[1].penaltyUpdate()
+            changable()
+            return
+        }
+        notEnoughMoney.opacity = 1.0
+    }
+
+    fun sellUpgrade(){
+        data[gamePlay.presentId].moneyChange(board.fields[1].upgradeCost)
+        board.fields[1].upgrade--
+        board.fields[1].penaltyUpdate()
+        changable()
     }
 }
