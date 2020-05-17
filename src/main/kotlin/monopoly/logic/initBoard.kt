@@ -54,6 +54,7 @@ fun initBoard(board: Game.GameBoard) : Game.GameBoard {
     board.fields[9].layoutX = 840.0
     board.fields[9].layoutY = 270.0
     board.fields.add(Field(10, Type.Car))
+    board.fields[10].particular = true
     board.fields[10].costUpdate(3000)
     board.fields[10].layoutX = 840.0
     board.fields[10].layoutY = 370.0
@@ -79,6 +80,7 @@ fun initBoard(board: Game.GameBoard) : Game.GameBoard {
     board.fields[16].layoutX = 590.0
     board.fields[16].layoutY = 770.0
     board.fields.add(Field(17, Type.Car))
+    board.fields[17].particular = true
     board.fields[17].costUpdate(3000)
     board.fields[17].layoutX = 480.0
     board.fields[17].layoutY = 770.0
@@ -105,6 +107,7 @@ fun initBoard(board: Game.GameBoard) : Game.GameBoard {
     board.fields.add(Field(24, Type.FastFood))
     board.fields[24].layoutY = 480.0
     board.fields.add(Field(25, Type.Car))
+    board.fields[25].particular = true
     board.fields[25].costUpdate(3000)
     board.fields[25].layoutY = 380.0
     board.fields.add(Field(26, Type.Software))
