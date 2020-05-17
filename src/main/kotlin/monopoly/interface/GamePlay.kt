@@ -485,6 +485,15 @@ class GamePlay: View("Monopoly"){
 
         println(cntPls)
 
+        //some balance in ingame value
+        if (cntPls == 2){
+            for (i in 0..1)data[i].moneyChange(10000)
+        }
+
+        if (cntPls == 3){
+            for (i in 0..2)data[i].moneyChange(5000)
+        }
+
         if (cntPls >= 1) {
             pl1.text += data[0].name
             moneylbl1.bind(data[0].moneyProperty)
@@ -659,8 +668,9 @@ class GamePlay: View("Monopoly"){
         runAsync {
             Thread.sleep(250)
         }ui{
-            //check cycle completed and reward if count of cycles < 5
-            if (data[presentId].position + dice.count > 27 && data[presentId].numberOfMoves < 140){
+            //check cycle completed and reward according to the settings
+            if ((data[presentId].position + dice.count > 27 && data[presentId].numberOfMoves < 140)||
+                (data[presentId].position + dice.count > 27 && data[presentId].numberOfMoves < 280 && data.size < 4)){
                 runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal()}
             }
             when(presentId){

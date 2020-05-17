@@ -19,6 +19,7 @@ class Field11 : Fragment(){
     private val notEnoughMoney : Label by fxid()
     private val upgradeButton : Button by fxid()
     private val sellUpgradeButton : Button by fxid()
+    private val sellByHalfButton : Button by fxid()
 
     init {
         player.text = data[gamePlay.presentId].name
@@ -36,6 +37,7 @@ class Field11 : Fragment(){
             //check for count upgrade
             sellUpgradeButton.disableProperty().value = board.fields[11].upgrade == 0
         }
+        sellByHalfButton.disableProperty().value = board.fields[11].upgrade != 0
     }
 
     fun sellByHalf(){
