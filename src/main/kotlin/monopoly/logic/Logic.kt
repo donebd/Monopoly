@@ -88,7 +88,7 @@ class Game{
             var layoutY = 0.0
             var owner : Player? = null
             var cost =  2000 + location*100
-            val upgradeCost = cost / 4
+            val upgradeCost = cost / 3
             var penalty = cost
             val penaltyProperty = SimpleIntegerProperty()
 
@@ -97,7 +97,7 @@ class Game{
             }
 
             fun penaltyUpdate(){
-                penalty = if (owner != null) (cost / 10) + (cost / 10)*upgrade*2
+                penalty = if (owner != null) (cost / 10) + (cost / 10)*upgrade*3
                 else cost
                 penaltyProperty.value = penalty
             }

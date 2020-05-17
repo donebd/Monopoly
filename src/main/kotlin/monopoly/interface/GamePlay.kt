@@ -346,63 +346,61 @@ class GamePlay: View("Monopoly"){
     //game realty fields
     private val field1 : VBox by fxid()
     private val field1Penalty : Label by fxid()
-    fun field1Action(){
-        if (canControl(1)) find<Field1>().openModal()
-    }
+    fun field1Action(){ if (canControl(1)) find<Field1>().openModal() }
     private val field2 : VBox by fxid()
     private val field2Penalty : Label by fxid()
-    fun field2Action(){}
+    fun field2Action(){ if (canControl(2)) find<Field2>().openModal() }
     private val field3 : VBox by fxid()
     private val field3Penalty : Label by fxid()
-    fun field3Action(){}
+    fun field3Action(){ if (canControl(3)) find<Field3>().openModal() }
     private val field5 : VBox by fxid()
     private val field5Penalty : Label by fxid()
-    fun field5Action(){}
+    fun field5Action(){ if (canControl(5)) find<Field5>().openModal() }
     private val field6 : VBox by fxid()
     private val field6Penalty : Label by fxid()
-    fun field6Action(){}
+    fun field6Action(){ if (canControl(6)) find<Field6>().openModal() }
     private val field8 : HBox by fxid()
     private val field8Penalty : Label by fxid()
-    fun field8Action(){}
+    fun field8Action(){ if (canControl(8)) find<Field8>().openModal() }
     private val field9 : HBox by fxid()
     private val field9Penalty : Label by fxid()
-    fun field9Action(){}
+    fun field9Action(){ if (canControl(9)) find<Field9>().openModal() }
     private val field10 : HBox by fxid()
     private val field10Penalty : Label by fxid()
     fun field10Action(){}
     private val field11 : HBox by fxid()
     private val field11Penalty : Label by fxid()
-    fun field11Action(){}
+    fun field11Action(){ if (canControl(11)) find<Field11>().openModal() }
     private val field13 : HBox by fxid()
     private val field13Penalty : Label by fxid()
-    fun field13Action(){}
+    fun field13Action(){ if (canControl(13)) find<Field13>().openModal() }
     private val field15 : VBox by fxid()
     private val field15Penalty : Label by fxid()
-    fun field15Action(){}
+    fun field15Action(){ if (canControl(15)) find<Field15>().openModal() }
     private val field16 : VBox by fxid()
     private val field16Penalty : Label by fxid()
-    fun field16Action(){}
+    fun field16Action(){ if (canControl(16)) find<Field16>().openModal() }
     private val field17 : VBox by fxid()
     private val field17Penalty : Label by fxid()
     fun field17Action(){}
     private val field19 : VBox by fxid()
     private val field19Penalty : Label by fxid()
-    fun field19Action(){}
+    fun field19Action(){ if (canControl(19)) find<Field19>().openModal() }
     private val field22 : HBox by fxid()
     private val field22Penalty : Label by fxid()
-    fun field22Action(){}
+    fun field22Action(){ if (canControl(22)) find<Field22>().openModal() }
     private val field24 : HBox by fxid()
     private val field24Penalty : Label by fxid()
-    fun field24Action(){}
+    fun field24Action(){ if (canControl(24)) find<Field24>().openModal() }
     private val field25 : HBox by fxid()
     private val field25Penalty : Label by fxid()
     fun field25Action(){}
     private val field26 : HBox by fxid()
     private val field26Penalty : Label by fxid()
-    fun field26Action(){}
+    fun field26Action(){ if (canControl(26)) find<Field26>().openModal() }
     private val field27 : HBox by fxid()
     private val field27Penalty : Label by fxid()
-    fun field27Action(){}
+    fun field27Action(){ if (canControl(27)) find<Field27>().openModal() }
 
     private fun canControl(number : Int) = board.fields[number].owner == data[presentId]
 
@@ -737,8 +735,10 @@ class GamePlay: View("Monopoly"){
     }
 
     private fun checkEndGame(){
-        if (cntPls - loosers.size == 1){
-            find<FinishGame>().openModal()
+        runAsync { Thread.sleep(350) }ui {
+            if (cntPls - loosers.size == 1) {
+                find<FinishGame>().openModal()
+            }
         }
     }
 

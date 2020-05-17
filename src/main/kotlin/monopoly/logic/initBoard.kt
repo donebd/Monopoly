@@ -15,7 +15,7 @@ enum class Type{
     Airlanes,
     FastFood,
     Car,
-    It,
+    Software,
     Stonks
 }
 
@@ -107,9 +107,9 @@ fun initBoard(board: Game.GameBoard) : Game.GameBoard {
     board.fields.add(Field(25, Type.Car))
     board.fields[25].costUpdate(3000)
     board.fields[25].layoutY = 380.0
-    board.fields.add(Field(26, Type.It))
+    board.fields.add(Field(26, Type.Software))
     board.fields[26].layoutY = 290.0
-    board.fields.add(Field(27, Type.It))
+    board.fields.add(Field(27, Type.Software))
     board.fields[27].layoutY = 190.0
     return board
 }

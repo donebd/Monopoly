@@ -372,7 +372,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <HBox onMouseClicked="#field13Action" prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox prefHeight="95.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0">
                                  <children>
@@ -393,7 +393,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <HBox fx:id="field13" prefHeight="93.0" prefWidth="214.0" style="-fx-border-color: #000000;">
+                        <HBox fx:id="field13" onMouseClicked="#field13Action" prefHeight="93.0" prefWidth="214.0" style="-fx-border-color: #000000;">
                            <children>
                               <HBox prefHeight="96.0" prefWidth="50.0" style="-fx-background-color: #3dab53;">
                                  <children>
