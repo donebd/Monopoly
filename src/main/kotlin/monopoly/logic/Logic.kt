@@ -82,6 +82,7 @@ class Game{
         }
 
         class Field(val location: Int, val type: Type){
+            var name = "SomeField"
             var upgrade = 0
             var couldBuy = true
             var layoutX = 0.0
