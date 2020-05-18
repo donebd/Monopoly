@@ -56,9 +56,6 @@ class Game{
             second = (1..4).random()
             count = second + first
             double = first - second == 0
-            print("On the dice fell $count ")
-            if (double) print(", double!")
-            println()
         }
 
         fun secretAction() {
@@ -78,6 +75,7 @@ class Game{
         val fields = mutableListOf<Field>()
 
         init {
+            fields.clear()
             fields.addAll(initBoard(this).fields)
         }
 

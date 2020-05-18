@@ -175,6 +175,35 @@ class Field : Fragment(){
             sellUpgradeButton.disableProperty().value = board.fields[position].upgrade == 0
         }
         sellByHalfButton.disableProperty().value = board.fields[position].upgrade != 0
+        val upgrade = when (board.fields[position].upgrade){
+            0 -> ""
+            1 -> "*"
+            2 -> "**"
+            3 -> "***"
+            4 -> "****"
+            else -> "*****"
+        }
+        when(position){
+            1 -> gamePlay.labelUpgrade1.text = upgrade
+            2 -> gamePlay.labelUpgrade2.text = upgrade
+            3 -> gamePlay.labelUpgrade3.text = upgrade
+            5 -> gamePlay.labelUpgrade5.text = upgrade
+            6 -> gamePlay.labelUpgrade6.text = upgrade
+            8 -> gamePlay.labelUpgrade8.text = upgrade
+            9 -> gamePlay.labelUpgrade9.text = upgrade
+            10 -> gamePlay.labelUpgrade10.text = upgrade
+            11 -> gamePlay.labelUpgrade11.text = upgrade
+            13 -> gamePlay.labelUpgrade13.text = upgrade
+            15 -> gamePlay.labelUpgrade15.text = upgrade
+            16 -> gamePlay.labelUpgrade16.text = upgrade
+            17 -> gamePlay.labelUpgrade17.text = upgrade
+            19 -> gamePlay.labelUpgrade19.text = upgrade
+            22 -> gamePlay.labelUpgrade22.text = upgrade
+            24 -> gamePlay.labelUpgrade24.text = upgrade
+            25 -> gamePlay.labelUpgrade25.text = upgrade
+            26 -> gamePlay.labelUpgrade26.text = upgrade
+            else -> gamePlay.labelUpgrade27.text = upgrade
+        }
     }
 
     fun sellByHalf(){

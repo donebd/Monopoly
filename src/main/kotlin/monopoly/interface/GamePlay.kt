@@ -346,114 +346,133 @@ class GamePlay: View("Monopoly"){
     //game realty fields
     private val field1 : VBox by fxid()
     private val field1Penalty : Label by fxid()
+    val labelUpgrade1 : Label by fxid()
     fun field1Action(){ if (canControl(1)) {
         click = 1
         find<Field>().openModal()
     } }
     private val field2 : VBox by fxid()
     private val field2Penalty : Label by fxid()
+    val labelUpgrade2 : Label by fxid()
     fun field2Action(){ if (canControl(2)) {
         click = 2
         find<Field>().openModal()
     } }
     private val field3 : VBox by fxid()
     private val field3Penalty : Label by fxid()
+    val labelUpgrade3 : Label by fxid()
     fun field3Action(){ if (canControl(3)) {
         click = 3
         find<Field>().openModal()
     } }
     private val field5 : VBox by fxid()
     private val field5Penalty : Label by fxid()
+    val labelUpgrade5 : Label by fxid()
     fun field5Action(){ if (canControl(5)) {
         click = 5
         find<Field>().openModal()
     } }
     private val field6 : VBox by fxid()
     private val field6Penalty : Label by fxid()
+    val labelUpgrade6 : Label by fxid()
     fun field6Action(){ if (canControl(6)) {
         click = 6
         find<Field>().openModal()
     } }
     private val field8 : HBox by fxid()
     private val field8Penalty : Label by fxid()
+    val labelUpgrade8 : Label by fxid()
     fun field8Action(){ if (canControl(8)) {
         click = 8
         find<Field>().openModal()
     } }
     private val field9 : HBox by fxid()
     private val field9Penalty : Label by fxid()
+    val labelUpgrade9 : Label by fxid()
     fun field9Action(){ if (canControl(9)) {
         click = 9
         find<Field>().openModal()
     } }
     private val field10 : HBox by fxid()
     private val field10Penalty : Label by fxid()
+    val labelUpgrade10 : Label by fxid()
     fun field10Action(){ if (canControl(10)) {
         click = 10
         find<Field>().openModal()
     } }
     private val field11 : HBox by fxid()
     private val field11Penalty : Label by fxid()
+    val labelUpgrade11 : Label by fxid()
     fun field11Action(){ if (canControl(11)) {
         click = 11
         find<Field>().openModal()
     } }
     private val field13 : HBox by fxid()
     private val field13Penalty : Label by fxid()
+    val labelUpgrade13 : Label by fxid()
     fun field13Action(){ if (canControl(13)) {
         click = 13
         find<Field>().openModal()
     } }
     private val field15 : VBox by fxid()
     private val field15Penalty : Label by fxid()
+    val labelUpgrade15 : Label by fxid()
     fun field15Action(){ if (canControl(15)) {
         click = 15
         find<Field>().openModal()
     } }
     private val field16 : VBox by fxid()
     private val field16Penalty : Label by fxid()
+    val labelUpgrade16 : Label by fxid()
     fun field16Action(){ if (canControl(16)) {
         click = 16
         find<Field>().openModal()
     } }
     private val field17 : VBox by fxid()
     private val field17Penalty : Label by fxid()
+    val labelUpgrade17 : Label by fxid()
     fun field17Action(){ if (canControl(17)) {
         click = 17
         find<Field>().openModal()
     } }
     private val field19 : VBox by fxid()
     private val field19Penalty : Label by fxid()
+    val labelUpgrade19 : Label by fxid()
     fun field19Action(){ if (canControl(19)) {
         click = 19
         find<Field>().openModal()
     } }
     private val field22 : HBox by fxid()
     private val field22Penalty : Label by fxid()
+    val labelUpgrade22 : Label by fxid()
     fun field22Action(){ if (canControl(22)) {
         click = 22
         find<Field>().openModal()
     } }
     private val field24 : HBox by fxid()
     private val field24Penalty : Label by fxid()
+    val labelUpgrade24 : Label by fxid()
     fun field24Action(){ if (canControl(24)) {
         click = 24
         find<Field>().openModal()
     } }
     private val field25 : HBox by fxid()
     private val field25Penalty : Label by fxid()
+    val labelUpgrade25 : Label by fxid()
     fun field25Action(){ if (canControl(25)) {
         click = 25
         find<Field>().openModal()
     } }
     private val field26 : HBox by fxid()
     private val field26Penalty : Label by fxid()
+    val labelUpgrade26 : Label by fxid()
     fun field26Action(){ if (canControl(26)) {
         click = 26
         find<Field>().openModal()
     } }
     private val field27 : HBox by fxid()
     private val field27Penalty : Label by fxid()
+    val labelUpgrade27 : Label by fxid()
     fun field27Action(){ if (canControl(27)) {
         click = 27
         find<Field>().openModal()
@@ -466,25 +485,82 @@ class GamePlay: View("Monopoly"){
     //paint field by owner
     fun paintField(number: Int, color : Color){
         when(number){
-            1 -> field1.style(append = true){backgroundColor += color;}
-            2 -> field2.style(append = true){backgroundColor += color}
-            3 -> field3.style(append = true){backgroundColor += color}
-            5 -> field5.style(append = true){backgroundColor += color}
-            6 -> field6.style(append = true){backgroundColor += color}
-            8 -> field8.style(append = true){backgroundColor += color}
-            9 -> field9.style(append = true){backgroundColor += color}
-            10 -> field10.style(append = true){backgroundColor += color}
-            11 -> field11.style(append = true){backgroundColor += color}
-            13 -> field13.style(append = true){backgroundColor += color}
-            15 -> field15.style(append = true){backgroundColor += color}
-            16 -> field16.style(append = true){backgroundColor += color}
-            17 -> field17.style(append = true){backgroundColor += color}
-            19 -> field19.style(append = true){backgroundColor += color}
-            22 -> field22.style(append = true){backgroundColor += color}
-            24 -> field24.style(append = true){backgroundColor += color}
-            25 -> field25.style(append = true){backgroundColor += color}
-            26 -> field26.style(append = true){backgroundColor += color}
-            else -> field27.style(append = true){backgroundColor += color}
+            1 -> {
+                labelUpgrade1.text = ""
+                field1.style(append = true){backgroundColor += color;}
+            }
+            2 -> {
+                labelUpgrade2.text = ""
+                field2.style(append = true){backgroundColor += color}
+            }
+            3 -> {
+                labelUpgrade3.text = ""
+                field3.style(append = true){backgroundColor += color}
+            }
+            5 -> {
+                labelUpgrade5.text = ""
+                field5.style(append = true){backgroundColor += color}
+            }
+            6 -> {
+                labelUpgrade6.text = ""
+                field6.style(append = true){backgroundColor += color}
+            }
+            8 -> {
+                labelUpgrade8.text = ""
+                field8.style(append = true){backgroundColor += color}
+            }
+            9 -> {
+                labelUpgrade9.text = ""
+                field9.style(append = true){backgroundColor += color}
+            }
+            10 -> {
+                labelUpgrade10.text = ""
+                field10.style(append = true){backgroundColor += color}
+            }
+            11 -> {
+                labelUpgrade11.text = ""
+                field11.style(append = true){backgroundColor += color}
+            }
+            13 -> {
+                labelUpgrade13.text = ""
+                field13.style(append = true){backgroundColor += color}
+            }
+            15 -> {
+                labelUpgrade15.text = ""
+                field15.style(append = true){backgroundColor += color}
+            }
+            16 -> {
+                labelUpgrade16.text = ""
+                field16.style(append = true){backgroundColor += color}
+            }
+            17 -> {
+                labelUpgrade17.text = ""
+                field17.style(append = true){backgroundColor += color}
+            }
+            19 -> {
+                labelUpgrade19.text = ""
+                field19.style(append = true){backgroundColor += color}
+            }
+            22 -> {
+                labelUpgrade22.text = ""
+                field22.style(append = true){backgroundColor += color}
+            }
+            24 -> {
+                labelUpgrade24.text = ""
+                field24.style(append = true){backgroundColor += color}
+            }
+            25 -> {
+                labelUpgrade25.text = ""
+                field25.style(append = true){backgroundColor += color}
+            }
+            26 -> {
+                labelUpgrade26.text = ""
+                field26.style(append = true){backgroundColor += color}
+            }
+            else -> {
+                labelUpgrade27.text = ""
+                field27.style(append = true){backgroundColor += color}
+            }
         }
     }
 
@@ -611,6 +687,7 @@ class GamePlay: View("Monopoly"){
         for (i in current.realty){
             paintField(i.location, c("#d2edd7"))
             board.fields[i.location].owner = null
+            board.fields[i.location].upgrade = 0
             board.fields[i.location].penaltyUpdate()
         }
         when (current.id){
@@ -683,7 +760,6 @@ class GamePlay: View("Monopoly"){
     }
 
     private fun fieldEvent(){
-        println("Event start")
         //buy realty
         if (board.fields[data[presentId].position].couldBuy && board.fields[data[presentId].position].owner == null){
             offerToBuy()
