@@ -60,7 +60,7 @@ class Begin : View("Monopoly"){
     }
 
     init {
-        primaryStage.width = 600.0
+        primaryStage.width = 610.0
         primaryStage.height = 420.0
         primaryStage.centerOnScreen()
     }
