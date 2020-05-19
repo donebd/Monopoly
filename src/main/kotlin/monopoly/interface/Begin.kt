@@ -23,7 +23,7 @@ class Begin : View("Monopoly"){
     private val playfield5 : TextField by fxid()
 
     fun howToPlay(){
-        find<HowToPlay>().openModal()
+        find<HowToPlay>().openModal(resizable =  false)
     }
 
     fun active3(){

@@ -349,133 +349,133 @@ class GamePlay: View("Monopoly"){
     val labelUpgrade1 : Label by fxid()
     fun field1Action(){ if (canControl(1)) {
         click = 1
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field2 : VBox by fxid()
     private val field2Penalty : Label by fxid()
     val labelUpgrade2 : Label by fxid()
     fun field2Action(){ if (canControl(2)) {
         click = 2
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field3 : VBox by fxid()
     private val field3Penalty : Label by fxid()
     val labelUpgrade3 : Label by fxid()
     fun field3Action(){ if (canControl(3)) {
         click = 3
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field5 : VBox by fxid()
     private val field5Penalty : Label by fxid()
     val labelUpgrade5 : Label by fxid()
     fun field5Action(){ if (canControl(5)) {
         click = 5
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field6 : VBox by fxid()
     private val field6Penalty : Label by fxid()
     val labelUpgrade6 : Label by fxid()
     fun field6Action(){ if (canControl(6)) {
         click = 6
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field8 : HBox by fxid()
     private val field8Penalty : Label by fxid()
     val labelUpgrade8 : Label by fxid()
     fun field8Action(){ if (canControl(8)) {
         click = 8
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field9 : HBox by fxid()
     private val field9Penalty : Label by fxid()
     val labelUpgrade9 : Label by fxid()
     fun field9Action(){ if (canControl(9)) {
         click = 9
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field10 : HBox by fxid()
     private val field10Penalty : Label by fxid()
     val labelUpgrade10 : Label by fxid()
     fun field10Action(){ if (canControl(10)) {
         click = 10
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field11 : HBox by fxid()
     private val field11Penalty : Label by fxid()
     val labelUpgrade11 : Label by fxid()
     fun field11Action(){ if (canControl(11)) {
         click = 11
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field13 : HBox by fxid()
     private val field13Penalty : Label by fxid()
     val labelUpgrade13 : Label by fxid()
     fun field13Action(){ if (canControl(13)) {
         click = 13
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field15 : VBox by fxid()
     private val field15Penalty : Label by fxid()
     val labelUpgrade15 : Label by fxid()
     fun field15Action(){ if (canControl(15)) {
         click = 15
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field16 : VBox by fxid()
     private val field16Penalty : Label by fxid()
     val labelUpgrade16 : Label by fxid()
     fun field16Action(){ if (canControl(16)) {
         click = 16
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field17 : VBox by fxid()
     private val field17Penalty : Label by fxid()
     val labelUpgrade17 : Label by fxid()
     fun field17Action(){ if (canControl(17)) {
         click = 17
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field19 : VBox by fxid()
     private val field19Penalty : Label by fxid()
     val labelUpgrade19 : Label by fxid()
     fun field19Action(){ if (canControl(19)) {
         click = 19
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field22 : HBox by fxid()
     private val field22Penalty : Label by fxid()
     val labelUpgrade22 : Label by fxid()
     fun field22Action(){ if (canControl(22)) {
         click = 22
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field24 : HBox by fxid()
     private val field24Penalty : Label by fxid()
     val labelUpgrade24 : Label by fxid()
     fun field24Action(){ if (canControl(24)) {
         click = 24
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field25 : HBox by fxid()
     private val field25Penalty : Label by fxid()
     val labelUpgrade25 : Label by fxid()
     fun field25Action(){ if (canControl(25)) {
         click = 25
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field26 : HBox by fxid()
     private val field26Penalty : Label by fxid()
     val labelUpgrade26 : Label by fxid()
     fun field26Action(){ if (canControl(26)) {
         click = 26
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
     private val field27 : HBox by fxid()
     private val field27Penalty : Label by fxid()
     val labelUpgrade27 : Label by fxid()
     fun field27Action(){ if (canControl(27)) {
         click = 27
-        find<Field>().openModal()
+        find<Field>().openModal(resizable = false)
     } }
 
     private fun canControl(number : Int) = board.fields[number].owner == data[presentId]
@@ -718,7 +718,7 @@ class GamePlay: View("Monopoly"){
         dice.secretAction()
         //positive
         if (dice.secret.first){
-            find<SomeActionAlert>().openModal()
+            find<SomeActionAlert>().openModal(resizable = false)
             endMotion()
         }else{//negative
             negativeInit()
@@ -741,7 +741,7 @@ class GamePlay: View("Monopoly"){
             4 -> movePlayer4(0, true)
             else -> movePlayer5(0, true)
         }
-        find<SomeActionAlert>().openModal()
+        find<SomeActionAlert>().openModal(resizable = false)
         if (dice.double){
             motionPlayer++
             motionPlayer %= cntPls
@@ -752,7 +752,7 @@ class GamePlay: View("Monopoly"){
 
     private fun diceDoubleAlert(){
         if (dice.double) {
-            find<DiceDouble>().openModal()
+            find<DiceDouble>().openModal(resizable = false)
             data[presentId].doubleInARow ++
         }else {
             data[presentId].doubleInARow = 0
@@ -780,7 +780,7 @@ class GamePlay: View("Monopoly"){
         }
         //get stonks
         if (board.fields[data[presentId].position].type == Type.Stonks){
-            find<SomeActionAlert>().openModal()
+            find<SomeActionAlert>().openModal(resizable = false)
             data[presentId].moneyChange(3000)
         }
         //secret action
@@ -791,7 +791,7 @@ class GamePlay: View("Monopoly"){
         }
         //start field
         if (board.fields[data[presentId].position].type == Type.Start){
-            find<SomeActionAlert>().openModal()
+            find<SomeActionAlert>().openModal(resizable = false)
             data[presentId].moneyChange(1000)
         }
 
@@ -806,7 +806,7 @@ class GamePlay: View("Monopoly"){
             //check cycle completed and reward according to the settings
             if ((data[presentId].position + dice.count > 27 && data[presentId].numberOfMoves < 140)||
                 (data[presentId].position + dice.count > 27 && data[presentId].numberOfMoves < 280 && data.size < 4)){
-                runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal()}
+                runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal(resizable = false)}
             }
             when(presentId){
                 0 -> {
@@ -882,13 +882,13 @@ class GamePlay: View("Monopoly"){
     private fun checkEndGame(){
         runAsync { Thread.sleep(350) }ui {
             if (cntPls - loosers.size == 1) {
-                find<FinishGame>().openModal()
+                find<FinishGame>().openModal(resizable = false)
             }
         }
     }
 
     fun howToPlay(){
-        find<HowToPlay>().openModal()
+        find<HowToPlay>().openModal(resizable = false)
     }
 
     fun newGame(){
