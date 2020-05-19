@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -17,101 +18,106 @@
       <Insets bottom="20" left="20" right="20" top="20" />
    </padding>
    <top>
-      <VBox prefHeight="340.0" prefWidth="564.0" BorderPane.alignment="CENTER">
+      <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="53.0" prefWidth="564.0" text="Сколько будет игроков?">
-               <font>
-                  <Font size="27.0" />
-               </font>
-            </Label>
-            <HBox prefHeight="43.0" prefWidth="564.0">
+            <VBox prefHeight="340.0" prefWidth="564.0">
                <children>
-                  <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="89.0" selected="true" text="Игрок 1">
+                  <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="53.0" prefWidth="564.0" text="Сколько будет игроков?">
                      <font>
-                        <Font size="14.0" />
+                        <Font size="27.0" />
                      </font>
-                  </CheckBox>
-                  <TextField fx:id="playfield1" prefHeight="36.0" prefWidth="349.0" text="Player 1">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </TextField>
+                  </Label>
+                  <HBox prefHeight="43.0" prefWidth="564.0">
+                     <children>
+                        <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="89.0" selected="true" text="Игрок 1">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="playfield1" prefHeight="36.0" prefWidth="349.0" text="Player 1">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="43.0" prefWidth="564.0">
+                     <children>
+                        <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="90.0" selected="true" text="Игрок 2">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="playfield2" prefHeight="36.0" prefWidth="349.0" text="Player 2">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="43.0" prefWidth="564.0">
+                     <children>
+                        <CheckBox mnemonicParsing="false" onAction="#active3" prefHeight="35.0" prefWidth="91.0" text="Игрок 3">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="playfield3" disable="true" prefHeight="36.0" prefWidth="349.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="43.0" prefWidth="564.0">
+                     <children>
+                        <CheckBox mnemonicParsing="false" onAction="#active4" prefHeight="35.0" prefWidth="91.0" text="Игрок 4">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="playfield4" disable="true" prefHeight="36.0" prefWidth="349.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="37.0" prefWidth="564.0">
+                     <children>
+                        <CheckBox mnemonicParsing="false" onAction="#active5" prefHeight="35.0" prefWidth="92.0" text="Игрок 5">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="playfield5" disable="true" prefHeight="95.0" prefWidth="349.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="80.0" prefWidth="564.0">
+                     <children>
+                        <ImageView fitHeight="109.0" fitWidth="106.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../dice.png" />
+                           </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" onAction="#startGame" prefHeight="36.0" prefWidth="104.0" text="Начать игру" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="350.0" top="30.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
-            <HBox prefHeight="43.0" prefWidth="564.0">
-               <children>
-                  <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="90.0" selected="true" text="Игрок 2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </CheckBox>
-                  <TextField fx:id="playfield2" prefHeight="36.0" prefWidth="349.0" text="Player 2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </TextField>
-               </children>
-            </HBox>
-            <HBox prefHeight="43.0" prefWidth="564.0">
-               <children>
-                  <CheckBox mnemonicParsing="false" onAction="#active3" prefHeight="35.0" prefWidth="91.0" text="Игрок 3">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </CheckBox>
-                  <TextField fx:id="playfield3" disable="true" prefHeight="36.0" prefWidth="349.0">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </TextField>
-               </children>
-            </HBox>
-            <HBox prefHeight="43.0" prefWidth="564.0">
-               <children>
-                  <CheckBox mnemonicParsing="false" onAction="#active4" prefHeight="35.0" prefWidth="91.0" text="Игрок 4">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </CheckBox>
-                  <TextField fx:id="playfield4" disable="true" prefHeight="36.0" prefWidth="349.0">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </TextField>
-               </children>
-            </HBox>
-            <HBox prefHeight="37.0" prefWidth="564.0">
-               <children>
-                  <CheckBox mnemonicParsing="false" onAction="#active5" prefHeight="35.0" prefWidth="92.0" text="Игрок 5">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </CheckBox>
-                  <TextField fx:id="playfield5" disable="true" prefHeight="95.0" prefWidth="349.0">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </TextField>
-               </children>
-            </HBox>
-            <HBox prefHeight="80.0" prefWidth="564.0">
-               <children>
-                  <ImageView fitHeight="109.0" fitWidth="106.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../dice.png" />
-                     </image>
-                  </ImageView>
-                  <Button mnemonicParsing="false" onAction="#startGame" prefHeight="36.0" prefWidth="104.0" text="Начать игру" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="350.0" top="30.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-            </HBox>
+            </VBox>
+            <Button layoutX="240.0" layoutY="295.0" mnemonicParsing="false" onAction="#howToPlay" prefHeight="30.0" prefWidth="89.0" text="Как играть?" />
          </children>
-      </VBox>
+      </AnchorPane>
    </top>
 </BorderPane>

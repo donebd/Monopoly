@@ -22,6 +22,10 @@ class Begin : View("Monopoly"){
 
     private val playfield5 : TextField by fxid()
 
+    fun howToPlay(){
+        find<HowToPlay>().openModal()
+    }
+
     fun active3(){
         if (playfield3.disableProperty().value == true) {
             playfield3.disableProperty().value = false

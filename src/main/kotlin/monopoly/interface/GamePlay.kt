@@ -887,6 +887,10 @@ class GamePlay: View("Monopoly"){
         }
     }
 
+    fun howToPlay(){
+        find<HowToPlay>().openModal()
+    }
+
     fun newGame(){
         motionPlayer = 0
         board = Game.GameBoard()

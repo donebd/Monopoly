@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="784.0" prefWidth="1173.0" style="-fx-background-color: #d7d6d0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="760.0" fitWidth="759.0" layoutX="398.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../../Downloads/Игра%20(1).png" />
+         </image>
+      </ImageView>
+      <Text layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Обанкротьте своих соперников!">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="342.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2) Собирайте поля, одного типа, чтобы создавать монополию, и повышать штраф ренты!" wrappingWidth="372.338871717453">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="426.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ценники полей одного типа объеденены одним цветом. " wrappingWidth="372.338871717453">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="483.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3) Выбив дубль, вы можете ходить еще раз! Но будьте осторожны, три дубля подрят ведут к заключению в тюрьме." wrappingWidth="372.338871717453">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1) На поле расставлены поля недвижимости, секреты, штрафы, тюрьма, арест, выйгришь, старт." wrappingWidth="382.338871717453">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="При прохрждении круга, игрок получает 2000 на счет, в течении некоторого количества кругов." wrappingWidth="372.338871717453">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="226.0" strokeType="OUTSIDE" strokeWidth="0.0" text="При попадании на поле СТАРТ, игрок получает 1000 на счет." wrappingWidth="372.338871717453">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="При попадании на поле АРЕСТ(левый нижний угол), игрок попадает в тюрьму." wrappingWidth="372.338871717453">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="567.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4) Попав в тюрьму, игроку предоставляется две возможности, заплатить 500, или попытаться выбить дубль." wrappingWidth="372.338871717453">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="679.0" strokeType="OUTSIDE" strokeWidth="0.0" text="У игрока есть три хода чтобы выбить дубль, если игрок не смог выбить дубль, он платит 750 и выходит из тюрьмы." wrappingWidth="372.338871717453">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>
