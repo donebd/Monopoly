@@ -478,7 +478,15 @@ class GamePlay: View("Monopoly"){
         find<Field>().openModal(resizable = false)
     } }
 
-    private fun canControl(number : Int) = board.fields[number].owner == data[presentId]
+    private fun canControl(number : Int) : Boolean{
+        if (board.fields[number].owner == data[presentId]){
+            playerClicked = presentId
+            return true
+        }
+        return false
+    }
+
+    var playerClicked = 0
 
     var click = 0
 
@@ -617,8 +625,6 @@ class GamePlay: View("Monopoly"){
         primaryStage.centerOnScreen()
 
         cntPls = data.size
-
-        println(cntPls)
 
         //some balance in ingame value
         if (cntPls == 2){
@@ -803,11 +809,6 @@ class GamePlay: View("Monopoly"){
         runAsync {
             Thread.sleep(250)
         }ui{
-            //check cycle completed and reward according to the settings
-            if ((data[presentId].position + dice.count > 27 && data[presentId].numberOfMoves < 140)||
-                (data[presentId].position + dice.count > 27 && data[presentId].numberOfMoves < 280 && data.size < 4)){
-                runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal(resizable = false)}
-            }
             when(presentId){
                 0 -> {
                     data[0].positionChange(dice.count)
@@ -829,6 +830,11 @@ class GamePlay: View("Monopoly"){
                     data[4].positionChange(dice.count)
                     movePlayer5(data[4].position, false)
                 }
+            }
+            //check cycle completed and reward according to the settings
+            if ((data[presentId].finishCircle && data[presentId].circlesCompleted < 5)||
+                (data[presentId].finishCircle && data[presentId].circlesCompleted < 10 && cntPls < 4)){
+                runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal(resizable = false)}
             }
             runAsync {
                 Thread.sleep(500)

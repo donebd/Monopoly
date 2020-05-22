@@ -14,6 +14,8 @@ class Game{
         var doubleInARow = 0
         val realty = mutableListOf<GameBoard.Field>()
         val currentMotionUpgrade = mutableListOf<Type>()//monitoring 1 upgrade of one of type realty in motion
+        var finishCircle = false
+        var circlesCompleted = 0
 
         init {
             moneyChange(0)
@@ -27,6 +29,8 @@ class Game{
         }
 
         fun positionChange(a : Int){
+            finishCircle = position + a > 27
+            if (finishCircle) circlesCompleted ++
             numberOfMoves += a
             position = numberOfMoves % 28
         }
@@ -56,6 +60,7 @@ class Game{
             second = (1..4).random()
             count = second + first
             double = first - second == 0
+            count = 1
         }
 
         fun secretAction() {

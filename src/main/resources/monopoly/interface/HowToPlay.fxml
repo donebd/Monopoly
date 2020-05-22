@@ -33,7 +33,7 @@
             <Font size="19.0" />
          </font>
       </Text>
-      <Text layoutX="14.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1) На поле расставлены поля недвижимости, секреты, штрафы, тюрьма, арест, выйгришь, старт." wrappingWidth="382.338871717453">
+      <Text layoutX="14.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1) На поле расставлены поля недвижимости, секреты, штрафы, тюрьма, арест, выигрышь, старт." wrappingWidth="382.338871717453">
          <font>
             <Font size="19.0" />
          </font>
