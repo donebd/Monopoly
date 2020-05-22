@@ -60,7 +60,6 @@ class Game{
             second = (1..4).random()
             count = second + first
             double = first - second == 0
-            count = 1
         }
 
         fun secretAction() {
