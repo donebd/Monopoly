@@ -14,7 +14,7 @@ class MyApp: App(Begin::class){
         with(stage) {
         isResizable = false
     }
-        stage.icons.add(Image("file:src/main/resources/monopoly/dice.png"))
+        stage.icons.add(Image("monopoly/dice.png"))
         super.start(stage)
     }
 }
