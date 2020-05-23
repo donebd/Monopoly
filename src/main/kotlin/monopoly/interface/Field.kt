@@ -31,9 +31,9 @@ class Field : Fragment(){
     private var type : Type
 
     init {
-        position = gamePlay.click
-        companyName.text = board.fields[position].name
-        typeOfField.text = board.fields[position].type.toString()
+        position = game.click
+        companyName.text = game.board.fields[position].name
+        typeOfField.text = game.board.fields[position].type.toString()
 
         when (position){
             1 -> with(root){
@@ -158,24 +158,24 @@ class Field : Fragment(){
             26,27 -> Type.Software
             else -> Type.Car
         }
-        player.text = data[gamePlay.playerClicked].name
-        costLabel.text = "${board.fields[position].cost}"
-        costOfUpgrade.text = "${board.fields[position].upgradeCost}"
+        player.text =  game.data[game.playerClicked].name
+        costLabel.text = "${game.board.fields[position].cost}"
+        costOfUpgrade.text = "${game.board.fields[position].upgradeCost}"
         changable()
     }
 
 
     private fun changable(){
-        penaltyLabel.text = "${board.fields[position].penalty}"
-        countUpgrade.text = "${board.fields[position].upgrade}"
-        if (data[gamePlay.playerClicked].realty.filter { it.type == type}.size == monopolySize){
-            upgradeButton.disableProperty().value = (board.fields[position].upgrade > 4 ||
-                    data[gamePlay.playerClicked].currentMotionUpgrade.contains(type))
+        penaltyLabel.text = "${game.board.fields[position].penalty}"
+        countUpgrade.text = "${game.board.fields[position].upgrade}"
+        if ( game.data[game.playerClicked].realty.filter { it.type == type}.size == monopolySize){
+            upgradeButton.disableProperty().value = (game.board.fields[position].upgrade > 4 ||
+                    game.data[game.playerClicked].currentMotionUpgrade.contains(type))
             //check for count upgrade
-            sellUpgradeButton.disableProperty().value = board.fields[position].upgrade == 0
+            sellUpgradeButton.disableProperty().value = game.board.fields[position].upgrade == 0
         }
-        sellByHalfButton.disableProperty().value = board.fields[position].upgrade != 0
-        val upgrade = when (board.fields[position].upgrade){
+        sellByHalfButton.disableProperty().value = game.board.fields[position].upgrade != 0
+        val upgrade = when (game.board.fields[position].upgrade){
             0 -> ""
             1 -> "*"
             2 -> "**"
@@ -207,21 +207,21 @@ class Field : Fragment(){
     }
 
     fun sellByHalf(){
-        data[gamePlay.playerClicked].moneyChange(board.fields[position].cost/2)
-        data[gamePlay.playerClicked].realty.remove( board.fields[position])
-        board.fields[position].owner = null
-        board.fields[position].upgrade = 0
-        board.fields[position].penaltyUpdate()
+        game.data[game.playerClicked].moneyChange(game.board.fields[position].cost/2)
+        game.data[game.playerClicked].realty.remove( game.board.fields[position])
+        game.board.fields[position].owner = null
+        game.board.fields[position].upgrade = 0
+        game.board.fields[position].penaltyUpdate()
         gamePlay.paintField(position, c("#d2edd7"))
         close()
     }
 
     fun buildUpgrade(){
-        if (data[gamePlay.playerClicked].money >= board.fields[position].upgradeCost){
-            data[gamePlay.playerClicked].moneyChange(-board.fields[position].upgradeCost)
-            board.fields[position].upgrade++
-            board.fields[position].penaltyUpdate()
-            data[gamePlay.playerClicked].currentMotionUpgrade.add(type)
+        if ( game.data[game.playerClicked].money >= game.board.fields[position].upgradeCost){
+            game.data[game.playerClicked].moneyChange(-game.board.fields[position].upgradeCost)
+            game.board.fields[position].upgrade++
+            game.board.fields[position].penaltyUpdate()
+            game.data[game.playerClicked].currentMotionUpgrade.add(type)
             changable()
             return
         }
@@ -229,9 +229,9 @@ class Field : Fragment(){
     }
 
     fun sellUpgrade(){
-        data[gamePlay.playerClicked].moneyChange(board.fields[position].upgradeCost)
-        board.fields[position].upgrade--
-        board.fields[position].penaltyUpdate()
+        game.data[game.playerClicked].moneyChange(game.board.fields[position].upgradeCost)
+        game.board.fields[position].upgrade--
+        game.board.fields[position].penaltyUpdate()
         changable()
     }
 }

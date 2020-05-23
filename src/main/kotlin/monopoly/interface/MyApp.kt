@@ -5,15 +5,9 @@ import javafx.stage.Stage
 import monopoly.logic.Game
 import tornadofx.*
 
-var data = mutableListOf<Game.Player>()
-
-var board = Game.GameBoard()
+var game = Game()
 
 var gamePlay = GamePlay()
-
-var motionPlayer = 0
-
-var loosers = mutableListOf<Int>()
 
 class MyApp: App(Begin::class){
     override fun start(stage: Stage) {

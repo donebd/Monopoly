@@ -11,8 +11,7 @@ class CycleComplete : Fragment(){
     private val player : Label by fxid()
 
     init {
-        player.text = data[gamePlay.presentId].name
-        data[gamePlay.presentId].moneyChange(2000)
+        player.text = game.data[game.presentId].name
     }
 
     fun exit(){

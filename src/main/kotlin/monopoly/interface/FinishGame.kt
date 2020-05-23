@@ -10,7 +10,7 @@ class FinishGame : Fragment(){
     private val winner : Label by fxid()
 
     init {
-        winner.text = data[gamePlay.presentId].name
+        winner.text =  game.data[game.presentId].name
         runAsync { Thread.sleep(100) }ui{
             gamePlay.buttonRoll.disableProperty().value = true}
 

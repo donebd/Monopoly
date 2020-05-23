@@ -66,26 +66,25 @@ class Begin : View("Monopoly"){
     }
 
     fun startGame(){
-        data.add(Game.Player(1))
-        data[0].name = playfield1.text
-        data.add(Game.Player(2))
-        data[1].name = playfield2.text
+        game = Game()
+
+        game.data[0].name = playfield1.text
+        game.data[1].name = playfield2.text
 
         if (playfield3.disableProperty().value == false){
-            data.add(Game.Player(data.size + 1))
-            data.last().name = playfield3.text
+            game.data.add(Game.Player(game.data.size + 1))
+            game.data.last().name = playfield3.text
         }
 
         if (playfield4.disableProperty().value == false){
-            data.add(Game.Player(data.size + 1))
-            data.last().name = playfield4.text
+            game.data.add(Game.Player(game.data.size + 1))
+            game.data.last().name = playfield4.text
         }
 
         if (playfield5.disableProperty().value == false){
-            data.add(Game.Player(data.size + 1))
-            data.last().name = playfield5.text
+            game.data.add(Game.Player(game.data.size + 1))
+            game.data.last().name = playfield5.text
         }
-
         gamePlay.root.clear()
         gamePlay = GamePlay()
         replaceWith(gamePlay, ViewTransition.Explode(0.5.seconds))

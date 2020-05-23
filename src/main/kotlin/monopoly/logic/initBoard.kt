@@ -27,7 +27,7 @@ enum class SecretAction{
     Action5,
 }
 
-fun initBoard(board: Game.GameBoard) : Game.GameBoard {
+fun initBoard(board: Game.GameBoard) {
     board.fields.add(Field(0, Type.Start))
     board.fields[0].couldBuy = false
     board.fields.add(Field(1, Type.Perfume))
@@ -133,5 +133,4 @@ fun initBoard(board: Game.GameBoard) : Game.GameBoard {
     board.fields.add(Field(27, Type.Software))
     board.fields[27].name = "Apple"
     board.fields[27].layoutY = 190.0
-    return board
 }
