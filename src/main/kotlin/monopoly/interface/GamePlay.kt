@@ -366,7 +366,7 @@ class GamePlay: View("Monopoly"){
         when(number){
             1 -> {
                 labelUpgrade1.text = ""
-                field1.style(append = true){backgroundColor += color;}
+                field1.style(append = true){backgroundColor += color}
             }
             2 -> {
                 labelUpgrade2.text = ""
@@ -625,7 +625,7 @@ class GamePlay: View("Monopoly"){
             return
         }
         //get stonks
-        if (game.ifStonks()){
+        if (game.stonksAction()){
             find<SomeActionAlert>().openModal(resizable = false)
         }
         //secret action
@@ -635,7 +635,7 @@ class GamePlay: View("Monopoly"){
             return
         }
         //start field
-        if (game.ifStart()){
+        if (game.startAction()){
             find<SomeActionAlert>().openModal(resizable = false)
         }
 

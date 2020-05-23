@@ -28,6 +28,8 @@ class Game{
     var playerClicked = 0 // for action with realty
     var click = 0
 
+    var prisonByDouble = false
+
     fun canControl(number : Int) : Boolean{
         if (board.fields[number].owner == data[presentId]){
             click = number
@@ -62,7 +64,14 @@ class Game{
         return false
     }
 
-    fun checkPrisonByDouble() = (dice.double && data[presentId].doubleInARow == 2)
+    fun checkPrisonByDouble() : Boolean{
+        if ((dice.double && data[presentId].doubleInARow == 2)){
+            prisonByDouble = true
+            return true
+        }
+        prisonByDouble = false
+        return false
+    }
 
     fun motionIfPrison(current: Player){
         current.goToPrison()
@@ -106,23 +115,27 @@ class Game{
 
     fun ifToPrison() = board.fields[data[presentId].position].type == Type.ToPrison
 
-    fun ifStonks() : Boolean{
-        if(board.fields[data[presentId].position].type == Type.Stonks){
+    fun stonksAction() : Boolean{
+        if (ifStonks()){
             data[presentId].moneyChange(3000)
             return true
         }
         return false
     }
 
+    fun ifStonks() = board.fields[data[presentId].position].type == Type.Stonks
+
     fun ifSecret() = board.fields[data[presentId].position].type == Type.Secret
 
-    fun ifStart() : Boolean{
-        if(board.fields[data[presentId].position].type == Type.Start){
+    fun startAction() : Boolean{
+        if(ifStart()){
             data[presentId].moneyChange(1000)
             return true
         }
         return false
     }
+
+    fun ifStart() : Boolean = board.fields[data[presentId].position].type == Type.Start
 
     fun playerAcceptBuyRealty() : Boolean{
         if (data[presentId].money >= board.fields[data[presentId].position].cost){
@@ -148,6 +161,16 @@ class Game{
 
     fun playerLose(){
         loosers.add(presentId)
+    }
+
+    fun positiveSecret(){
+        when(dice.secret.second){
+            SecretAction.Action1 -> data[presentId].moneyChange(250)
+            SecretAction.Action2 -> data[presentId].moneyChange(500)
+            SecretAction.Action3 -> data[presentId].moneyChange(300)
+            SecretAction.Action4 -> data[presentId].moneyChange(750)
+            else -> data[presentId].moneyChange(100)
+        }
     }
 
     fun fieldClear(i : GameBoard.Field){
@@ -216,6 +239,62 @@ class Game{
         motionPlayer %= cntPls
         data[presentId].prisonDays ++
         return false
+    }
+
+    //fieldAction
+    var position = 1
+
+    var monopolySize = 2
+
+    var type = Type.Perfume
+
+    fun fieldActionInit(){
+        position = click
+        monopolySize = when(position){
+            1,2,8,9,11,13,22,24,26,27 -> 2
+            else -> 3
+        }
+        type = when(position){
+            1,2 -> Type.Perfume
+            3,5,6 -> Type.Clothes
+            8,9 -> Type.SocialNetwork
+            11,13 -> Type.Soda
+            15,16,19 -> Type.Airlanes
+            22,24 -> Type.FastFood
+            26,27 -> Type.Software
+            else -> Type.Car
+        }
+    }
+
+    fun playerHasMonopoly() = data[playerClicked].realty.filter { it.type == type}.size == monopolySize
+
+    fun fieldCantBeUpgraded() = board.fields[position].upgrade > 4 || data[playerClicked].currentMotionUpgrade.contains(type)
+
+    fun fieldCantBeSelled() = board.fields[position].upgrade == 0
+
+    fun fieldSellByHalf(){
+        data[playerClicked].moneyChange(board.fields[position].cost/2)
+        data[playerClicked].realty.remove(board.fields[position])
+        board.fields[position].owner = null
+        board.fields[position].upgrade = 0
+        board.fields[position].penaltyUpdate()
+    }
+
+    fun fieldBuildUpgrade() : Boolean{
+        if (data[playerClicked].money >= board.fields[position].upgradeCost){
+            data[playerClicked].moneyChange(-board.fields[position].upgradeCost)
+            board.fields[position].upgrade++
+            board.fields[position].penaltyUpdate()
+            data[playerClicked].currentMotionUpgrade.add(type)
+            return true
+        }
+        return false
+    }
+
+    fun fieldSellUpgrade(){
+        data[playerClicked].moneyChange(board.fields[position].upgradeCost)
+        board.fields[position].upgrade--
+        board.fields[position].penaltyUpdate()
     }
 
     class Player(val id: Int){
