@@ -42,6 +42,7 @@ class Game{
     init {
         data.add(Player(1))
         data.add(Player(2))
+        cntPls = data.size
     }
 
     fun setBalance(){
