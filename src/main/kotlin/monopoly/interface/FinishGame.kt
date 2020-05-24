@@ -13,7 +13,6 @@ class FinishGame : Fragment(){
         winner.text =  game.data[game.presentId].name
         runAsync { Thread.sleep(100) }ui{
             gamePlay.buttonRoll.disableProperty().value = true}
-
     }
 
     fun newGame(){

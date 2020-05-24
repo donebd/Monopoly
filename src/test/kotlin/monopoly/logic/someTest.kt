@@ -54,6 +54,9 @@ class someTest{
         assertEquals(18000 - 210,game.data[1].money)
         assertEquals(10700 + 210, game.data[0].money)//check field penalty work correctly
 
+        game.data[1].positionChange(1)// player 2 go to player1's realty
+        game.playerLose()
+        assertEquals(true, game.gameIsEnd())
     }
 
 }
