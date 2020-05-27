@@ -18,7 +18,7 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <Text fx:id="prisonText" layoutX="10.0" layoutY="168.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Для выхода из тюрьмы заплатите 500К, или выбейте дубль в течении трех ходов, по истечению ходов вам придется заплатить 750К!" wrappingWidth="503.3291015625">
+      <Text fx:id="prisonText" layoutX="10.0" layoutY="168.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Для выхода из тюрьмы заплатите 500, или выбейте дубль в течении трех ходов, по истечению ходов вам придется заплатить 750!" wrappingWidth="503.3291015625">
          <font>
             <Font size="22.0" />
          </font>

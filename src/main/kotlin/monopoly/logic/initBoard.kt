@@ -1,33 +1,6 @@
 package monopoly.logic
 
-import monopoly.logic.Game.GameBoard.*
-
-enum class Type{
-    Start,
-    ToPrison,
-    Secret,
-    Punisment,
-    Free,
-    Perfume,
-    Clothes,
-    SocialNetwork,
-    Soda,
-    Airlanes,
-    FastFood,
-    Car,
-    Software,
-    Stonks
-}
-
-enum class SecretAction{
-    Action1,
-    Action2,
-    Action3,
-    Action4,
-    Action5,
-}
-
-fun initBoard(board: Game.GameBoard) {
+fun initBoard(board: GameBoard) {
     board.fields.add(Field(0, Type.Start))
     board.fields[0].couldBuy = false
     board.fields.add(Field(1, Type.Perfume))

@@ -3,6 +3,7 @@ package monopoly.`interface`
 import javafx.scene.control.TextField
 import javafx.scene.layout.BorderPane
 import monopoly.logic.Game
+import monopoly.logic.Player
 import tornadofx.View
 import tornadofx.ViewTransition
 import tornadofx.clear
@@ -72,17 +73,17 @@ class Begin : View("Monopoly"){
         game.data[1].name = playfield2.text
 
         if (playfield3.disableProperty().value == false){
-            game.data.add(Game.Player(game.data.size + 1))
+            game.data.add(Player(game.data.size + 1))
             game.data.last().name = playfield3.text
         }
 
         if (playfield4.disableProperty().value == false){
-            game.data.add(Game.Player(game.data.size + 1))
+            game.data.add(Player(game.data.size + 1))
             game.data.last().name = playfield4.text
         }
 
         if (playfield5.disableProperty().value == false){
-            game.data.add(Game.Player(game.data.size + 1))
+            game.data.add(Player(game.data.size + 1))
             game.data.last().name = playfield5.text
         }
         gamePlay.root.clear()

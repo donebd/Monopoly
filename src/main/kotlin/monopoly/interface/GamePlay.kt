@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.util.Duration
 import monopoly.logic.Game
+import monopoly.logic.Player
 import monopoly.logic.SecretAction
 import tornadofx.*
 
@@ -543,7 +544,7 @@ class GamePlay: View("Monopoly"){
         field27Penalty.bind(game.board.fields[27].penaltyProperty)
     }
 
-    private fun clearFieldLooser(current : Game.Player){
+    private fun clearFieldLooser(current : Player){
         for (i in current.realty){
             paintField(i.location, c("#d2edd7"))
             game.fieldClear(i)
@@ -589,7 +590,7 @@ class GamePlay: View("Monopoly"){
         checkEndGame()
     }
 
-    private fun playerToPrison(current: Game.Player){
+    private fun playerToPrison(current: Player){
         game.motionIfPrison(current)
         when(current.id){
             1 -> movePlayer1(0, true)
@@ -677,6 +678,7 @@ class GamePlay: View("Monopoly"){
         }
         game.dice.roll()
         diceRoll(game.dice.first, game.dice.second)
+
         runAsync { Thread.sleep(500) }ui {
             if (game.checkPrisonByDouble()) {
                 playerToPrison(game.data[game.presentId])

@@ -23,7 +23,7 @@ compileTestKotlin {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'monopoly.logic.MainKt'
+        attributes 'Main-Class': 'monopoly.interface.MyApp'
     }
     from configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
 }
