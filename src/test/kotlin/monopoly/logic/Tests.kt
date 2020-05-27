@@ -78,7 +78,7 @@ class Tests{
     }
 
     @Test
-    fun checPenaltykLogic(){
+    fun checkPenaltyLogic(){
         val game = Game()
         game.data[0].positionChange(1)
         game.playerAcceptBuyRealty()
