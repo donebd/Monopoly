@@ -10,22 +10,30 @@ class Field(val location: Int, val type: Type){
     var layoutY = 0.0
     var owner : Player? = null
     var cost =  2000 + location*100
-    val upgradeCost = cost / 3
+    val upgradeCost = cost / 2
     var penalty = cost
     var particular = false
     val penaltyProperty = SimpleIntegerProperty()
+    var hasMonopoly = false
 
     init {
         penaltyUpdate()
     }
 
     fun penaltyUpdate(){
-        penalty = if (owner != null) {
-            if (!particular) (cost / 10) + (cost / 10)*upgrade*3
-            else (cost / 10) + (cost / 10)*upgrade*4
+        penalty = if (hasMonopoly){
+            if (!particular) (cost / 5) + (cost / 5)*upgrade*2
+            else (cost / 5) + (cost / 5)*upgrade*3
+        }else {
+            if (owner != null) (cost / 10)
+            else cost
         }
-        else cost
         penaltyProperty.value = penalty
+    }
+
+    fun monopolyChange(){
+        hasMonopoly = !hasMonopoly
+        penaltyUpdate()
     }
 
     fun costUpdate(a : Int){

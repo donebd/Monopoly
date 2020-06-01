@@ -364,83 +364,51 @@ class GamePlay: View("Monopoly"){
 
     //paint field by owner
     fun paintField(number: Int, color : Color){
+        labelUpgradeClear(number)
         when(number){
-            1 -> {
-                labelUpgrade1.text = ""
-                field1.style(append = true){backgroundColor += color}
-            }
-            2 -> {
-                labelUpgrade2.text = ""
-                field2.style(append = true){backgroundColor += color}
-            }
-            3 -> {
-                labelUpgrade3.text = ""
-                field3.style(append = true){backgroundColor += color}
-            }
-            5 -> {
-                labelUpgrade5.text = ""
-                field5.style(append = true){backgroundColor += color}
-            }
-            6 -> {
-                labelUpgrade6.text = ""
-                field6.style(append = true){backgroundColor += color}
-            }
-            8 -> {
-                labelUpgrade8.text = ""
-                field8.style(append = true){backgroundColor += color}
-            }
-            9 -> {
-                labelUpgrade9.text = ""
-                field9.style(append = true){backgroundColor += color}
-            }
-            10 -> {
-                labelUpgrade10.text = ""
-                field10.style(append = true){backgroundColor += color}
-            }
-            11 -> {
-                labelUpgrade11.text = ""
-                field11.style(append = true){backgroundColor += color}
-            }
-            13 -> {
-                labelUpgrade13.text = ""
-                field13.style(append = true){backgroundColor += color}
-            }
-            15 -> {
-                labelUpgrade15.text = ""
-                field15.style(append = true){backgroundColor += color}
-            }
-            16 -> {
-                labelUpgrade16.text = ""
-                field16.style(append = true){backgroundColor += color}
-            }
-            17 -> {
-                labelUpgrade17.text = ""
-                field17.style(append = true){backgroundColor += color}
-            }
-            19 -> {
-                labelUpgrade19.text = ""
-                field19.style(append = true){backgroundColor += color}
-            }
-            22 -> {
-                labelUpgrade22.text = ""
-                field22.style(append = true){backgroundColor += color}
-            }
-            24 -> {
-                labelUpgrade24.text = ""
-                field24.style(append = true){backgroundColor += color}
-            }
-            25 -> {
-                labelUpgrade25.text = ""
-                field25.style(append = true){backgroundColor += color}
-            }
-            26 -> {
-                labelUpgrade26.text = ""
-                field26.style(append = true){backgroundColor += color}
-            }
-            else -> {
-                labelUpgrade27.text = ""
-                field27.style(append = true){backgroundColor += color}
-            }
+            1 -> field1.style(append = true){backgroundColor += color}
+            2 -> field2.style(append = true){backgroundColor += color}
+            3 -> field3.style(append = true){backgroundColor += color}
+            5 -> field5.style(append = true){backgroundColor += color}
+            6 -> field6.style(append = true){backgroundColor += color}
+            8 -> field8.style(append = true){backgroundColor += color}
+            9 -> field9.style(append = true){backgroundColor += color}
+            10 -> field10.style(append = true){backgroundColor += color}
+            11 -> field11.style(append = true){backgroundColor += color}
+            13 -> field13.style(append = true){backgroundColor += color}
+            15 -> field15.style(append = true){backgroundColor += color}
+            16 -> field16.style(append = true){backgroundColor += color}
+            17 -> field17.style(append = true){backgroundColor += color}
+            19 -> field19.style(append = true){backgroundColor += color}
+            22 -> field22.style(append = true){backgroundColor += color}
+            24 -> field24.style(append = true){backgroundColor += color}
+            25 -> field25.style(append = true){backgroundColor += color}
+            26 -> field26.style(append = true){backgroundColor += color}
+            else -> field27.style(append = true){backgroundColor += color}
+        }
+    }
+
+    fun labelUpgradeClear(number : Int){
+        when(number){
+            1 -> labelUpgrade1.text = ""
+            2 -> labelUpgrade2.text = ""
+            3 -> labelUpgrade3.text = ""
+            5 -> labelUpgrade5.text = ""
+            6 -> labelUpgrade6.text = ""
+            8 -> labelUpgrade8.text = ""
+            9 -> labelUpgrade9.text = ""
+            10 -> labelUpgrade10.text = ""
+            11 -> labelUpgrade11.text = ""
+            13 -> labelUpgrade13.text = ""
+            15 -> labelUpgrade15.text = ""
+            16 -> labelUpgrade16.text = ""
+            17 -> labelUpgrade17.text = ""
+            19 -> labelUpgrade19.text = ""
+            22 -> labelUpgrade22.text = ""
+            24 -> labelUpgrade24.text = ""
+            25 -> labelUpgrade25.text = ""
+            26 -> labelUpgrade26.text = ""
+            else -> labelUpgrade27.text = ""
         }
     }
 

@@ -141,6 +141,7 @@ class Game{
             data[presentId].moneyChange(-board.fields[data[presentId].position].cost)
             data[presentId].realty.add(board.fields[data[presentId].position])
             board.fields[data[presentId].position].owner = data[presentId]
+            data[presentId].checkForMonopoly(board.fields[data[presentId].position])
             board.fields[data[presentId].position].penaltyUpdate()
             return true
         }
@@ -175,6 +176,7 @@ class Game{
     fun fieldClear(i : Field){
         board.fields[i.location].owner = null
         board.fields[i.location].upgrade = 0
+        if(board.fields[i.location].hasMonopoly) board.fields[i.location].monopolyChange()
         board.fields[i.location].penaltyUpdate()
     }
 
@@ -276,6 +278,7 @@ class Game{
         data[playerClicked].realty.remove(board.fields[position])
         board.fields[position].owner = null
         board.fields[position].upgrade = 0
+        data[playerClicked].checkForMonopoly(board.fields[position])
         board.fields[position].penaltyUpdate()
     }
 

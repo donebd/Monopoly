@@ -185,6 +185,9 @@ class Field : Fragment(){
 
     fun sellByHalf(){
         game.fieldSellByHalf()
+        for (current in game.data[game.playerClicked].realty.filter{ it.type == game.board.fields[game.click].type}){
+            gamePlay.labelUpgradeClear(current.location)
+        }
         gamePlay.paintField(game.position, c("#d2edd7"))
         close()
     }

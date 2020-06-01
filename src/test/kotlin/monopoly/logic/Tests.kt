@@ -93,8 +93,8 @@ class Tests{
         assertEquals(true, game.punishmentOrPenalty())
         assertEquals(false, game.ifPunishment())
         assertEquals(true, game.playerPayPenalty())
-        assertEquals(15000 - 210,game.data[1].money)
-        assertEquals(10700 + 210, game.data[0].money)//check field penalty work correctly
+        assertEquals(15000 - 420,game.data[1].money)
+        assertEquals(10700 + 420, game.data[0].money)//check field penalty work correctly
 
         game.data[1].positionChange(1)// player 2 go to player1's realty
         game.playerLose()

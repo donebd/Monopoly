@@ -16,7 +16,6 @@ class Dice{
         second = (1..4).random()
         count = second + first
         double = first - second == 0
-        count = 2
     }
 
     fun secretAction() {

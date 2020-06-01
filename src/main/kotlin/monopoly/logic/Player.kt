@@ -12,6 +12,7 @@ class Player(val id: Int){
     var doubleInARow = 0
     val realty = mutableListOf<Field>()
     val currentMotionUpgrade = mutableListOf<Type>()//monitoring 1 upgrade of one of type realty in motion
+    val monopolyRealty = mutableListOf<Type>()
     var finishCircle = false
     var circlesCompleted = 0
 
@@ -41,4 +42,23 @@ class Player(val id: Int){
         doubleInARow = 0
     }
 
+    fun checkForMonopoly(field: Field) : Boolean {
+        val monopolySize = when (field.location) {
+            1, 2, 8, 9, 11, 13, 22, 24, 26, 27 -> 2
+            else -> 3
+        }
+        if (realty.filter { it.type == field.type}.size == monopolySize){
+            if (field.type !in monopolyRealty) {
+                monopolyRealty.add(field.type)
+                for (current in realty.filter { it.type == field.type})current.monopolyChange()
+                }
+                return true
+        }
+        if (field.type in monopolyRealty) {
+            for (current in realty.filter { it.type == field.type && field.hasMonopoly})current.monopolyChange()
+            field.monopolyChange()
+            monopolyRealty.remove(field.type)
+        }
+        return false
+    }
 }
