@@ -43,6 +43,59 @@ class Game{
         cntPls = data.size
     }
 
+    fun aiInstructions(){
+        if (data[motionPlayer].monopolyRealty.isNotEmpty()){
+            for (i in data[motionPlayer].monopolyRealty){
+                board.fields.filter { it.type == i }.forEach{ if ( i !in data[motionPlayer].currentMotionUpgrade && data[motionPlayer].money >= it.upgradeCost && it.upgrade < 5 ){
+                    data[motionPlayer].moneyChange(-it.upgradeCost)
+                    it.upgrade++
+                    it.penaltyUpdate()
+                    data[motionPlayer].currentMotionUpgrade.add(i)
+                } }
+            }
+        }//Блок апгрейда своих монополий by ai
+    }
+
+    fun aiBuyInstructions() : Boolean{
+        if ((data[presentId].monopolyRealty.isEmpty() || data[presentId].money >= 10000) && data[presentId].money + 500 >= board.fields[data[presentId].position].cost)
+            return true
+        return false
+    }
+
+    fun aiPunisment() : Int{
+        if (data[presentId].money >= board.fields[data[presentId].position].penalty) return 0
+            if (data[presentId].monopolyRealty.isNotEmpty()){
+                return 1
+            }else{
+                if (data[presentId].hasSomething()) return  2
+            }
+        return 3
+    }
+
+    fun sellSomeUpgrade(player : Player){
+        for (i in player.monopolyRealty){
+            for (j in board.fields.filter { it.type == i })
+                if (j.upgrade > 0){
+                    player.moneyChange(j.upgradeCost)
+                    j.upgrade--
+                    j.penaltyUpdate()
+                    return
+                }
+        }
+    }
+
+    fun sellSomeField(player: Player) : Int{
+        for (i in player.realty){
+            if (player.realty.filter { it.type == i.type }.size == 1)
+                return i.location
+        }
+        for (i in player.realty){
+            if (player.realty.filter { it.type == i.type }.size == 2)
+                return i.location
+        }
+        return 0
+    }
+
     fun setBalance(){
         if (data.size == 2){
             for (i in 0..1)data[i].moneyChange(10000)
@@ -280,6 +333,15 @@ class Game{
         board.fields[position].upgrade = 0
         data[playerClicked].checkForMonopoly(board.fields[position])
         board.fields[position].penaltyUpdate()
+    }
+
+    fun fieldSellByHalf(player: Player, field: Field){
+        player.moneyChange(field.cost/2)
+        player.realty.remove(field)
+        field.owner = null
+        field.upgrade = 0
+        player.checkForMonopoly(field)
+        field.penaltyUpdate()
     }
 
     fun fieldBuildUpgrade() : Boolean{

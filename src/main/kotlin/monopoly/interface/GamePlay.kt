@@ -488,6 +488,11 @@ class GamePlay: View("Monopoly"){
         }
         game.setBalance()
         linkCostOfField()
+
+        println("---New Game---")
+        for (i in game.data){
+            println(i)
+        }
     }
 
     private fun linkCostOfField(){
@@ -567,24 +572,51 @@ class GamePlay: View("Monopoly"){
             4 -> movePlayer4(0, true)
             else -> movePlayer5(0, true)
         }
-        find<SomeActionAlert>().openModal(resizable = false)
+        if (!current.ai) find<SomeActionAlert>().openModal(resizable = false)
         runAsync { Thread.sleep(50) }ui{endMotion()}
     }
 
     private fun diceDoubleAlert(){
-        if (game.diceDoubleCheck()) find<DiceDouble>().openModal(resizable = false)
+        if (game.diceDoubleCheck() && !game.data[game.presentId].ai) find<DiceDouble>().openModal(resizable = false)
+    }
+
+    private fun aiPunisment(){
+        when (game.aiPunisment()){
+            0 -> penaltyAccept()
+            1 -> {
+                game.sellSomeUpgrade(game.data[game.presentId])
+                updateUpgrade()
+                aiPunisment()
+            }
+            2 -> {
+                val tmp = game.sellSomeField(game.data[game.presentId])
+                game.fieldSellByHalf(game.data[game.presentId], game.board.fields[tmp])
+                paintField(tmp, c("#d2edd7"))
+                aiPunisment()
+            }
+            else -> playerSurrender()
+        }
     }
 
     private fun fieldEvent(){
         //buy realty
         if (game.realtyCanBuy()){
-            offerToBuy()
+            if (game.data[game.presentId].ai){
+                if (game.aiBuyInstructions())
+                    offerAccept()
+                else
+                    endMotion()
+            }else
+                offerToBuy()
             diceDoubleAlert()
             return
         }
         //pay penalty
         if (game.punishmentOrPenalty()){
-            payPenalty()
+            if (game.data[game.presentId].ai){
+                    aiPunisment()
+            }else
+                payPenalty()
             diceDoubleAlert()
             return
         }
@@ -656,6 +688,41 @@ class GamePlay: View("Monopoly"){
         }
     }
 
+    fun updateUpgrade(){
+        for (i in 1..27){
+            val upgrade = when (game.board.fields[i].upgrade){
+                0 -> ""
+                1 -> "*"
+                2 -> "**"
+                3 -> "***"
+                4 -> "****"
+                else -> "*****"
+            }
+            when(i){
+                1 -> gamePlay.labelUpgrade1.text = upgrade
+                2 -> gamePlay.labelUpgrade2.text = upgrade
+                3 -> gamePlay.labelUpgrade3.text = upgrade
+                5 -> gamePlay.labelUpgrade5.text = upgrade
+                6 -> gamePlay.labelUpgrade6.text = upgrade
+                8 -> gamePlay.labelUpgrade8.text = upgrade
+                9 -> gamePlay.labelUpgrade9.text = upgrade
+                10 -> gamePlay.labelUpgrade10.text = upgrade
+                11 -> gamePlay.labelUpgrade11.text = upgrade
+                13 -> gamePlay.labelUpgrade13.text = upgrade
+                15 -> gamePlay.labelUpgrade15.text = upgrade
+                16 -> gamePlay.labelUpgrade16.text = upgrade
+                17 -> gamePlay.labelUpgrade17.text = upgrade
+                19 -> gamePlay.labelUpgrade19.text = upgrade
+                22 -> gamePlay.labelUpgrade22.text = upgrade
+                24 -> gamePlay.labelUpgrade24.text = upgrade
+                25 -> gamePlay.labelUpgrade25.text = upgrade
+                26 -> gamePlay.labelUpgrade26.text = upgrade
+                27 -> gamePlay.labelUpgrade27.text = upgrade
+                else -> {}
+            }
+        }
+    }
+
     private fun endMotion(){
         runAsync { Thread.sleep(300) }ui{
             game.endMotionLogic()
@@ -667,7 +734,11 @@ class GamePlay: View("Monopoly"){
                 else -> idMotion.text = "Ход игрока ${game.data[4].name}"
             }
             buttonRoll.disableProperty().value = false
-            if (game.data[game.motionPlayer].playerInPrison()) motion()
+            if (game.data[game.motionPlayer].ai) {
+                game.aiInstructions()
+                updateUpgrade()
+            }
+            if (game.data[game.motionPlayer].playerInPrison() || game.data[game.motionPlayer].ai) motion()
         }
     }
 

@@ -53,11 +53,19 @@
                               <Font size="14.0" />
                            </font>
                         </TextField>
+                        <CheckBox fx:id="botCheck1" mnemonicParsing="false" onAction="#botAction1" prefHeight="35.0" prefWidth="104.0" text="Компьютер">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </CheckBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="43.0" prefWidth="564.0">
                      <children>
-                        <CheckBox mnemonicParsing="false" onAction="#active3" prefHeight="35.0" prefWidth="91.0" text="Игрок 3">
+                        <CheckBox fx:id="player3Check" mnemonicParsing="false" onAction="#active3" prefHeight="35.0" prefWidth="91.0" text="Игрок 3">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -67,11 +75,19 @@
                               <Font size="14.0" />
                            </font>
                         </TextField>
+                        <CheckBox fx:id="botCheck2" disable="true" mnemonicParsing="false" onAction="#botAction2" prefHeight="35.0" prefWidth="104.0" text="Компьютер">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </CheckBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="43.0" prefWidth="564.0">
                      <children>
-                        <CheckBox mnemonicParsing="false" onAction="#active4" prefHeight="35.0" prefWidth="91.0" text="Игрок 4">
+                        <CheckBox fx:id="player4Check" mnemonicParsing="false" onAction="#active4" prefHeight="35.0" prefWidth="91.0" text="Игрок 4">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -81,11 +97,19 @@
                               <Font size="14.0" />
                            </font>
                         </TextField>
+                        <CheckBox fx:id="botCheck3" disable="true" mnemonicParsing="false" onAction="#botAction3" prefHeight="35.0" prefWidth="104.0" text="Компьютер">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </CheckBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="37.0" prefWidth="564.0">
                      <children>
-                        <CheckBox mnemonicParsing="false" onAction="#active5" prefHeight="35.0" prefWidth="92.0" text="Игрок 5">
+                        <CheckBox fx:id="player5Check" mnemonicParsing="false" onAction="#active5" prefHeight="35.0" prefWidth="92.0" text="Игрок 5">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -95,6 +119,14 @@
                               <Font size="14.0" />
                            </font>
                         </TextField>
+                        <CheckBox fx:id="botCheck4" disable="true" mnemonicParsing="false" onAction="#botAction4" prefHeight="35.0" prefWidth="104.0" text="Компьютер">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </CheckBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="80.0" prefWidth="564.0">

@@ -15,9 +15,18 @@ class Player(val id: Int){
     val monopolyRealty = mutableListOf<Type>()
     var finishCircle = false
     var circlesCompleted = 0
+    var ai = false
 
     init {
         moneyChange(0)
+    }
+
+    override fun toString(): String {
+        return "[Id = $id] [Name = $name] [Money = $money] [Ai = $ai]"
+    }
+
+    fun hasSomething() : Boolean{
+        return realty.isNotEmpty()
     }
 
     fun playerInPrison() : Boolean = prisonDays != 0
