@@ -177,10 +177,9 @@ class GamePlay: View("Monopoly"){
         game.dice.roll()
         diceRoll(game.dice.first,game.dice.second)
         prisonClose()
-        runAsync { Thread.sleep(200) }ui{
-            Thread.sleep(200)
+        runAsync { Thread.sleep(600) }ui{
             if (game.prisonTry()) playerMove()
-            endMotion()
+            else endMotion()
         }
     }
 

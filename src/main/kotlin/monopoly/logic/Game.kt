@@ -67,7 +67,7 @@ class Game{
     }
 
     private fun someOnBoardNearlyHasMonopoly() : Boolean{ // функция для проверки необходимости покупки поля для руина монополии другому игроку
-        for (player in data.filter { it.id != data[presentId].id})
+        for (player in data)
             if (playerNearlyHasMonopoly(player, board.fields[data[presentId].position])) return true
         return false
     }
