@@ -32,7 +32,6 @@ class SomeActionAlert : Fragment(){
         }
         //secret only positive
         if (game.ifSecret()){
-            game.positiveSecret()
             when(game.dice.secret.second){
                 SecretAction.Action1 -> message.text = "Вы нашли в зимней куртке забытые 250"
                 SecretAction.Action2 -> message.text = "Вы выйграли на ставках 500"

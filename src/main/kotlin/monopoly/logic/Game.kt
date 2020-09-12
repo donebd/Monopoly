@@ -56,32 +56,78 @@ class Game{
         }//Блок апгрейда своих монополий by ai
     }
 
-    fun aiBuyInstructions() : Boolean{
-        if ((data[presentId].monopolyRealty.isEmpty() || data[presentId].money >= 10000) && data[presentId].money + 500 >= board.fields[data[presentId].position].cost)
-            return true
+    fun aiBuyInstructions() : Int{
+        if ((data[presentId].monopolyRealty.isEmpty() || data[presentId].money >= 10000 || someOnBoardNearlyHasMonopoly()) && data[presentId].money + 500 >= board.fields[data[presentId].position].cost)
+            return 0// купить
+        if (playerNearlyHasMonopoly(data[presentId], board.fields[data[presentId].position]) && data[presentId].monopolyRealty.isNotEmpty() && sellSomeUpgrade(data[presentId]))
+            return 1//продать апгрейд, чтобы потом купить поле для для еще одной монополии
+        if (playerNearlyHasMonopoly(data[presentId], board.fields[data[presentId].position]) && data[presentId].realty.any { it.type != board.fields[data[presentId].position].type })
+            return 2//продать поле, чтобы потом купить поле для для еще одной монополии
+        return -1// не купить
+    }
+
+    private fun someOnBoardNearlyHasMonopoly() : Boolean{ // функция для проверки необходимости покупки поля для руина монополии другому игроку
+        for (player in data.filter { it.id != data[presentId].id})
+            if (playerNearlyHasMonopoly(player, board.fields[data[presentId].position])) return true
         return false
     }
 
-    fun aiPunisment() : Int{
-        if (data[presentId].money >= board.fields[data[presentId].position].penalty) return 0
-            if (data[presentId].monopolyRealty.isNotEmpty()){
-                return 1
-            }else{
-                if (data[presentId].hasSomething()) return  2
-            }
-        return 3
+    fun playerNearlyHasMonopoly(player: Player, field: Field) : Boolean{
+        when(player.realty.filter { it.type == field.type }.size){
+            1 -> if (field.type == Type.Perfume || field.type == Type.Software || field.type == Type.Soda || field.type == Type.FastFood || field.type == Type.SocialNetwork) return true
+            2 -> if (field.type == Type.Clothes || field.type == Type.Car || field.type == Type.Airlanes) return true
+            else -> return false
+        }
+        return false
     }
 
-    fun sellSomeUpgrade(player : Player){
+    fun aiNegativeEvent() : Int{
+        when(dice.secret.second) {
+            SecretAction.Action1 -> if (data[presentId].money >= 300) {
+                return 0
+            }
+            SecretAction.Action2 -> if (data[presentId].money >= 500) {
+                return 0
+            }
+            SecretAction.Action3 -> if (data[presentId].money >= 40) {
+                return 0
+            }
+            SecretAction.Action4 -> if (data[presentId].money >= 750) {
+                return 0
+            }
+            else -> if (data[presentId].money >= 250) {
+                return 0
+            }
+        }
+        if (data[presentId].monopolyRealty.isNotEmpty() && sellSomeUpgrade(data[presentId])){
+            return 1// продать апгрейд, чтобы потом заплатить
+        }else{
+            if (data[presentId].hasSomething()) return  2// продать поле, чтобы потом заплатить
+        }
+        return 3// сдаться
+    }
+
+    fun aiPunisment() : Int{
+        if (data[presentId].money >= board.fields[data[presentId].position].penalty) return 0//заплатить
+            if (data[presentId].monopolyRealty.isNotEmpty() && sellSomeUpgrade(data[presentId])){
+                return 1// продать апгрейд, чтобы потом заплатить
+            }else{
+                if (data[presentId].hasSomething()) return  2// продать поле, чтобы потом заплатить
+            }
+        return 3// сдаться
+    }
+
+    fun sellSomeUpgrade(player : Player) : Boolean{
         for (i in player.monopolyRealty){
             for (j in board.fields.filter { it.type == i })
                 if (j.upgrade > 0){
                     player.moneyChange(j.upgradeCost)
                     j.upgrade--
                     j.penaltyUpdate()
-                    return
+                    return true
                 }
         }
+        return false
     }
 
     fun sellSomeField(player: Player) : Int{
@@ -90,6 +136,22 @@ class Game{
                 return i.location
         }
         for (i in player.realty){
+            if (player.realty.filter { it.type == i.type }.size == 2)
+                return i.location
+        }
+        for (i in player.realty){
+            if (player.realty.filter { it.type == i.type }.size == 3)
+                return i.location
+        }
+        return 0
+    }
+
+    fun sellSomeOtherTypeField(player: Player) : Int{
+        for (i in player.realty.filter { it.type != board.fields[player.position].type && it.type !in player.monopolyRealty}){
+            if (player.realty.filter { it.type == i.type }.size == 1)
+                return i.location
+        }
+        for (i in player.realty.filter { it.type != board.fields[player.position].type && it.type !in player.monopolyRealty}){
             if (player.realty.filter { it.type == i.type }.size == 2)
                 return i.location
         }

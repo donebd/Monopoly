@@ -177,9 +177,10 @@ class GamePlay: View("Monopoly"){
         game.dice.roll()
         diceRoll(game.dice.first,game.dice.second)
         prisonClose()
-        runAsync { Thread.sleep(1000) }ui{
+        runAsync { Thread.sleep(200) }ui{
+            Thread.sleep(200)
             if (game.prisonTry()) playerMove()
-            runAsync { Thread.sleep(250) }ui{endMotion()}
+            endMotion()
         }
     }
 
@@ -549,10 +550,14 @@ class GamePlay: View("Monopoly"){
     private fun secretAction(){
         //positive
         if (game.secretIsPositive()){
-            find<SomeActionAlert>().openModal(resizable = false)
+            game.positiveSecret()
+            if (!game.data[game.presentId].ai) find<SomeActionAlert>().openModal(resizable = false)
             endMotion()
         }else{//negative
-            negativeInit()
+            if (game.data[game.presentId].ai)
+                aiNegativeEvent()
+            else
+                negativeInit()
         }
     }
 
@@ -584,7 +589,6 @@ class GamePlay: View("Monopoly"){
         when (game.aiPunisment()){
             0 -> penaltyAccept()
             1 -> {
-                game.sellSomeUpgrade(game.data[game.presentId])
                 updateUpgrade()
                 aiPunisment()
             }
@@ -598,14 +602,47 @@ class GamePlay: View("Monopoly"){
         }
     }
 
+    private fun aiNegativeEvent(){
+        when (game.aiNegativeEvent()){
+            0 -> negativePay()
+            1 -> {
+                updateUpgrade()
+                aiNegativeEvent()
+            }
+            2 -> {
+                val tmp = game.sellSomeField(game.data[game.presentId])
+                game.fieldSellByHalf(game.data[game.presentId], game.board.fields[tmp])
+                paintField(tmp, c("#d2edd7"))
+                aiNegativeEvent()
+            }
+            else -> playerSurrender()
+        }
+    }
+
+    private fun aiBuyInstructions(){
+        when(game.aiBuyInstructions()){
+            0 -> offerAccept()
+            1 ->{
+                updateUpgrade()
+                aiBuyInstructions()
+            }
+            2 ->{
+                val tmp = game.sellSomeOtherTypeField(game.data[game.presentId])
+                game.fieldSellByHalf(game.data[game.presentId], game.board.fields[tmp])
+                paintField(tmp, c("#d2edd7"))
+                aiBuyInstructions()
+            }
+            else -> runAsync {
+                Thread.sleep(100)
+            }ui{endMotion()}
+        }
+    }
+
     private fun fieldEvent(){
         //buy realty
         if (game.realtyCanBuy()){
             if (game.data[game.presentId].ai){
-                if (game.aiBuyInstructions())
-                    offerAccept()
-                else
-                    endMotion()
+                aiBuyInstructions()
             }else
                 offerToBuy()
             diceDoubleAlert()
@@ -626,7 +663,7 @@ class GamePlay: View("Monopoly"){
             return
         }
         //get stonks
-        if (game.stonksAction()){
+        if (game.stonksAction() && !game.data[game.presentId].ai){
             find<SomeActionAlert>().openModal(resizable = false)
         }
         //secret action
@@ -636,7 +673,7 @@ class GamePlay: View("Monopoly"){
             return
         }
         //start field
-        if (game.startAction()){
+        if (game.startAction() && !game.data[game.presentId].ai){
             find<SomeActionAlert>().openModal(resizable = false)
         }
 
@@ -657,7 +694,7 @@ class GamePlay: View("Monopoly"){
                 else -> movePlayer5(game.data[4].position, false)
             }
             //check cycle completed and reward according to the settings
-            if (game.checkCircleComplete()){
+            if (game.checkCircleComplete() && !game.data[game.presentId].ai){
                 runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal(resizable = false)}
             }
 
