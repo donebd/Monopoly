@@ -492,6 +492,10 @@ class GamePlay: View("Monopoly"){
         linkCostOfField()
 
         alertCheck.isSelected = showAlerts
+
+        if (game.data.filter { it.ai }.size == game.data.size) buttonRoll.opacity = 0.0
+
+        if (game.data[0].ai) motion()
     }
 
     private fun linkCostOfField(){
