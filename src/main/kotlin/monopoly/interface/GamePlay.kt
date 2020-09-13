@@ -627,6 +627,14 @@ class GamePlay: View("Monopoly"){
             }
             2 ->{
                 val tmp = game.sellSomeOtherTypeField(game.data[game.presentId])
+                if (tmp == 0) {
+                    runAsync {
+                        Thread.sleep(100)
+                    }ui{
+                        endMotion()
+                    }
+                    return
+                }
                 game.fieldSellByHalf(game.data[game.presentId], game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
                 aiBuyInstructions()
@@ -790,18 +798,19 @@ class GamePlay: View("Monopoly"){
                 3 -> idMotion.text = "Ход игрока ${game.data[3].name}"
                 else -> idMotion.text = "Ход игрока ${game.data[4].name}"
             }
-            buttonRoll.disableProperty().value = false
+            if (!game.gameIsEnd) buttonRoll.disableProperty().value = false
             if (game.data[game.motionPlayer].ai) {
                 game.aiInstructions()
                 updateUpgrade()
             }
-            if (game.data[game.motionPlayer].playerInPrison() || game.data[game.motionPlayer].ai) motion()
+            if ((game.data[game.motionPlayer].playerInPrison() || game.data[game.motionPlayer].ai) && !game.gameIsEnd) motion()
         }
     }
 
     private fun checkEndGame(){
         runAsync { Thread.sleep(350) }ui {
             if (game.gameIsEnd()) {
+                game.gameIsEnd = true
                 find<FinishGame>().openModal(resizable = false)
             }
         }

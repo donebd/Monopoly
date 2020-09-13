@@ -11,13 +11,15 @@ class Game{
 
     val data = mutableListOf<Player>()
 
+    var gameIsEnd = false
+
     val board = GameBoard()
 
     var motionPlayer = 0
 
     var presentId = 0 // number of the player who is currently walking in action
 
-    private var loosers = mutableListOf<Int>()
+    var loosers = mutableListOf<Int>()
 
     var cntPls = 0 // count of players
 
@@ -72,7 +74,7 @@ class Game{
     }
 
     fun aiBuyInstructions() : Int{
-        if (data[presentId].money + 500 >= board.fields[data[presentId].position].cost && (data[presentId].monopolyRealty.isEmpty() || data[presentId].money >= 10000 || someOnBoardNearlyHasMonopoly()))
+        if (data[presentId].money >= board.fields[data[presentId].position].cost + 500 && (data[presentId].monopolyRealty.isEmpty() || data[presentId].money >= 10000 || someOnBoardNearlyHasMonopoly()))
             return 0// купить
         if (playerNearlyHasMonopoly(data[presentId], board.fields[data[presentId].position]) && data[presentId].monopolyRealty.isNotEmpty() && sellSomeUpgrade(data[presentId]))
             return 1//продать апгрейд, чтобы потом купить поле для для еще одной монополии
