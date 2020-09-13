@@ -1,6 +1,7 @@
 package monopoly.`interface`
 
 import javafx.scene.control.Button
+import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.Label
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
@@ -10,7 +11,6 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.util.Duration
-import monopoly.logic.Game
 import monopoly.logic.Player
 import monopoly.logic.SecretAction
 import tornadofx.*
@@ -18,6 +18,8 @@ import tornadofx.*
 class GamePlay: View("Monopoly"){
 
     override val root : AnchorPane by fxml()
+
+    private val alertCheck : CheckMenuItem by fxid()
 
     //Offer to buy field block
     private val offerToBuy : AnchorPane by fxid()
@@ -489,10 +491,7 @@ class GamePlay: View("Monopoly"){
         game.setBalance()
         linkCostOfField()
 
-        println("---New Game---")
-        for (i in game.data){
-            println(i)
-        }
+        alertCheck.isSelected = showAlerts
     }
 
     private fun linkCostOfField(){
@@ -550,7 +549,7 @@ class GamePlay: View("Monopoly"){
         //positive
         if (game.secretIsPositive()){
             game.positiveSecret()
-            if (!game.data[game.presentId].ai) find<SomeActionAlert>().openModal(resizable = false)
+            if (!game.data[game.presentId].ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
             endMotion()
         }else{//negative
             if (game.data[game.presentId].ai)
@@ -576,12 +575,12 @@ class GamePlay: View("Monopoly"){
             4 -> movePlayer4(0, true)
             else -> movePlayer5(0, true)
         }
-        if (!current.ai) find<SomeActionAlert>().openModal(resizable = false)
+        if (!current.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
         runAsync { Thread.sleep(100) }ui{endMotion()}
     }
 
     private fun diceDoubleAlert(){
-        if (game.diceDoubleCheck() && !game.data[game.presentId].ai) find<DiceDouble>().openModal(resizable = false)
+        if (game.diceDoubleCheck() && !game.data[game.presentId].ai && showAlerts) find<DiceDouble>().openModal(resizable = false)
     }
 
     private fun aiPunisment(){
@@ -688,7 +687,7 @@ class GamePlay: View("Monopoly"){
             return
         }
         //get stonks
-        if (game.stonksAction() && !game.data[game.presentId].ai){
+        if (game.stonksAction() && !game.data[game.presentId].ai && showAlerts){
             find<SomeActionAlert>().openModal(resizable = false)
         }
         //secret action
@@ -698,7 +697,7 @@ class GamePlay: View("Monopoly"){
             return
         }
         //start field
-        if (game.startAction() && !game.data[game.presentId].ai){
+        if (game.startAction() && !game.data[game.presentId].ai && showAlerts){
             find<SomeActionAlert>().openModal(resizable = false)
         }
 
@@ -719,7 +718,7 @@ class GamePlay: View("Monopoly"){
                 else -> movePlayer5(game.data[4].position, false)
             }
             //check cycle completed and reward according to the settings
-            if (game.checkCircleComplete() && !game.data[game.presentId].ai){
+            if (game.checkCircleComplete() && !game.data[game.presentId].ai && showAlerts){
                 runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal(resizable = false)}
             }
 
@@ -822,6 +821,10 @@ class GamePlay: View("Monopoly"){
 
     fun newGame(){
         replaceWith(Begin(), ViewTransition.Implode(0.5.seconds))
+    }
+
+    fun alertSwitch(){
+        showAlerts = alertCheck.isSelected
     }
 
     fun exit(){

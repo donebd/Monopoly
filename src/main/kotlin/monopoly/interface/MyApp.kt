@@ -9,6 +9,8 @@ var game = Game()
 
 var gamePlay = GamePlay()
 
+var showAlerts = true
+
 class MyApp: App(Begin::class){
     override fun start(stage: Stage) {
         with(stage) {
