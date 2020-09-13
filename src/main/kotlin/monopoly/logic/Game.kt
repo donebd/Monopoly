@@ -55,9 +55,24 @@ class Game{
             }
         }//Блок апгрейда своих монополий by ai
     }
+    fun aiPrisonInstructions(player: Player) : Int{
+        if (!prisonPayDay(player)){
+            if ((player.money >= 10000 || (player.monopolyRealty.isEmpty() && playerNearlyHasSomeMonopoly(player))) && onBoardHasBuyableFields() && player.money >= 500) return 0// выкуп за 500
+            return 1// попытка выйти дублем
+        }else{
+            if (player.money >= 750) return 0// выкуп за 750
+            if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)) return 2//продажа апгрейда чтобы выйти за 750
+            if (player.hasSomething()) return 3// продажа поля чтобы выйти за 750
+        }
+        return -1// surrender
+    }
+
+    private fun onBoardHasBuyableFields() : Boolean{
+        return board.fields.any { it.couldBuy && it.owner == null }
+    }
 
     fun aiBuyInstructions() : Int{
-        if ((data[presentId].monopolyRealty.isEmpty() || data[presentId].money >= 10000 || someOnBoardNearlyHasMonopoly()) && data[presentId].money + 500 >= board.fields[data[presentId].position].cost)
+        if (data[presentId].money + 500 >= board.fields[data[presentId].position].cost && (data[presentId].monopolyRealty.isEmpty() || data[presentId].money >= 10000 || someOnBoardNearlyHasMonopoly()))
             return 0// купить
         if (playerNearlyHasMonopoly(data[presentId], board.fields[data[presentId].position]) && data[presentId].monopolyRealty.isNotEmpty() && sellSomeUpgrade(data[presentId]))
             return 1//продать апгрейд, чтобы потом купить поле для для еще одной монополии
@@ -72,12 +87,17 @@ class Game{
         return false
     }
 
-    fun playerNearlyHasMonopoly(player: Player, field: Field) : Boolean{
+    private fun playerNearlyHasMonopoly(player: Player, field: Field) : Boolean{
         when(player.realty.filter { it.type == field.type }.size){
             1 -> if (field.type == Type.Perfume || field.type == Type.Software || field.type == Type.Soda || field.type == Type.FastFood || field.type == Type.SocialNetwork) return true
             2 -> if (field.type == Type.Clothes || field.type == Type.Car || field.type == Type.Airlanes) return true
             else -> return false
         }
+        return false
+    }
+
+    private fun playerNearlyHasSomeMonopoly(player: Player) : Boolean{
+        for (i in player.realty) if (playerNearlyHasMonopoly(player, i)) return true
         return false
     }
 
@@ -117,7 +137,7 @@ class Game{
         return 3// сдаться
     }
 
-    fun sellSomeUpgrade(player : Player) : Boolean{
+    private fun sellSomeUpgrade(player : Player) : Boolean{
         for (i in player.monopolyRealty){
             for (j in board.fields.filter { it.type == i })
                 if (j.upgrade > 0){
@@ -344,6 +364,7 @@ class Game{
     }
 
     fun prisonPayDay() = data[presentId].prisonDays == 4
+    private fun prisonPayDay(player: Player) = player.prisonDays == 4
 
     fun prisonTry() : Boolean{
         if (dice.double) {

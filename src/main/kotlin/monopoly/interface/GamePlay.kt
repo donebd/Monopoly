@@ -577,7 +577,7 @@ class GamePlay: View("Monopoly"){
             else -> movePlayer5(0, true)
         }
         if (!current.ai) find<SomeActionAlert>().openModal(resizable = false)
-        runAsync { Thread.sleep(50) }ui{endMotion()}
+        runAsync { Thread.sleep(100) }ui{endMotion()}
     }
 
     private fun diceDoubleAlert(){
@@ -634,6 +634,24 @@ class GamePlay: View("Monopoly"){
             else -> runAsync {
                 Thread.sleep(100)
             }ui{endMotion()}
+        }
+    }
+
+    fun aiPrisonInstructions(player: Player){
+        when(game.aiPrisonInstructions(player)){
+            0 -> prisonPay()
+            1 -> prisonTry()
+            2 -> {
+                updateUpgrade()
+                aiPrisonInstructions(player)
+            }
+            3 ->{
+                val tmp = game.sellSomeField(player)
+                game.fieldSellByHalf(player, game.board.fields[tmp])
+                paintField(tmp, c("#d2edd7"))
+                aiPrisonInstructions(player)
+            }
+            else -> playerSurrender()
         }
     }
 
@@ -709,7 +727,10 @@ class GamePlay: View("Monopoly"){
     fun motion(){
         buttonRoll.disableProperty().value = true
         if (game.data[game.presentId].playerInPrison()){
-            prisonInit()
+            if (game.data[game.presentId].ai)
+                aiPrisonInstructions(game.data[game.presentId])
+            else
+                prisonInit()
             return
         }
         game.dice.roll()
