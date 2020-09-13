@@ -1,8 +1,11 @@
 package monopoly.`interface`
 
+import javafx.collections.FXCollections
 import javafx.scene.control.CheckBox
+import javafx.scene.control.ComboBox
 import javafx.scene.control.TextField
 import javafx.scene.layout.BorderPane
+import monopoly.logic.Difficulty
 import monopoly.logic.Game
 import monopoly.logic.Player
 import tornadofx.*
@@ -36,6 +39,16 @@ class Begin : View("Monopoly"){
     private val player4Check : CheckBox by fxid()
 
     private val player5Check : CheckBox by fxid()
+
+    private val difficultyBox1 : ComboBox<String> by fxid()
+
+    private val difficultyBox2 : ComboBox<String> by fxid()
+
+    private val difficultyBox3 : ComboBox<String> by fxid()
+
+    private val difficultyBox4 : ComboBox<String> by fxid()
+
+    private val difficultyBox5 : ComboBox<String> by fxid()
 
     fun howToPlay(){
         find<HowToPlay>().openModal(resizable =  false)
@@ -87,18 +100,30 @@ class Begin : View("Monopoly"){
         if (botCheck1.isSelected){
             playfield1.disableProperty().value = true
             playfield1.text = "AI 1"
+            difficultyBox1.disableProperty().value = false
+            difficultyBox1.value = "Легкий"
+            difficultyBox1.opacity = 1.0
         } else {
             playfield1.disableProperty().value = false
             playfield1.text = "Player 1"
+            difficultyBox1.disableProperty().value = true
+            difficultyBox1.value = "null"
+            difficultyBox1.opacity = 0.0
         }
     }
     fun botAction2(){
         if (botCheck2.isSelected){
             playfield2.disableProperty().value = true
             playfield2.text = "AI 2"
+            difficultyBox2.disableProperty().value = false
+            difficultyBox2.value = "Легкий"
+            difficultyBox2.opacity = 1.0
         } else {
             playfield2.disableProperty().value = false
             playfield2.text = "Player 2"
+            difficultyBox2.disableProperty().value = true
+            difficultyBox2.value = "null"
+            difficultyBox2.opacity = 0.0
         }
     }
 
@@ -106,9 +131,15 @@ class Begin : View("Monopoly"){
         if (botCheck3.isSelected){
             playfield3.disableProperty().value = true
             playfield3.text = "AI 3"
+            difficultyBox3.disableProperty().value = false
+            difficultyBox3.value = "Легкий"
+            difficultyBox3.opacity = 1.0
         } else {
             playfield3.disableProperty().value = false
             playfield3.text = "Player 3"
+            difficultyBox3.disableProperty().value = true
+            difficultyBox3.value = "null"
+            difficultyBox3.opacity = 0.0
         }
     }
 
@@ -116,9 +147,15 @@ class Begin : View("Monopoly"){
         if (botCheck4.isSelected){
             playfield4.disableProperty().value = true
             playfield4.text = "AI 4"
+            difficultyBox4.disableProperty().value = false
+            difficultyBox4.value = "Легкий"
+            difficultyBox4.opacity = 1.0
         } else {
             playfield4.disableProperty().value = false
             playfield4.text = "Player 4"
+            difficultyBox4.disableProperty().value = true
+            difficultyBox4.value = "null"
+            difficultyBox4.opacity = 0.0
         }
     }
 
@@ -126,9 +163,15 @@ class Begin : View("Monopoly"){
         if (botCheck5.isSelected){
             playfield5.disableProperty().value = true
             playfield5.text = "AI 5"
+            difficultyBox5.disableProperty().value = false
+            difficultyBox5.value = "Легкий"
+            difficultyBox5.opacity = 1.0
         } else {
             playfield5.disableProperty().value = false
             playfield5.text = "Player 5"
+            difficultyBox5.disableProperty().value = true
+            difficultyBox5.value = "null"
+            difficultyBox5.opacity = 0.0
         }
     }
 
@@ -136,6 +179,11 @@ class Begin : View("Monopoly"){
         primaryStage.width = 610.0
         primaryStage.height = 420.0
         primaryStage.centerOnScreen()
+        difficultyBox1.items = FXCollections.observableArrayList("Легкий", "Средний", "0 Ошибок")
+        difficultyBox2.items = FXCollections.observableArrayList("Легкий", "Средний", "0 Ошибок")
+        difficultyBox3.items = FXCollections.observableArrayList("Легкий", "Средний", "0 Ошибок")
+        difficultyBox4.items = FXCollections.observableArrayList("Легкий", "Средний", "0 Ошибок")
+        difficultyBox5.items = FXCollections.observableArrayList("Легкий", "Средний", "0 Ошибок")
     }
 
     fun startGame(){
@@ -144,26 +192,61 @@ class Begin : View("Monopoly"){
         game.data[0].name = playfield1.text
         game.data[1].name = playfield2.text
 
-        if (botCheck1.isSelected) game.data[0].ai = true
+        if (botCheck1.isSelected){
+            game.data[0].ai = true
+            when (difficultyBox1.value){
+                "Легкий" -> game.data[0].aiDifficulty = Difficulty.Easy
+                "Средний" -> game.data[0].aiDifficulty = Difficulty.Medium
+                else -> game.data[0].aiDifficulty = Difficulty.Hard
+            }
+        }
 
-        if (botCheck2.isSelected) game.data[1].ai = true
+        if (botCheck2.isSelected){
+            game.data[1].ai = true
+            when (difficultyBox2.value){
+                "Легкий" -> game.data[1].aiDifficulty = Difficulty.Easy
+                "Средний" -> game.data[1].aiDifficulty = Difficulty.Medium
+                else -> game.data[1].aiDifficulty = Difficulty.Hard
+            }
+        }
 
         if (player3Check.isSelected){
             game.data.add(Player(game.data.size + 1))
             game.data.last().name = playfield3.text
-            if (botCheck3.isSelected) game.data.last().ai = true
+            if (botCheck3.isSelected){
+                game.data.last().ai = true
+                when (difficultyBox3.value){
+                    "Легкий" -> game.data.last().aiDifficulty = Difficulty.Easy
+                    "Средний" -> game.data.last().aiDifficulty = Difficulty.Medium
+                    else -> game.data.last().aiDifficulty = Difficulty.Hard
+                }
+            }
         }
 
         if (player4Check.isSelected){
             game.data.add(Player(game.data.size + 1))
             game.data.last().name = playfield4.text
-            if (botCheck4.isSelected) game.data.last().ai = true
+            if (botCheck4.isSelected){
+                game.data.last().ai = true
+                when (difficultyBox4.value){
+                    "Легкий" -> game.data.last().aiDifficulty = Difficulty.Easy
+                    "Средний" -> game.data.last().aiDifficulty = Difficulty.Medium
+                    else -> game.data.last().aiDifficulty = Difficulty.Hard
+                }
+            }
         }
 
         if (player5Check.isSelected){
             game.data.add(Player(game.data.size + 1))
             game.data.last().name = playfield5.text
-            if (botCheck5.isSelected) game.data.last().ai = true
+            if (botCheck5.isSelected){
+                game.data.last().ai = true
+                when (difficultyBox5.value){
+                    "Легкий" -> game.data.last().aiDifficulty = Difficulty.Easy
+                    "Средний" -> game.data.last().aiDifficulty = Difficulty.Medium
+                    else -> game.data.last().aiDifficulty = Difficulty.Hard
+                }
+            }
         }
         gamePlay.root.clear()
         gamePlay = GamePlay()

@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -29,112 +30,137 @@
                   </Label>
                   <HBox prefHeight="43.0" prefWidth="564.0">
                      <children>
-                        <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="89.0" selected="true" text="Игрок 1">
+                        <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="80.0" selected="true" text="Игрок 1">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="playfield1" prefHeight="36.0" prefWidth="349.0" text="Player 1">
+                        <TextField fx:id="playfield1" prefHeight="36.0" prefWidth="260.0" text="Player 1">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <CheckBox fx:id="botCheck1" mnemonicParsing="false" onAction="#botAction1" prefHeight="35.0" prefWidth="104.0" text="Компьютер">
+                        <CheckBox fx:id="botCheck1" mnemonicParsing="false" onAction="#botAction1" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
                            <font>
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="20.0" />
+                              <Insets left="10.0" />
                            </HBox.margin>
                         </CheckBox>
+                        <ComboBox fx:id="difficultyBox1" accessibleRole="IMAGE_VIEW" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                           <HBox.margin>
+                              <Insets top="6.0" />
+                           </HBox.margin>
+                        </ComboBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="43.0" prefWidth="564.0">
                      <children>
-                        <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="90.0" selected="true" text="Игрок 2">
+                        <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="80.0" selected="true" text="Игрок 2">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="playfield2" prefHeight="36.0" prefWidth="349.0" text="Player 2">
+                        <TextField fx:id="playfield2" prefHeight="36.0" prefWidth="260.0" text="Player 2">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <CheckBox fx:id="botCheck2" mnemonicParsing="false" onAction="#botAction2" prefHeight="35.0" prefWidth="104.0" text="Компьютер">
+                        <CheckBox fx:id="botCheck2" mnemonicParsing="false" onAction="#botAction2" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
                            <font>
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="20.0" />
+                              <Insets left="10.0" />
                            </HBox.margin>
                         </CheckBox>
+                        <ComboBox fx:id="difficultyBox2" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                           <HBox.margin>
+                              <Insets top="6.0" />
+                           </HBox.margin>
+                        </ComboBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="43.0" prefWidth="564.0">
                      <children>
-                        <CheckBox fx:id="player3Check" mnemonicParsing="false" onAction="#active3" prefHeight="35.0" prefWidth="91.0" text="Игрок 3">
+                        <CheckBox fx:id="player3Check" mnemonicParsing="false" onAction="#active3" prefHeight="35.0" prefWidth="80.0" text="Игрок 3">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="playfield3" disable="true" prefHeight="36.0" prefWidth="349.0">
+                        <TextField fx:id="playfield3" disable="true" prefHeight="36.0" prefWidth="260.0">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <CheckBox fx:id="botCheck3" disable="true" mnemonicParsing="false" onAction="#botAction3" prefHeight="35.0" prefWidth="104.0" text="Компьютер">
+                        <CheckBox fx:id="botCheck3" disable="true" mnemonicParsing="false" onAction="#botAction3" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
                            <font>
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="20.0" />
+                              <Insets left="10.0" />
                            </HBox.margin>
                         </CheckBox>
+                        <ComboBox fx:id="difficultyBox3" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                           <HBox.margin>
+                              <Insets top="6.0" />
+                           </HBox.margin>
+                        </ComboBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="43.0" prefWidth="564.0">
                      <children>
-                        <CheckBox fx:id="player4Check" mnemonicParsing="false" onAction="#active4" prefHeight="35.0" prefWidth="91.0" text="Игрок 4">
+                        <CheckBox fx:id="player4Check" mnemonicParsing="false" onAction="#active4" prefHeight="35.0" prefWidth="80.0" text="Игрок 4">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="playfield4" disable="true" prefHeight="36.0" prefWidth="349.0">
+                        <TextField fx:id="playfield4" disable="true" prefHeight="36.0" prefWidth="260.0">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <CheckBox fx:id="botCheck4" disable="true" mnemonicParsing="false" onAction="#botAction4" prefHeight="35.0" prefWidth="104.0" text="Компьютер">
+                        <CheckBox fx:id="botCheck4" disable="true" mnemonicParsing="false" onAction="#botAction4" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
                            <font>
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="20.0" />
+                              <Insets left="10.0" />
                            </HBox.margin>
                         </CheckBox>
+                        <ComboBox fx:id="difficultyBox4" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                           <HBox.margin>
+                              <Insets top="6.0" />
+                           </HBox.margin>
+                        </ComboBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="37.0" prefWidth="564.0">
                      <children>
-                        <CheckBox fx:id="player5Check" mnemonicParsing="false" onAction="#active5" prefHeight="35.0" prefWidth="92.0" text="Игрок 5">
+                        <CheckBox fx:id="player5Check" mnemonicParsing="false" onAction="#active5" prefHeight="35.0" prefWidth="80.0" text="Игрок 5">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="playfield5" disable="true" prefHeight="95.0" prefWidth="349.0">
+                        <TextField fx:id="playfield5" disable="true" prefHeight="95.0" prefWidth="260.0">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <CheckBox fx:id="botCheck5" disable="true" mnemonicParsing="false" onAction="#botAction5" prefHeight="35.0" prefWidth="104.0" text="Компьютер">
+                        <CheckBox fx:id="botCheck5" disable="true" mnemonicParsing="false" onAction="#botAction5" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
                            <font>
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="20.0" />
+                              <Insets left="10.0" />
                            </HBox.margin>
                         </CheckBox>
+                        <ComboBox fx:id="difficultyBox5" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                           <HBox.margin>
+                              <Insets top="6.0" />
+                           </HBox.margin>
+                        </ComboBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="80.0" prefWidth="564.0">

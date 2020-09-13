@@ -16,13 +16,14 @@ class Player(val id: Int){
     var finishCircle = false
     var circlesCompleted = 0
     var ai = false
+    var aiDifficulty : Difficulty? = null
 
     init {
         moneyChange(0)
     }
 
     override fun toString(): String {
-        return "[Id = $id] [Name = $name] [Money = $money] [Ai = $ai]"
+        return "[Id = $id] [Name = $name] [Money = $money] [Ai = $ai] [Difficulty = $aiDifficulty]"
     }
 
     fun hasSomething() : Boolean{

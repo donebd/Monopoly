@@ -495,6 +495,11 @@ class GamePlay: View("Monopoly"){
 
         if (game.data.filter { it.ai }.size == game.data.size) buttonRoll.opacity = 0.0
 
+        println("---New Game---")
+        for (i in game.data){
+            println(i)
+        }
+
         if (game.data[0].ai) motion()
     }
 
