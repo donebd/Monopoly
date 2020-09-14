@@ -48,7 +48,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </CheckBox>
-                        <ComboBox fx:id="difficultyBox1" accessibleRole="IMAGE_VIEW" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                        <ComboBox fx:id="difficultyBox1" accessibleRole="IMAGE_VIEW" disable="true" onAction="#difficultyAct1" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
                            <HBox.margin>
                               <Insets top="6.0" />
                            </HBox.margin>
@@ -75,7 +75,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </CheckBox>
-                        <ComboBox fx:id="difficultyBox2" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                        <ComboBox fx:id="difficultyBox2" disable="true" onAction="#difficultyAct2" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
                            <HBox.margin>
                               <Insets top="6.0" />
                            </HBox.margin>
@@ -102,7 +102,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </CheckBox>
-                        <ComboBox fx:id="difficultyBox3" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                        <ComboBox fx:id="difficultyBox3" disable="true" onAction="#difficultyAct3" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
                            <HBox.margin>
                               <Insets top="6.0" />
                            </HBox.margin>
@@ -129,7 +129,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </CheckBox>
-                        <ComboBox fx:id="difficultyBox4" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                        <ComboBox fx:id="difficultyBox4" disable="true" onAction="#difficultyAct4" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
                            <HBox.margin>
                               <Insets top="6.0" />
                            </HBox.margin>
@@ -156,7 +156,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </CheckBox>
-                        <ComboBox fx:id="difficultyBox5" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                        <ComboBox fx:id="difficultyBox5" disable="true" onAction="#difficultyAct5" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
                            <HBox.margin>
                               <Insets top="6.0" />
                            </HBox.margin>

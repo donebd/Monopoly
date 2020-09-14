@@ -45,26 +45,53 @@ class Game{
         cntPls = data.size
     }
 
-    fun aiInstructions(){
-        if (data[motionPlayer].monopolyRealty.isNotEmpty()){
-            for (i in data[motionPlayer].monopolyRealty){
-                board.fields.filter { it.type == i }.forEach{ if ( i !in data[motionPlayer].currentMotionUpgrade && data[motionPlayer].money >= it.upgradeCost && it.upgrade < 5 ){
-                    data[motionPlayer].moneyChange(-it.upgradeCost)
+    fun aiInstructions(player: Player){
+        if (player.monopolyRealty.isNotEmpty() && (player.aiDifficulty == Difficulty.Hard || (player.aiDifficulty == Difficulty.Medium && (1..100).random() in (1..85))
+                    || (player.aiDifficulty == Difficulty.Easy && (0..1).random() == 1))){
+            for (i in player.monopolyRealty){
+                board.fields.filter { it.type == i }.forEach{ if ( i !in player.currentMotionUpgrade && player.money >= it.upgradeCost && it.upgrade < 5 ){
+                    player.moneyChange(-it.upgradeCost)
                     it.upgrade++
                     it.penaltyUpdate()
-                    data[motionPlayer].currentMotionUpgrade.add(i)
+                    player.currentMotionUpgrade.add(i)
                 } }
             }
         }//Блок апгрейда своих монополий by ai
     }
     fun aiPrisonInstructions(player: Player) : Int{
-        if (!prisonPayDay(player)){
-            if ((player.money >= 10000 || (player.monopolyRealty.isEmpty() && playerNearlyHasSomeMonopoly(player))) && onBoardHasBuyableFields() && player.money >= 500) return 0// выкуп за 500
-            return 1// попытка выйти дублем
-        }else{
-            if (player.money >= 750) return 0// выкуп за 750
-            if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)) return 2//продажа апгрейда чтобы выйти за 750
-            if (player.hasSomething()) return 3// продажа поля чтобы выйти за 750
+        when(player.aiDifficulty){
+            Difficulty.Hard -> {
+                if (!prisonPayDay(player)){
+                    if ((player.money >= 10000 || (player.monopolyRealty.isEmpty() && playerNearlyHasSomeMonopoly(player))) && onBoardHasBuyableFields() && player.money >= 500) return 0// выкуп за 500
+                    return 1// попытка выйти дублем
+                }else{
+                    if (player.money >= 750) return 0// выкуп за 750
+                    if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)) return 2//продажа апгрейда чтобы выйти за 750
+                    if (player.hasSomething()) return 3// продажа поля чтобы выйти за 750
+                }
+            }
+            Difficulty.Medium -> {
+                if (!prisonPayDay(player)){
+                    if (player.monopolyRealty.isEmpty() && onBoardHasBuyableFields() && player.money >= 500) return 0
+                    return 1
+                }else{
+                    if (player.money >= 750) return 0
+                    if (player.hasSomeNotMonopoly()) return 4 // продажа немонопольных полей
+                    if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)) return 2//продажа апгрейда чтобы выйти за 750
+                    if (player.hasSomething()) return 3// продажа поля чтобы выйти за 750
+                }
+            }
+            else -> {
+                if (!prisonPayDay(player)){
+                    if (player.money >= 500 && (0..1).random() == 1) return 0
+                    return 1
+                }else{
+                    if (player.money >= 750) return 0
+                    if (player.hasSomeNotMonopoly()) return 4 // продажа немонопольных полей
+                    if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)) return 2//продажа апгрейда чтобы выйти за 750
+                    if (player.hasSomething()) return 3// продажа поля чтобы выйти за 750
+                }
+            }
         }
         return -1// surrender
     }
@@ -73,14 +100,49 @@ class Game{
         return board.fields.any { it.couldBuy && it.owner == null }
     }
 
-    fun aiBuyInstructions() : Int{
-        if (data[presentId].money >= board.fields[data[presentId].position].cost + 500 && (data[presentId].monopolyRealty.isEmpty() || data[presentId].money >= 10000 || someOnBoardNearlyHasMonopoly()))
-            return 0// купить
-        if (playerNearlyHasMonopoly(data[presentId], board.fields[data[presentId].position]) && data[presentId].monopolyRealty.isNotEmpty() && sellSomeUpgrade(data[presentId]))
-            return 1//продать апгрейд, чтобы потом купить поле для для еще одной монополии
-        if (playerNearlyHasMonopoly(data[presentId], board.fields[data[presentId].position]) && data[presentId].realty.any { it.type != board.fields[data[presentId].position].type })
-            return 2//продать поле, чтобы потом купить поле для для еще одной монополии
+    fun aiBuyInstructions(player: Player) : Int{
+        when (player.aiDifficulty){
+            Difficulty.Hard -> {
+                if (player.money >= board.fields[player.position].cost + 500 && (player.monopolyRealty.isEmpty() || player.money >= 10000 || someOnBoardNearlyHasMonopoly()))
+                    return 0// купить
+                if (playerNearlyHasMonopoly(player, board.fields[player.position])
+                    && calculateRealtyCost(player) + player.money >= board.fields[player.position].cost + 500
+                    && player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player))
+                    return 1//продать апгрейд, чтобы потом купить поле для монополии
+                if (playerNearlyHasMonopoly(player, board.fields[player.position])
+                    && calculateRealtyCost(player) + player.money >= board.fields[player.position].cost + 500
+                    && player.realty.any { it.type != board.fields[player.position].type })
+                    return 2//продать поле, чтобы потом купить поле для монополии
+            }
+            Difficulty.Medium -> {
+                if (player.money >= board.fields[player.position].cost && (player.monopolyRealty.isEmpty() || someOnBoardNearlyHasMonopoly()))
+                    return  0
+
+            }
+            else -> if (player.money >= board.fields[player.position].cost) return 0
+        }
+
         return -1// не купить
+    }
+
+    private fun calculateRealtyCost(player : Player) : Int{// возвращает кол-во денег с продажи всех немонопольных полей и апгрейдов
+        var sum = 0
+        for (i in player.monopolyRealty){
+            for (j in board.fields.filter { it.type == i })
+                if (j.upgrade > 0){
+                   sum += j.upgrade * j.upgradeCost
+                }
+        }//стоимость всех апгрейдов
+
+        for (i in player.realty.filter { it.type != board.fields[player.position].type && it.type !in player.monopolyRealty}){
+            if (player.realty.filter { it.type == i.type }.size == 1)
+                sum += i.cost/2
+        }
+        for (i in player.realty.filter { it.type != board.fields[player.position].type && it.type !in player.monopolyRealty}){
+            if (player.realty.filter { it.type == i.type }.size == 2)
+                sum += i.cost/2
+        }
+        return sum //стоимость всех немонопольных полей
     }
 
     private fun someOnBoardNearlyHasMonopoly() : Boolean{ // функция для проверки необходимости покупки поля для руина монополии другому игроку
@@ -103,40 +165,66 @@ class Game{
         return false
     }
 
-    fun aiNegativeEvent() : Int{
+    fun aiNegativeEvent(player: Player) : Int{
         when(dice.secret.second) {
-            SecretAction.Action1 -> if (data[presentId].money >= 300) {
+            SecretAction.Action1 -> if (player.money >= 300) {
                 return 0
             }
-            SecretAction.Action2 -> if (data[presentId].money >= 500) {
+            SecretAction.Action2 -> if (player.money >= 500) {
                 return 0
             }
-            SecretAction.Action3 -> if (data[presentId].money >= 40) {
+            SecretAction.Action3 -> if (player.money >= 40) {
                 return 0
             }
-            SecretAction.Action4 -> if (data[presentId].money >= 750) {
+            SecretAction.Action4 -> if (player.money >= 750) {
                 return 0
             }
-            else -> if (data[presentId].money >= 250) {
+            else -> if (player.money >= 250) {
                 return 0
             }
         }
-        if (data[presentId].monopolyRealty.isNotEmpty() && sellSomeUpgrade(data[presentId])){
-            return 1// продать апгрейд, чтобы потом заплатить
-        }else{
-            if (data[presentId].hasSomething()) return  2// продать поле, чтобы потом заплатить
+        when(player.aiDifficulty){
+            Difficulty.Hard, Difficulty.Medium -> {
+                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)){
+                    return 1// продать апгрейд, чтобы потом заплатить
+                }else{
+                    if (player.hasSomething()) return  2// продать поле, чтобы потом заплатить
+                }
+            }
+            else -> {
+                if (player.hasSomeNotMonopoly()) return 3 // продать немонопольные поля
+                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)){
+                    return 1
+                }else{
+                    if (player.hasSomething()) return  2
+                }
+            }
         }
-        return 3// сдаться
+
+        return 4// сдаться
     }
 
-    fun aiPunisment() : Int{
-        if (data[presentId].money >= board.fields[data[presentId].position].penalty) return 0//заплатить
-            if (data[presentId].monopolyRealty.isNotEmpty() && sellSomeUpgrade(data[presentId])){
-                return 1// продать апгрейд, чтобы потом заплатить
-            }else{
-                if (data[presentId].hasSomething()) return  2// продать поле, чтобы потом заплатить
+    fun aiPunisment(player: Player) : Int{
+        if (player.money >= board.fields[player.position].penalty) return 0//заплатить
+        when(player.aiDifficulty){
+            Difficulty.Hard, Difficulty.Medium -> {
+                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)){
+                    return 1// продать апгрейд, чтобы потом заплатить
+                }else{
+                    if (player.hasSomething()) return  2// продать поле, чтобы потом заплатить
+                }
             }
-        return 3// сдаться
+            else -> {
+                if (player.hasSomeNotMonopoly()) return 3 // продать немонопольные поля
+                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)){
+                    return 1
+                }else{
+                    if (player.hasSomething()) return  2
+                }
+            }
+        }
+
+        return 4// сдаться
     }
 
     private fun sellSomeUpgrade(player : Player) : Boolean{
@@ -165,6 +253,18 @@ class Game{
             if (player.realty.filter { it.type == i.type }.size == 3)
                 return i.location
         }
+        return 0 // никогда не выполняется, т.к. идет проверка до
+    }
+
+    fun sellSomeNotMonopolyField(player: Player) : Int{
+        for (i in player.realty.filter { it.type !in player.monopolyRealty }){
+            if (player.realty.filter { it.type == i.type }.size == 2)
+                return i.location
+        }
+        for (i in player.realty.filter { it.type !in player.monopolyRealty }){
+            if (player.realty.filter { it.type == i.type }.size == 1)
+                return i.location
+        }
         return 0
     }
 
@@ -177,7 +277,7 @@ class Game{
             if (player.realty.filter { it.type == i.type }.size == 2)
                 return i.location
         }
-        return 0
+        return 0 // никогда не выполняется
     }
 
     fun setBalance(){
@@ -187,6 +287,10 @@ class Game{
 
         if (data.size == 3){
             for (i in 0..2)data[i].moneyChange(5000)
+        }
+
+        if (data.size == 5){
+            for (i in 0..2)data[i].moneyChange(-5000)
         }
     }
 

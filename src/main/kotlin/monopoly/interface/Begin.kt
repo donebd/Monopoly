@@ -99,7 +99,7 @@ class Begin : View("Monopoly"){
     fun botAction1(){
         if (botCheck1.isSelected){
             playfield1.disableProperty().value = true
-            playfield1.text = "AI 1"
+            playfield1.text = "EasyAI 1"
             difficultyBox1.disableProperty().value = false
             difficultyBox1.value = "Легкий"
             difficultyBox1.opacity = 1.0
@@ -114,7 +114,7 @@ class Begin : View("Monopoly"){
     fun botAction2(){
         if (botCheck2.isSelected){
             playfield2.disableProperty().value = true
-            playfield2.text = "AI 2"
+            playfield2.text = "EasyAI 2"
             difficultyBox2.disableProperty().value = false
             difficultyBox2.value = "Легкий"
             difficultyBox2.opacity = 1.0
@@ -130,7 +130,7 @@ class Begin : View("Monopoly"){
     fun botAction3(){
         if (botCheck3.isSelected){
             playfield3.disableProperty().value = true
-            playfield3.text = "AI 3"
+            playfield3.text = "EasyAI 3"
             difficultyBox3.disableProperty().value = false
             difficultyBox3.value = "Легкий"
             difficultyBox3.opacity = 1.0
@@ -146,7 +146,7 @@ class Begin : View("Monopoly"){
     fun botAction4(){
         if (botCheck4.isSelected){
             playfield4.disableProperty().value = true
-            playfield4.text = "AI 4"
+            playfield4.text = "EasyAI 4"
             difficultyBox4.disableProperty().value = false
             difficultyBox4.value = "Легкий"
             difficultyBox4.opacity = 1.0
@@ -162,7 +162,7 @@ class Begin : View("Monopoly"){
     fun botAction5(){
         if (botCheck5.isSelected){
             playfield5.disableProperty().value = true
-            playfield5.text = "AI 5"
+            playfield5.text = "EasyAI 5"
             difficultyBox5.disableProperty().value = false
             difficultyBox5.value = "Легкий"
             difficultyBox5.opacity = 1.0
@@ -172,6 +172,51 @@ class Begin : View("Monopoly"){
             difficultyBox5.disableProperty().value = true
             difficultyBox5.value = "null"
             difficultyBox5.opacity = 0.0
+        }
+    }
+
+    fun difficultyAct1(){
+        playfield1.text = when(difficultyBox1.value){
+            "Легкий" -> "EasyAI 1"
+            "Средний" -> "MediumAI 1"
+            "0 Ошибок" -> "HardAI 1"
+            else ->  "Player 1"
+        }
+    }
+
+    fun difficultyAct2(){
+        playfield2.text = when(difficultyBox2.value){
+            "Легкий" -> "EasyAI 2"
+            "Средний" -> "MediumAI 2"
+            "0 Ошибок" -> "HardAI 2"
+            else ->  "Player 2"
+        }
+    }
+
+    fun difficultyAct3(){
+        playfield3.text = when(difficultyBox3.value){
+            "Легкий" -> "EasyAI 3"
+            "Средний" -> "MediumAI 3"
+            "0 Ошибок" -> "HardAI 3"
+            else ->  "Player 3"
+        }
+    }
+
+    fun difficultyAct4(){
+        playfield4.text = when(difficultyBox4.value){
+            "Легкий" -> "EasyAI 4"
+            "Средний" -> "MediumAI 4"
+            "0 Ошибок" -> "HardAI 4"
+            else ->  "Player 4"
+        }
+    }
+
+    fun difficultyAct5(){
+        playfield5.text = when(difficultyBox5.value){
+            "Легкий" -> "EasyAI 5"
+            "Средний" -> "MediumAI 5"
+            "0 Ошибок" -> "HardAI 5"
+            else ->  "Player 5"
         }
     }
 

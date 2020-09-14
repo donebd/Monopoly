@@ -562,7 +562,7 @@ class GamePlay: View("Monopoly"){
             endMotion()
         }else{//negative
             if (game.data[game.presentId].ai)
-                aiNegativeEvent()
+                aiNegativeEvent(game.data[game.presentId])
             else
                 negativeInit()
         }
@@ -592,60 +592,64 @@ class GamePlay: View("Monopoly"){
         if (game.diceDoubleCheck() && !game.data[game.presentId].ai && showAlerts) find<DiceDouble>().openModal(resizable = false)
     }
 
-    private fun aiPunisment(){
-        when (game.aiPunisment()){
+    private fun aiPunisment(player: Player){
+        when (game.aiPunisment(player)){
             0 -> penaltyAccept()
             1 -> {
                 updateUpgrade()
-                aiPunisment()
+                aiPunisment(player)
             }
             2 -> {
-                val tmp = game.sellSomeField(game.data[game.presentId])
-                game.fieldSellByHalf(game.data[game.presentId], game.board.fields[tmp])
+                val tmp = game.sellSomeField(player)
+                game.fieldSellByHalf(player, game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
-                aiPunisment()
+                aiPunisment(player)
+            }
+            3 -> {
+                val tmp = game.sellSomeNotMonopolyField(player)
+                game.fieldSellByHalf(player, game.board.fields[tmp])
+                paintField(tmp, c("#d2edd7"))
+                aiPunisment(player)
             }
             else -> playerSurrender()
         }
     }
 
-    private fun aiNegativeEvent(){
-        when (game.aiNegativeEvent()){
+    private fun aiNegativeEvent(player: Player){
+        when (game.aiNegativeEvent(player)){
             0 -> negativePay()
             1 -> {
                 updateUpgrade()
-                aiNegativeEvent()
+                aiNegativeEvent(player)
             }
             2 -> {
-                val tmp = game.sellSomeField(game.data[game.presentId])
-                game.fieldSellByHalf(game.data[game.presentId], game.board.fields[tmp])
+                val tmp = game.sellSomeField(player)
+                game.fieldSellByHalf(player, game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
-                aiNegativeEvent()
+                aiNegativeEvent(player)
+            }
+            3 -> {
+                val tmp = game.sellSomeNotMonopolyField(player)
+                game.fieldSellByHalf(player, game.board.fields[tmp])
+                paintField(tmp, c("#d2edd7"))
+                aiNegativeEvent(player)
             }
             else -> playerSurrender()
         }
     }
 
-    private fun aiBuyInstructions(){
-        when(game.aiBuyInstructions()){
+    private fun aiBuyInstructions(player: Player){
+        when(game.aiBuyInstructions(player)){
             0 -> offerAccept()
             1 ->{
                 updateUpgrade()
-                aiBuyInstructions()
+                aiBuyInstructions(player)
             }
             2 ->{
-                val tmp = game.sellSomeOtherTypeField(game.data[game.presentId])
-                if (tmp == 0) {
-                    runAsync {
-                        Thread.sleep(100)
-                    }ui{
-                        endMotion()
-                    }
-                    return
-                }
-                game.fieldSellByHalf(game.data[game.presentId], game.board.fields[tmp])
+                val tmp = game.sellSomeOtherTypeField(player)
+                game.fieldSellByHalf(player, game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
-                aiBuyInstructions()
+                aiBuyInstructions(player)
             }
             else -> runAsync {
                 Thread.sleep(100)
@@ -653,7 +657,7 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    fun aiPrisonInstructions(player: Player){
+    private fun aiPrisonInstructions(player: Player){
         when(game.aiPrisonInstructions(player)){
             0 -> prisonPay()
             1 -> prisonTry()
@@ -667,6 +671,12 @@ class GamePlay: View("Monopoly"){
                 paintField(tmp, c("#d2edd7"))
                 aiPrisonInstructions(player)
             }
+            4 -> {
+                val tmp = game.sellSomeNotMonopolyField(player)
+                game.fieldSellByHalf(player, game.board.fields[tmp])
+                paintField(tmp, c("#d2edd7"))
+                aiPrisonInstructions(player)
+            }
             else -> playerSurrender()
         }
     }
@@ -675,7 +685,7 @@ class GamePlay: View("Monopoly"){
         //buy realty
         if (game.realtyCanBuy()){
             if (game.data[game.presentId].ai){
-                aiBuyInstructions()
+                aiBuyInstructions(game.data[game.presentId])
             }else
                 offerToBuy()
             diceDoubleAlert()
@@ -684,7 +694,7 @@ class GamePlay: View("Monopoly"){
         //pay penalty
         if (game.punishmentOrPenalty()){
             if (game.data[game.presentId].ai){
-                    aiPunisment()
+                    aiPunisment(game.data[game.presentId])
             }else
                 payPenalty()
             diceDoubleAlert()
@@ -808,7 +818,7 @@ class GamePlay: View("Monopoly"){
             }
             if (!game.gameIsEnd) buttonRoll.disableProperty().value = false
             if (game.data[game.motionPlayer].ai) {
-                game.aiInstructions()
+                game.aiInstructions(game.data[game.motionPlayer])
                 updateUpgrade()
             }
             if ((game.data[game.motionPlayer].playerInPrison() || game.data[game.motionPlayer].ai) && !game.gameIsEnd) motion()
@@ -829,6 +839,7 @@ class GamePlay: View("Monopoly"){
     }
 
     fun newGame(){
+        game.gameIsEnd = true
         replaceWith(Begin(), ViewTransition.Implode(0.5.seconds))
     }
 
