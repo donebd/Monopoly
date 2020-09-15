@@ -55,37 +55,37 @@ fun initBoard(board: GameBoard) {
     board.fields.add(Field(14, Type.Free))
     board.fields[14].couldBuy = false
     board.fields[14].layoutX = 840.0
-    board.fields[14].layoutY = 770.0
+    board.fields[14].layoutY = 820.0
     board.fields.add(Field(15, Type.Airlanes))
     board.fields[15].name = "Lufthansa"
     board.fields[15].layoutX = 690.0
-    board.fields[15].layoutY = 770.0
+    board.fields[15].layoutY = 820.0
     board.fields.add(Field(16, Type.Airlanes))
     board.fields[16].name = "Eva Air"
     board.fields[16].layoutX = 590.0
-    board.fields[16].layoutY = 770.0
+    board.fields[16].layoutY = 820.0
     board.fields.add(Field(17, Type.Car))
     board.fields[17].name = "Audi"
     board.fields[17].particular = true
     board.fields[17].costUpdate(3000)
     board.fields[17].layoutX = 480.0
-    board.fields[17].layoutY = 770.0
+    board.fields[17].layoutY = 820.0
     board.fields.add(Field(18, Type.Punisment))
     board.fields[18].penalty = 2000
     board.fields[18].couldBuy = false
     board.fields[18].layoutX = 380.0
-    board.fields[18].layoutY = 770.0
+    board.fields[18].layoutY = 820.0
     board.fields.add(Field(19, Type.Airlanes))
     board.fields[19].name = "Аэрофлот"
     board.fields[19].layoutX = 280.0
-    board.fields[19].layoutY = 770.0
+    board.fields[19].layoutY = 820.0
     board.fields.add(Field(20, Type.Secret))
     board.fields[20].couldBuy = false
     board.fields[20].layoutX = 190.0
-    board.fields[20].layoutY = 770.0
+    board.fields[20].layoutY = 820.0
     board.fields.add(Field(21, Type.ToPrison))
     board.fields[21].couldBuy = false
-    board.fields[21].layoutY = 770.0
+    board.fields[21].layoutY = 820.0
     board.fields.add(Field(22, Type.FastFood))
     board.fields[22].name = "McDonald's"
     board.fields[22].layoutY = 670.0

@@ -14,6 +14,7 @@ import javafx.util.Duration
 import monopoly.logic.Player
 import monopoly.logic.SecretAction
 import tornadofx.*
+import monopoly.logic.CodeInstruction.*
 
 class GamePlay: View("Monopoly"){
 
@@ -594,18 +595,18 @@ class GamePlay: View("Monopoly"){
 
     private fun aiPunisment(player: Player){
         when (game.aiPunisment(player)){
-            0 -> penaltyAccept()
-            1 -> {
+            Buy -> penaltyAccept()
+            SellUpgrade -> {
                 updateUpgrade()
                 aiPunisment(player)
             }
-            2 -> {
+            SellField -> {
                 val tmp = game.sellSomeField(player)
                 game.fieldSellByHalf(player, game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
                 aiPunisment(player)
             }
-            3 -> {
+            SellNotMonopoly -> {
                 val tmp = game.sellSomeNotMonopolyField(player)
                 game.fieldSellByHalf(player, game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
@@ -617,18 +618,18 @@ class GamePlay: View("Monopoly"){
 
     private fun aiNegativeEvent(player: Player){
         when (game.aiNegativeEvent(player)){
-            0 -> negativePay()
-            1 -> {
+            Buy -> negativePay()
+            SellUpgrade -> {
                 updateUpgrade()
                 aiNegativeEvent(player)
             }
-            2 -> {
+            SellField -> {
                 val tmp = game.sellSomeField(player)
                 game.fieldSellByHalf(player, game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
                 aiNegativeEvent(player)
             }
-            3 -> {
+            SellNotMonopoly -> {
                 val tmp = game.sellSomeNotMonopolyField(player)
                 game.fieldSellByHalf(player, game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
@@ -640,12 +641,12 @@ class GamePlay: View("Monopoly"){
 
     private fun aiBuyInstructions(player: Player){
         when(game.aiBuyInstructions(player)){
-            0 -> offerAccept()
-            1 ->{
+            Buy -> offerAccept()
+            SellUpgrade ->{
                 updateUpgrade()
                 aiBuyInstructions(player)
             }
-            2 ->{
+            SellField ->{
                 val tmp = game.sellSomeOtherTypeField(player)
                 game.fieldSellByHalf(player, game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
@@ -659,19 +660,19 @@ class GamePlay: View("Monopoly"){
 
     private fun aiPrisonInstructions(player: Player){
         when(game.aiPrisonInstructions(player)){
-            0 -> prisonPay()
-            1 -> prisonTry()
-            2 -> {
+            Buy -> prisonPay()
+            PrisonTry -> prisonTry()
+            SellUpgrade -> {
                 updateUpgrade()
                 aiPrisonInstructions(player)
             }
-            3 ->{
+            SellField ->{
                 val tmp = game.sellSomeField(player)
                 game.fieldSellByHalf(player, game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
                 aiPrisonInstructions(player)
             }
-            4 -> {
+            SellNotMonopoly -> {
                 val tmp = game.sellSomeNotMonopolyField(player)
                 game.fieldSellByHalf(player, game.board.fields[tmp])
                 paintField(tmp, c("#d2edd7"))
