@@ -47,7 +47,8 @@ class Game{
         cntPls = data.size
     }
 
-    fun aiInstructions(player: Player){
+    fun aiInstructions(player: Player) : List<Int>{
+        val tmp  =  mutableListOf<Int>()
         if (player.monopolyRealty.isNotEmpty() && (player.aiDifficulty == Difficulty.Hard || (player.aiDifficulty == Difficulty.Medium && (1..100).random() in (1..85))
                     || (player.aiDifficulty == Difficulty.Easy && (0..1).random() == 1))){
             for (i in player.monopolyRealty){
@@ -56,9 +57,11 @@ class Game{
                     it.upgrade++
                     it.penaltyUpdate()
                     player.currentMotionUpgrade.add(i)
+                    tmp.add(it.location)
                 } }
             }
         }//Блок апгрейда своих монополий by ai
+        return tmp
     }
     fun aiPrisonInstructions(player: Player) : CodeInstruction{
         when(player.aiDifficulty){
@@ -68,7 +71,7 @@ class Game{
                     return PrisonTry
                 }else{
                     if (player.money >= 750) return Buy
-                    if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)) return SellUpgrade
+                    if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player,false) != -1) return SellUpgrade
                     if (player.hasSomething()) return SellField
                 }
             }
@@ -80,7 +83,7 @@ class Game{
                 }else{
                     if (player.money >= 750) return Buy
                     if (player.hasSomeNotMonopoly()) return SellNotMonopoly
-                    if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)) return SellUpgrade
+                    if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player,false) != -1) return SellUpgrade
                     if (player.hasSomething()) return SellField
                 }
             }
@@ -99,7 +102,7 @@ class Game{
                     return Buy
                 if (playerNearlyHasMonopoly(player, board.fields[player.position])
                     && calculateRealtyCost(player) + player.money >= board.fields[player.position].cost + 500
-                    && player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player))
+                    && player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player,false) != -1)
                     return SellUpgrade
                 if (playerNearlyHasMonopoly(player, board.fields[player.position])
                     && calculateRealtyCost(player) + player.money >= board.fields[player.position].cost + 500
@@ -177,7 +180,7 @@ class Game{
         }
         when(player.aiDifficulty){
             Difficulty.Hard, Difficulty.Medium -> {
-                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)){
+                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player,false) != -1){
                     return SellUpgrade
                 }else{
                     if (player.hasSomething()) return  SellField
@@ -185,7 +188,7 @@ class Game{
             }
             else -> {
                 if (player.hasSomeNotMonopoly()) return SellNotMonopoly
-                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)){
+                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player,false) != -1){
                     return SellUpgrade
                 }else{
                     if (player.hasSomething()) return  SellField
@@ -200,7 +203,7 @@ class Game{
         if (player.money >= board.fields[player.position].penalty) return Buy
         when(player.aiDifficulty){
             Difficulty.Hard, Difficulty.Medium -> {
-                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)){
+                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1){
                     return SellUpgrade
                 }else{
                     if (player.hasSomething()) return  SellField
@@ -208,7 +211,7 @@ class Game{
             }
             else -> {
                 if (player.hasSomeNotMonopoly()) return SellNotMonopoly
-                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player)){
+                if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player,false) != -1){
                     return SellUpgrade
                 }else{
                     if (player.hasSomething()) return  SellField
@@ -219,17 +222,19 @@ class Game{
         return Surrender
     }
 
-    private fun sellSomeUpgrade(player : Player) : Boolean{
+    fun sellSomeUpgrade(player : Player, needSell : Boolean) : Int{
         for (i in player.monopolyRealty){
             for (j in board.fields.filter { it.type == i })
                 if (j.upgrade > 0){
-                    player.moneyChange(j.upgradeCost)
-                    j.upgrade--
-                    j.penaltyUpdate()
-                    return true
+                    if (needSell){
+                        player.moneyChange(j.upgradeCost)
+                        j.upgrade--
+                        j.penaltyUpdate()
+                    }
+                    return j.location
                 }
         }
-        return false
+        return -1
     }
 
     fun sellSomeField(player: Player) : Int{
@@ -451,18 +456,20 @@ class Game{
         return false
     }
 
-    fun prisonPay() : Boolean{
+    fun prisonPay() : Int{
         if(data[presentId].prisonDays == 4 && data[presentId].money >= 750){
             data[presentId].prisonDays = 0
             data[presentId].moneyChange(-750)
-            return true
+            data[presentId].justOutJail = true
+            return 1
         }
         if (data[presentId].prisonDays != 4 && data[presentId].money >= 500){
             data[presentId].prisonDays = 0
             data[presentId].moneyChange(-500)
-            return true
+            data[presentId].justOutJail = true
+            return 2
         }
-        return false
+        return -1
     }
 
     fun prisonPayDay() = data[presentId].prisonDays == 4

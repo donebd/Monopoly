@@ -17,6 +17,7 @@ class Player(val id: Int){
     var circlesCompleted = 0
     var ai = false
     var aiDifficulty : Difficulty? = null
+    var justOutJail = false
 
     init {
         moneyChange(0)

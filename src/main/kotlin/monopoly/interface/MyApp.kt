@@ -11,6 +11,8 @@ var gamePlay = GamePlay()
 
 var showAlerts = true
 
+var showActionLog = true
+
 class MyApp: App(Begin::class){
     override fun start(stage: Stage) {
         with(stage) {

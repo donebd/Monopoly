@@ -152,7 +152,6 @@ class Field : Fragment(){
             sellUpgradeButton.disableProperty().value = game.fieldCantBeSelled()
         }
         sellByHalfButton.disableProperty().value = !game.fieldCantBeSelled()
-        gamePlay.updateUpgrade()
     }
 
     fun sellByHalf(){
@@ -166,6 +165,8 @@ class Field : Fragment(){
 
     fun buildUpgrade(){
         if (game.fieldBuildUpgrade()){
+            gamePlay.updateUpgrade(game.click)
+            gamePlay.sendln(game.data[game.playerClicked].name + " строит филиал. Количество филиалов на поле " + game.board.fields[game.click].name + " - " + game.board.fields[game.click].upgrade)
             changable()
             return
         }
