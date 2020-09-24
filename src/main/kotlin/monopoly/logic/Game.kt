@@ -27,6 +27,14 @@ class Game{
 
     val dice = Dice()
 
+    var offerSender = Player(0)
+    var offerReceiver = Player(0)
+    var offerSenderList = mutableListOf<Field>()
+    var offerReceiverList = mutableListOf<Field>()
+    var offerMoneySender = 0
+    var offerMoneyReceiver = 0
+    var offerPause = false
+
     var playerClicked = 0 // for action with realty
     var click = 0
 
@@ -39,6 +47,27 @@ class Game{
             return true
         }
         return false
+    }
+
+    fun canOffer(sender: Player, receiver: Player) : Boolean {
+        offerSender = sender
+        offerReceiver = receiver
+        offerPause = sender.id != receiver.id && receiver.id !in loosers
+        return offerPause
+    }
+
+    fun correctExchange(sendingFields : List<Field>, receiveringFields : List<Field>, moneySend : Int, moneyGet : Int) : Boolean {
+        if (sendingFields.isEmpty() && receiveringFields.isEmpty()) return false
+        var costSend = moneySend
+        var costReceive = moneyGet
+        for (field in sendingFields) {
+            costSend += field.cost
+        }
+        for (field in receiveringFields) {
+            costReceive += field.cost
+        }
+        if (costSend > costReceive*2 || 2*costSend < costReceive) return false
+        return true
     }
 
     init {

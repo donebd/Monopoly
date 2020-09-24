@@ -429,7 +429,7 @@
                            <top>
                               <HBox prefHeight="120.0" prefWidth="0.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <VBox fx:id="playerField1" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: #000000;">
+                                    <VBox fx:id="playerField1" onMouseClicked="#player1Offer" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: #000000;">
                                        <children>
                                           <Label fx:id="pl1" alignment="CENTER" prefHeight="27.0" prefWidth="201.0" style="-fx-background-color: #f13030;" text="Игрок ">
                                              <font>
@@ -448,7 +448,7 @@
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <VBox fx:id="playerField2" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: #000000;">
+                                    <VBox fx:id="playerField2" onMouseClicked="#player2Offer" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: #000000;">
                                        <children>
                                           <Label fx:id="pl2" alignment="CENTER" contentDisplay="TOP" prefHeight="27.0" prefWidth="241.0" style="-fx-background-color: #f27330;" text="Игрок ">
                                              <font>
@@ -467,7 +467,7 @@
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <VBox fx:id="playerField3" opacity="0.0" prefHeight="133.0" prefWidth="180.0" style="-fx-border-color: black;">
+                                    <VBox fx:id="playerField3" onMouseClicked="#player3Offer" opacity="0.0" prefHeight="133.0" prefWidth="180.0" style="-fx-border-color: black;">
                                        <children>
                                           <Label fx:id="pl3" alignment="CENTER" prefHeight="27.0" prefWidth="224.0" style="-fx-background-color: green;" text="Игрок ">
                                              <font>
@@ -486,7 +486,7 @@
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <VBox fx:id="playerField4" opacity="0.0" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: black;">
+                                    <VBox fx:id="playerField4" onMouseClicked="#player4Offer" opacity="0.0" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: black;">
                                        <children>
                                           <Label fx:id="pl4" alignment="CENTER" prefHeight="27.0" prefWidth="264.0" style="-fx-background-color: #03a3d1;" text="Игрок ">
                                              <font>
@@ -505,7 +505,7 @@
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <VBox fx:id="playerField5" opacity="0.0" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: black;">
+                                    <VBox fx:id="playerField5" onMouseClicked="#player5Offer" opacity="0.0" prefHeight="117.0" prefWidth="180.0" style="-fx-border-color: black;">
                                        <children>
                                           <Label fx:id="pl5" alignment="CENTER" prefHeight="27.0" prefWidth="222.0" style="-fx-background-color: #eb15dc;" text="Игрок ">
                                              <font>
@@ -907,7 +907,7 @@
          <effect>
             <ImageInput>
                <source>
-                  <Image url="file:/C:/Users/381/IdeaProjects/game/src/main/resources/monopoly/fields/Player1.png" />
+                  <Image url="file:/C:/Users/Пользователь/IdeaProjects/Monopoly/src/main/resources/monopoly/fields/Player1.png" />
                </source>
             </ImageInput>
          </effect>
@@ -916,7 +916,7 @@
          <effect>
             <ImageInput>
                <source>
-                  <Image url="file:/C:/Users/381/IdeaProjects/game/src/main/resources/monopoly/fields/Player2.png" />
+                  <Image url="file:/C:/Users/Пользователь/IdeaProjects/Monopoly/src/main/resources/monopoly/fields/Player2.png" />
                </source>
             </ImageInput>
          </effect>
@@ -925,7 +925,7 @@
          <effect>
             <ImageInput>
                <source>
-                  <Image url="file:/C:/Users/381/IdeaProjects/game/src/main/resources/monopoly/fields/Player3.png" />
+                  <Image url="file:/C:/Users/Пользователь/IdeaProjects/Monopoly/src/main/resources/monopoly/fields/Player3.png" />
                </source>
             </ImageInput>
          </effect>
@@ -934,7 +934,7 @@
          <effect>
             <ImageInput>
                <source>
-                  <Image url="file:/C:/Users/381/IdeaProjects/game/src/main/resources/monopoly/fields/Player4.png" />
+                  <Image url="file:/C:/Users/Пользователь/IdeaProjects/Monopoly/src/main/resources/monopoly/fields/Player4.png" />
                </source>
             </ImageInput>
          </effect>
@@ -943,7 +943,7 @@
          <effect>
             <ImageInput>
                <source>
-                  <Image url="file:/C:/Users/381/IdeaProjects/game/src/main/resources/monopoly/fields/Player5.png" />
+                  <Image url="file:/C:/Users/Пользователь/IdeaProjects/Monopoly/src/main/resources/monopoly/fields/Player5.png" />
                </source>
             </ImageInput>
          </effect>

@@ -304,6 +304,17 @@ class GamePlay: View("Monopoly"){
     private val pl4 : Label by fxid()
     private val pl5 : Label by fxid()
 
+    fun player1Offer() { if (game.canOffer(game.data[game.presentId], game.data[0])) find<OfferToPlayer>().openModal(resizable = false) }
+
+    fun player2Offer() { if (game.canOffer(game.data[game.presentId], game.data[1])) find<OfferToPlayer>().openModal(resizable = false) }
+
+    fun player3Offer() { if (game.data.size > 2 && game.canOffer(game.data[game.presentId], game.data[2])) find<OfferToPlayer>().openModal(resizable = false) }
+
+    fun player4Offer() { if (game.data.size > 3 && game.canOffer(game.data[game.presentId], game.data[3])) find<OfferToPlayer>().openModal(resizable = false) }
+
+    fun player5Offer() { if (game.data.size > 4 && game.canOffer(game.data[game.presentId], game.data[4])) find<OfferToPlayer>().openModal(resizable = false) }
+
+
     //game realty fields
     private val field1 : VBox by fxid()
     private val field1Penalty : Label by fxid()
@@ -927,7 +938,7 @@ class GamePlay: View("Monopoly"){
                 3 -> idMotion.text = "Ход игрока ${game.data[3].name}"
                 else -> idMotion.text = "Ход игрока ${game.data[4].name}"
             }
-            if (!game.gameIsEnd) buttonRoll.disableProperty().value = false
+            if (!game.gameIsEnd && !game.data[game.motionPlayer].ai && !game.data[game.motionPlayer].playerInPrison()) buttonRoll.disableProperty().value = false
             if (game.data[game.motionPlayer].ai) {
                 for (i in game.aiInstructions(game.data[game.motionPlayer])){
                     sendln(game.data[game.motionPlayer].name + " строит филиал. Количество филиалов на поле " + game.board.fields[i].name + " - " + game.board.fields[i].upgrade)
@@ -939,7 +950,12 @@ class GamePlay: View("Monopoly"){
                 sendln("Ваш ход, ${game.data[game.motionPlayer].name} !")
             }
             game.data[game.motionPlayer].justOutJail = false
-            runAsync { Thread.sleep(1000) }ui {if ((game.data[game.motionPlayer].playerInPrison() || game.data[game.motionPlayer].ai) && !game.gameIsEnd) motion()}
+            runAsync {
+                    while(game.offerPause) {
+                        Thread.sleep(100)
+                    }
+                runAsync { Thread.sleep(1000) } ui { if ((game.data[game.motionPlayer].playerInPrison() || game.data[game.motionPlayer].ai) && !game.gameIsEnd) motion() }
+            }
         }
     }
 
