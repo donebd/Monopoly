@@ -37,7 +37,10 @@ class OfferSolution : Fragment(){
     }
 
     fun acceptOffer() {
-
+        game.acceptOffer()
+        gamePlay.updateColor(game.offerSender)
+        gamePlay.updateColor(game.offerReceiver)
+        exit()
     }
 
     fun rejectOffer() {

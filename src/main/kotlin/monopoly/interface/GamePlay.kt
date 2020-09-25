@@ -304,16 +304,34 @@ class GamePlay: View("Monopoly"){
     private val pl4 : Label by fxid()
     private val pl5 : Label by fxid()
 
-    fun player1Offer() { if (game.canOffer(game.data[game.presentId], game.data[0])) find<OfferToPlayer>().openModal(resizable = false) }
+    fun player1Offer() { if (game.canOffer(game.data[game.presentId], game.data[0])) openOfferWindow() }
 
-    fun player2Offer() { if (game.canOffer(game.data[game.presentId], game.data[1])) find<OfferToPlayer>().openModal(resizable = false) }
+    fun player2Offer() { if (game.canOffer(game.data[game.presentId], game.data[1])) openOfferWindow() }
 
-    fun player3Offer() { if (game.data.size > 2 && game.canOffer(game.data[game.presentId], game.data[2])) find<OfferToPlayer>().openModal(resizable = false) }
+    fun player3Offer() { if (game.data.size > 2 && game.canOffer(game.data[game.presentId], game.data[2])) openOfferWindow() }
 
-    fun player4Offer() { if (game.data.size > 3 && game.canOffer(game.data[game.presentId], game.data[3])) find<OfferToPlayer>().openModal(resizable = false) }
+    fun player4Offer() { if (game.data.size > 3 && game.canOffer(game.data[game.presentId], game.data[3])) openOfferWindow() }
 
-    fun player5Offer() { if (game.data.size > 4 && game.canOffer(game.data[game.presentId], game.data[4])) find<OfferToPlayer>().openModal(resizable = false) }
+    fun player5Offer() { if (game.data.size > 4 && game.canOffer(game.data[game.presentId], game.data[4])) openOfferWindow() }
 
+    fun openOfferWindow(){
+        find<OfferToPlayer>().openModal(resizable = false)!!.setOnCloseRequest {
+            game.offerPause = false
+        }
+    }
+
+    fun updateColor(player : Player) {
+        var color = when(game.data.indexOf(player)){
+            0 -> c("#f13030")
+            1 -> c("#f27330")
+            2 -> c("green")
+            3 -> c("#03a3d1")
+            else -> c("#eb15dc")
+        }
+        for (field in player.realty){
+            paintField(field.location, color)
+        }
+    }
 
     //game realty fields
     private val field1 : VBox by fxid()
@@ -489,6 +507,9 @@ class GamePlay: View("Monopoly"){
     }
 
     init {
+        this.currentStage!!.setOnCloseRequest {
+            game.offerPause = false
+        }
         primaryStage.width = 1024.0
         primaryStage.height = 1048.0
         primaryStage.centerOnScreen()

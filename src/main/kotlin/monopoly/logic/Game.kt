@@ -56,6 +56,35 @@ class Game{
         return offerPause
     }
 
+    fun acceptOffer(){
+        for (field in offerSenderList) {
+            offerSender.realty.remove(field)
+            field.owner = null
+            field.upgrade = 0
+            offerSender.checkForMonopoly(field)
+            field.penaltyUpdate()
+            offerReceiver.realty.add(field)
+            field.owner = offerReceiver
+            offerReceiver.checkForMonopoly(field)
+        }// fields of sender to receiver
+
+        for (field in offerReceiverList) {
+            offerReceiver.realty.remove(field)
+            field.owner = null
+            field.upgrade = 0
+            offerReceiver.checkForMonopoly(field)
+            field.penaltyUpdate()
+            offerSender.realty.add(field)
+            field.owner = offerSender
+            offerSender.checkForMonopoly(field)
+        }
+
+        offerSender.moneyChange(offerMoneyReceiver)
+        offerSender.moneyChange(-offerMoneySender)
+        offerReceiver.moneyChange(offerMoneySender)
+        offerReceiver.moneyChange(-offerMoneyReceiver)
+    }
+
     fun correctExchange(sendingFields : List<Field>, receiveringFields : List<Field>, moneySend : Int, moneyGet : Int) : Boolean {
         if (sendingFields.isEmpty() && receiveringFields.isEmpty()) return false
         var costSend = moneySend
