@@ -175,6 +175,8 @@ class Field : Fragment(){
 
     fun sellUpgrade(){
         game.fieldSellUpgrade()
+        gamePlay.updateUpgrade(game.click)
+        gamePlay.sendln(game.data[game.playerClicked].name + " продает филиал. Количество филиалов на поле " + game.board.fields[game.click].name + " - " + game.board.fields[game.click].upgrade)
         changable()
     }
 }

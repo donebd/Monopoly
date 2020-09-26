@@ -41,7 +41,7 @@ class Game{
     var prisonByDouble = false
 
     fun canControl(number : Int) : Boolean{
-        if (board.fields[number].owner == data[presentId]){
+        if (board.fields[number].owner == data[presentId] && !data[presentId].ai){
             click = number
             playerClicked = presentId
             return true
@@ -50,6 +50,7 @@ class Game{
     }
 
     fun canOffer(sender: Player, receiver: Player) : Boolean {
+        if (sender.ai || data[presentId].id != sender.id) return false
         offerSender = sender
         offerReceiver = receiver
         offerPause = sender.id != receiver.id && receiver.id !in loosers
@@ -66,6 +67,7 @@ class Game{
             offerReceiver.realty.add(field)
             field.owner = offerReceiver
             offerReceiver.checkForMonopoly(field)
+            field.penaltyUpdate()
         }// fields of sender to receiver
 
         for (field in offerReceiverList) {
@@ -77,6 +79,7 @@ class Game{
             offerSender.realty.add(field)
             field.owner = offerSender
             offerSender.checkForMonopoly(field)
+            field.penaltyUpdate()
         }
 
         offerSender.moneyChange(offerMoneyReceiver)

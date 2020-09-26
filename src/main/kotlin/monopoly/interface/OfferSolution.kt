@@ -40,6 +40,7 @@ class OfferSolution : Fragment(){
         game.acceptOffer()
         gamePlay.updateColor(game.offerSender)
         gamePlay.updateColor(game.offerReceiver)
+        gamePlay.offerLog()
         exit()
     }
 

@@ -1,13 +1,11 @@
 package monopoly.`interface`
 
-import javafx.event.EventHandler
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.AnchorPane
-import javafx.stage.WindowEvent
 import javafx.util.Duration
 import tornadofx.*
 
