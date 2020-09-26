@@ -40,9 +40,9 @@ class GamePlay: View("Monopoly"){
     }
 
     fun offerAccept(){
-        val player = game.data[game.presentId]
+        val player = game.currentPlayer
         if (game.playerAcceptBuyRealty()){
-            when(game.presentId){
+            when(game.data.indexOf(player)){
                 0 -> paintField(player.position, c("#f13030"))
                 1 -> paintField(player.position, c("#f27330"))
                 2 -> paintField(player.position, c("green"))
@@ -103,7 +103,7 @@ class GamePlay: View("Monopoly"){
 
     fun penaltySurrender(){
         penaltyClose()
-        playerSurrender(game.data[game.presentId])
+        playerSurrender(game.currentPlayer)
     }
 
     //Negative secret action block
@@ -140,7 +140,7 @@ class GamePlay: View("Monopoly"){
 
     fun negativeSurrender(){
         negativeClose()
-        playerSurrender(game.data[game.presentId])
+        playerSurrender(game.currentPlayer)
     }
 
     //Prison block
@@ -163,7 +163,7 @@ class GamePlay: View("Monopoly"){
             prisonSurrenderButton.opacity = 1.0
             prisonSurrenderButton.disableProperty().value = false
         }
-        prisonCountMoves.text = "${4 - game.data[game.presentId].prisonDays}"
+        prisonCountMoves.text = "${4 - game.currentPlayer.prisonDays}"
     }
 
     private fun prisonClose(){
@@ -176,8 +176,8 @@ class GamePlay: View("Monopoly"){
     fun prisonPay(){
         val tmp = game.prisonPay()
         if(tmp in 1..2){
-            if (tmp == 1) sendln("${game.data[game.presentId].name} выходит из тюрьмы, заплатив 750$.")
-            else sendln("${game.data[game.presentId].name} выходит из тюрьмы, заплатив 500$.")
+            if (tmp == 1) sendln("${game.currentPlayer.name} выходит из тюрьмы, заплатив 750$.")
+            else sendln("${game.currentPlayer.name} выходит из тюрьмы, заплатив 500$.")
             prisonClose()
             endMotion()
             return
@@ -191,14 +191,14 @@ class GamePlay: View("Monopoly"){
         prisonClose()
         runAsync { Thread.sleep(600) }ui{
             if (game.prisonTry()){
-                sendln("${game.data[game.presentId].name} выходит из тюрьмы, выбив дубль!")
-                playerMove(game.data[game.presentId])
+                sendln("${game.currentPlayer.name} выходит из тюрьмы, выбив дубль!")
+                playerMove(game.currentPlayer)
             }
             else{
-                if (4 - game.data[game.presentId].prisonDays + 1 != 1)
-                    sendln("Игрок остается в тюрьме еще на ${4 - game.data[game.presentId].prisonDays + 1} хода.")
+                if (4 - game.currentPlayer.prisonDays + 1 != 1)
+                    sendln("Игрок остается в тюрьме еще на ${4 - game.currentPlayer.prisonDays + 1} хода.")
                 else
-                    sendln("Всего один ход отлучает ${game.data[game.presentId].name}, от свободы!")
+                    sendln("Всего один ход отлучает ${game.currentPlayer.name}, от свободы!")
                 endMotion()
             }
         }
@@ -206,7 +206,7 @@ class GamePlay: View("Monopoly"){
 
     fun prisonSurrender(){
         prisonClose()
-        playerSurrender(game.data[game.presentId])
+        playerSurrender(game.currentPlayer)
     }
 
     //Board functional
@@ -305,15 +305,15 @@ class GamePlay: View("Monopoly"){
     private val pl4 : Label by fxid()
     private val pl5 : Label by fxid()
 
-    fun player1Offer() { if (game.canOffer(game.data[game.presentId], game.data[0])) openOfferWindow() }
+    fun player1Offer() { if (game.canOffer(game.currentPlayer, game.data[0])) openOfferWindow() }
 
-    fun player2Offer() { if (game.canOffer(game.data[game.presentId], game.data[1])) openOfferWindow() }
+    fun player2Offer() { if (game.canOffer(game.currentPlayer, game.data[1])) openOfferWindow() }
 
-    fun player3Offer() { if (game.data.size > 2 && game.canOffer(game.data[game.presentId], game.data[2])) openOfferWindow() }
+    fun player3Offer() { if (game.data.size > 2 && game.canOffer(game.currentPlayer, game.data[2])) openOfferWindow() }
 
-    fun player4Offer() { if (game.data.size > 3 && game.canOffer(game.data[game.presentId], game.data[3])) openOfferWindow() }
+    fun player4Offer() { if (game.data.size > 3 && game.canOffer(game.currentPlayer, game.data[3])) openOfferWindow() }
 
-    fun player5Offer() { if (game.data.size > 4 && game.canOffer(game.data[game.presentId], game.data[4])) openOfferWindow() }
+    fun player5Offer() { if (game.data.size > 4 && game.canOffer(game.currentPlayer, game.data[4])) openOfferWindow() }
 
     private fun openOfferWindow() {
         find<OfferToPlayer>().openModal(resizable = false)!!.setOnCloseRequest {
@@ -648,7 +648,7 @@ class GamePlay: View("Monopoly"){
         //positive
         if (game.secretIsPositive()){
             game.positiveSecret()
-            send(game.data[game.presentId].name + ", ")
+            send(game.currentPlayer.name + ", ")
             sendln(when(game.dice.secret.second){
                 SecretAction.Action1 -> "вы нашли в зимней куртке забытые 250$"
                 SecretAction.Action2 -> "вы выйграли на ставках 500$"
@@ -656,7 +656,7 @@ class GamePlay: View("Monopoly"){
                 SecretAction.Action4 -> "в банке произошла ошибка, на ваш счет перечислено 750$"
                 else -> "ваша собака принесла вам 100$"
             })
-            if (!game.data[game.presentId].ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+            if (!game.currentPlayer.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
             endMotion()
         }else{//negative
             send(when(game.dice.secret.second){
@@ -666,9 +666,9 @@ class GamePlay: View("Monopoly"){
                 SecretAction.Action4 -> "В банке произошла ошибка, и с вас списали 750$"
                 else -> "Вы простудились, и потратили 250$ в аптеке"
             })
-            sendln(", " + game.data[game.presentId].name)
-            if (game.data[game.presentId].ai)
-                aiNegativeEvent(game.data[game.presentId])
+            sendln(", " + game.currentPlayer.name)
+            if (game.currentPlayer.ai)
+                aiNegativeEvent(game.currentPlayer)
             else
                 negativeInit()
         }
@@ -685,7 +685,7 @@ class GamePlay: View("Monopoly"){
     }
 
     private fun playerToPrison(current: Player){
-        sendln("Не скучайте за решёткой, ${game.data[game.presentId].name}!")
+        sendln("Не скучайте за решёткой, ${game.currentPlayer.name}!")
         game.motionIfPrison(current)
         when(current.id){
             1 -> movePlayer1(0, true)
@@ -699,7 +699,7 @@ class GamePlay: View("Monopoly"){
     }
 
     private fun diceDoubleAlert(){
-        if (game.diceDoubleCheck() && !game.data[game.presentId].ai && showAlerts) find<DiceDouble>().openModal(resizable = false)
+        if (game.diceDoubleCheck() && !game.currentPlayer.ai && showAlerts) find<DiceDouble>().openModal(resizable = false)
     }
 
     private fun aiPunisment(player: Player){
@@ -858,7 +858,7 @@ class GamePlay: View("Monopoly"){
             Thread.sleep(250)
         }ui{
             player.positionChange(game.dice.count)
-            when(game.presentId){
+            when(game.data.indexOf(player)){
                 0 -> movePlayer1(game.data[0].position, false)
                 1 -> movePlayer2(game.data[1].position, false)
                 2 -> movePlayer3(game.data[2].position, false)
@@ -882,7 +882,7 @@ class GamePlay: View("Monopoly"){
 
     fun motion(){
         buttonRoll.disableProperty().value = true
-        val player = game.data[game.presentId]
+        val player = game.currentPlayer
         if (player.playerInPrison()){
             if (player.ai)
                 aiPrisonInstructions(player)

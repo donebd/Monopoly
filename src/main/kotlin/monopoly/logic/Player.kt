@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleIntegerProperty
 
 class Player(val id: Int){
     var name = "Player$id"
-    var numberOfMoves = 0
+    private var numberOfMoves = 0
     var position = 0
     var money = 15000
     val moneyProperty = SimpleIntegerProperty()

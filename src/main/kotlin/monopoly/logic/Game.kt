@@ -13,17 +13,23 @@ class Game{
 
     val data = mutableListOf<Player>()
 
+    var cntPls = 0 // count of players
+
+    init {
+        data.add(Player(1))
+        data.add(Player(2))
+        cntPls = data.size
+    }
+
     var gameIsEnd = false
 
     val board = GameBoard()
 
     var motionPlayer = 0
 
-    var presentId = 0 // number of the player who is currently walking in action
+    var currentPlayer = data.first() //the player who is currently walking in action
 
     var loosers = mutableListOf<Int>()
-
-    var cntPls = 0 // count of players
 
     val dice = Dice()
 
@@ -41,17 +47,16 @@ class Game{
     var prisonByDouble = false
 
     fun canControl(number : Int) : Boolean{
-        val player = data[presentId]
-        if (board.fields[number].owner == player && !player.ai){
+        if (board.fields[number].owner == currentPlayer && !currentPlayer.ai){
             fieldClicked = board.fields[number]
-            playerClicked = player
+            playerClicked = currentPlayer
             return true
         }
         return false
     }
 
     fun canOffer(sender: Player, receiver: Player) : Boolean {
-        if (sender.ai || data[presentId].id != sender.id) return false
+        if (sender.ai || currentPlayer.id != sender.id) return false
         offerSender = sender
         offerReceiver = receiver
         offerPause = sender.id != receiver.id && receiver.id !in loosers
@@ -101,12 +106,6 @@ class Game{
         }
         if (costSend > costReceive*2 || 2*costSend < costReceive) return false
         return true
-    }
-
-    init {
-        data.add(Player(1))
-        data.add(Player(2))
-        cntPls = data.size
     }
 
     fun aiInstructions(player: Player) : List<Int>{
@@ -204,7 +203,7 @@ class Game{
 
     private fun someOnBoardNearlyHasMonopoly() : Boolean{ // функция для проверки необходимости покупки поля для руина монополии другому игроку
         for (player in data)
-            if (playerNearlyHasMonopoly(player, board.fields[data[presentId].position])) return true
+            if (playerNearlyHasMonopoly(player, board.fields[currentPlayer.position])) return true
         return false
     }
 
@@ -359,16 +358,16 @@ class Game{
 
     //settings reward
     fun checkCircleComplete() : Boolean{
-        if ((data[presentId].finishCircle && data[presentId].circlesCompleted < 5)||
-            (data[presentId].finishCircle && data[presentId].circlesCompleted < 10 && cntPls < 4)){
-            data[presentId].moneyChange(2000)
+        if ((currentPlayer.finishCircle && currentPlayer.circlesCompleted < 5)||
+            (currentPlayer.finishCircle && currentPlayer.circlesCompleted < 10 && cntPls < 4)){
+            currentPlayer.moneyChange(2000)
             return true
         }
         return false
     }
 
     fun checkPrisonByDouble() : Boolean{
-        if ((dice.double && data[presentId].doubleInARow == 2)){
+        if ((dice.double && currentPlayer.doubleInARow == 2)){
             prisonByDouble = true
             return true
         }
@@ -393,70 +392,70 @@ class Game{
     }
 
     fun endMotionLogic(){
-        data[presentId].currentMotionUpgrade.clear()
+        currentPlayer.currentMotionUpgrade.clear()
         while (motionPlayer in loosers) {
             motionPlayer++
             motionPlayer %= cntPls
         }
-        presentId = motionPlayer
+        currentPlayer = data[motionPlayer]
     }
 
     fun diceDoubleCheck() : Boolean {
         if (dice.double) {
-            data[presentId].doubleInARow ++
+            currentPlayer.doubleInARow ++
             return true
         }
-        data[presentId].doubleInARow = 0
+        currentPlayer.doubleInARow = 0
         return false
     }
 
-    fun realtyCanBuy() = board.fields[data[presentId].position].couldBuy && board.fields[data[presentId].position].owner == null
+    fun realtyCanBuy() = board.fields[currentPlayer.position].couldBuy && board.fields[currentPlayer.position].owner == null
 
     fun punishmentOrPenalty() = ifPunishment() ||
-            (board.fields[data[presentId].position].owner != null && board.fields[data[presentId].position].owner!!.id != data[presentId].id)
-    fun ifPunishment() = board.fields[data[presentId].position].type == Type.Punisment
+            (board.fields[currentPlayer.position].owner != null && board.fields[currentPlayer.position].owner!!.id != currentPlayer.id)
+    fun ifPunishment() = board.fields[currentPlayer.position].type == Type.Punisment
 
-    fun ifToPrison() = board.fields[data[presentId].position].type == Type.ToPrison
+    fun ifToPrison() = board.fields[currentPlayer.position].type == Type.ToPrison
 
     fun stonksAction() : Boolean{
         if (ifStonks()){
-            data[presentId].moneyChange(3000)
+            currentPlayer.moneyChange(3000)
             return true
         }
         return false
     }
 
-    fun ifStonks() = board.fields[data[presentId].position].type == Type.Stonks
+    fun ifStonks() = board.fields[currentPlayer.position].type == Type.Stonks
 
-    fun ifSecret() = board.fields[data[presentId].position].type == Type.Secret
+    fun ifSecret() = board.fields[currentPlayer.position].type == Type.Secret
 
     fun startAction() : Boolean{
         if(ifStart()){
-            data[presentId].moneyChange(1000)
+            currentPlayer.moneyChange(1000)
             return true
         }
         return false
     }
 
-    fun ifStart() : Boolean = board.fields[data[presentId].position].type == Type.Start
+    fun ifStart() : Boolean = board.fields[currentPlayer.position].type == Type.Start
 
     fun playerAcceptBuyRealty() : Boolean{
-        if (data[presentId].money >= board.fields[data[presentId].position].cost){
-            data[presentId].moneyChange(-board.fields[data[presentId].position].cost)
-            data[presentId].realty.add(board.fields[data[presentId].position])
-            board.fields[data[presentId].position].owner = data[presentId]
-            data[presentId].checkForMonopoly(board.fields[data[presentId].position])
-            board.fields[data[presentId].position].penaltyUpdate()
+        if (currentPlayer.money >= board.fields[currentPlayer.position].cost){
+            currentPlayer.moneyChange(-board.fields[currentPlayer.position].cost)
+            currentPlayer.realty.add(board.fields[currentPlayer.position])
+            board.fields[currentPlayer.position].owner = currentPlayer
+            currentPlayer.checkForMonopoly(board.fields[currentPlayer.position])
+            board.fields[currentPlayer.position].penaltyUpdate()
             return true
         }
         return false
     }
 
     fun playerPayPenalty() : Boolean{
-        if (data[presentId].money >= board.fields[data[presentId].position].penalty) {
-            data[presentId].moneyChange(-board.fields[data[presentId].position].penalty)
-            if (board.fields[data[presentId].position].type != Type.Punisment) {
-                board.fields[data[presentId].position].owner!!.moneyChange(board.fields[data[presentId].position].penalty)
+        if (currentPlayer.money >= board.fields[currentPlayer.position].penalty) {
+            currentPlayer.moneyChange(-board.fields[currentPlayer.position].penalty)
+            if (board.fields[currentPlayer.position].type != Type.Punisment) {
+                board.fields[currentPlayer.position].owner!!.moneyChange(board.fields[currentPlayer.position].penalty)
             }
             return true
         }
@@ -464,16 +463,16 @@ class Game{
     }
 
     fun playerLose(){
-        loosers.add(presentId)
+        loosers.add(data.indexOf(currentPlayer))
     }
 
     fun positiveSecret(){
         when(dice.secret.second){
-            SecretAction.Action1 -> data[presentId].moneyChange(250)
-            SecretAction.Action2 -> data[presentId].moneyChange(500)
-            SecretAction.Action3 -> data[presentId].moneyChange(300)
-            SecretAction.Action4 -> data[presentId].moneyChange(750)
-            else -> data[presentId].moneyChange(100)
+            SecretAction.Action1 -> currentPlayer.moneyChange(250)
+            SecretAction.Action2 -> currentPlayer.moneyChange(500)
+            SecretAction.Action3 -> currentPlayer.moneyChange(300)
+            SecretAction.Action4 -> currentPlayer.moneyChange(750)
+            else -> currentPlayer.moneyChange(100)
         }
     }
 
@@ -494,24 +493,24 @@ class Game{
 
     fun negativePay() : Boolean{
         when(dice.secret.second){
-            SecretAction.Action1 -> if (data[presentId].money >= 300){
-                data[presentId].moneyChange(-300)
+            SecretAction.Action1 -> if (currentPlayer.money >= 300){
+                currentPlayer.moneyChange(-300)
                 return true
             }
-            SecretAction.Action2 -> if (data[presentId].money >= 500){
-                data[presentId].moneyChange(-500)
+            SecretAction.Action2 -> if (currentPlayer.money >= 500){
+                currentPlayer.moneyChange(-500)
                 return true
             }
-            SecretAction.Action3 -> if (data[presentId].money >= 40){
-                data[presentId].moneyChange(-40)
+            SecretAction.Action3 -> if (currentPlayer.money >= 40){
+                currentPlayer.moneyChange(-40)
                 return true
             }
-            SecretAction.Action4 -> if (data[presentId].money >= 750){
-                data[presentId].moneyChange(-750)
+            SecretAction.Action4 -> if (currentPlayer.money >= 750){
+                currentPlayer.moneyChange(-750)
                 return true
             }
-            else -> if (data[presentId].money >= 250){
-                data[presentId].moneyChange(-250)
+            else -> if (currentPlayer.money >= 250){
+                currentPlayer.moneyChange(-250)
                 return true
             }
         }
@@ -519,33 +518,33 @@ class Game{
     }
 
     fun prisonPay() : Int{
-        if(data[presentId].prisonDays == 4 && data[presentId].money >= 750){
-            data[presentId].prisonDays = 0
-            data[presentId].moneyChange(-750)
-            data[presentId].justOutJail = true
+        if (currentPlayer.prisonDays == 4 && currentPlayer.money >= 750){
+            currentPlayer.prisonDays = 0
+            currentPlayer.moneyChange(-750)
+            currentPlayer.justOutJail = true
             return 1
         }
-        if (data[presentId].prisonDays != 4 && data[presentId].money >= 500){
-            data[presentId].prisonDays = 0
-            data[presentId].moneyChange(-500)
-            data[presentId].justOutJail = true
+        if (currentPlayer.prisonDays != 4 && currentPlayer.money >= 500){
+            currentPlayer.prisonDays = 0
+            currentPlayer.moneyChange(-500)
+            currentPlayer.justOutJail = true
             return 2
         }
         return -1
     }
 
-    fun prisonPayDay() = data[presentId].prisonDays == 4
+    fun prisonPayDay() = currentPlayer.prisonDays == 4
     private fun prisonPayDay(player: Player) = player.prisonDays == 4
 
     fun prisonTry() : Boolean{
         if (dice.double) {
-            data[presentId].prisonDays = 0
+            currentPlayer.prisonDays = 0
             dice.double = false
             return true
         }
         motionPlayer++
         motionPlayer %= cntPls
-        data[presentId].prisonDays ++
+        currentPlayer.prisonDays ++
         return false
     }
 

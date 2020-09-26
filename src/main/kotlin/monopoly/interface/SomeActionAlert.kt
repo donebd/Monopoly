@@ -16,9 +16,9 @@ class SomeActionAlert : Fragment(){
     private val prisonText : Text by fxid()
 
     init {
-        player.text =  game.data[game.presentId].name
+        player.text =  game.currentPlayer.name
         //prison
-        if (game.data[game.presentId].playerInPrison()){
+        if (game.currentPlayer.playerInPrison()){
             prisonText.opacity = 1.0
             if (game.prisonByDouble){
                 message.text = "Вы отправляетесь в тюрьму, за махинации с кубиками."
