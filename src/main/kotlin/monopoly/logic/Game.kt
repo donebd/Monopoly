@@ -35,15 +35,16 @@ class Game{
     var offerMoneyReceiver = 0
     var offerPause = false
 
-    var playerClicked = 0 // for action with realty
-    var click = 0
+    var playerClicked = Player(228) // for action with realty
+    var fieldClicked = Field(50, Type.Secret)
 
     var prisonByDouble = false
 
     fun canControl(number : Int) : Boolean{
-        if (board.fields[number].owner == data[presentId] && !data[presentId].ai){
-            click = number
-            playerClicked = presentId
+        val player = data[presentId]
+        if (board.fields[number].owner == player && !player.ai){
+            fieldClicked = board.fields[number]
+            playerClicked = player
             return true
         }
         return false
@@ -548,20 +549,17 @@ class Game{
         return false
     }
 
-    //fieldAction
-    var position = 1
 
     private var monopolySize = 2
 
     private var type = Type.Perfume
 
     fun fieldActionInit(){
-        position = click
-        monopolySize = when(position){
+        monopolySize = when(fieldClicked.location){
             1,2,8,9,11,13,22,24,26,27 -> 2
             else -> 3
         }
-        type = when(position){
+        type = when(fieldClicked.location){
             1,2 -> Type.Perfume
             3,5,6 -> Type.Clothes
             8,9 -> Type.SocialNetwork
@@ -573,19 +571,19 @@ class Game{
         }
     }
 
-    fun playerHasMonopoly() = data[playerClicked].realty.filter { it.type == type}.size == monopolySize
+    fun playerHasMonopoly() = playerClicked.realty.filter { it.type == type}.size == monopolySize
 
-    fun fieldCantBeUpgraded() = board.fields[position].upgrade > 4 || data[playerClicked].currentMotionUpgrade.contains(type)
+    fun fieldCantBeUpgraded() = fieldClicked.upgrade > 4 || playerClicked.currentMotionUpgrade.contains(type)
 
-    fun fieldCantBeSelled() = board.fields[position].upgrade == 0
+    fun fieldCantBeSelled() = fieldClicked.upgrade == 0
 
     fun fieldSellByHalf(){
-        data[playerClicked].moneyChange(board.fields[position].cost/2)
-        data[playerClicked].realty.remove(board.fields[position])
-        board.fields[position].owner = null
-        board.fields[position].upgrade = 0
-        data[playerClicked].checkForMonopoly(board.fields[position])
-        board.fields[position].penaltyUpdate()
+        playerClicked.moneyChange(fieldClicked.cost/2)
+        playerClicked.realty.remove(fieldClicked)
+        fieldClicked.owner = null
+        fieldClicked.upgrade = 0
+        playerClicked.checkForMonopoly(fieldClicked)
+        fieldClicked.penaltyUpdate()
     }
 
     fun fieldSellByHalf(player: Player, field: Field){
@@ -598,20 +596,20 @@ class Game{
     }
 
     fun fieldBuildUpgrade() : Boolean{
-        if (data[playerClicked].money >= board.fields[position].upgradeCost){
-            data[playerClicked].moneyChange(-board.fields[position].upgradeCost)
-            board.fields[position].upgrade++
-            board.fields[position].penaltyUpdate()
-            data[playerClicked].currentMotionUpgrade.add(type)
+        if (playerClicked.money >= fieldClicked.upgradeCost){
+            playerClicked.moneyChange(-fieldClicked.upgradeCost)
+            fieldClicked.upgrade++
+            fieldClicked.penaltyUpdate()
+            playerClicked.currentMotionUpgrade.add(type)
             return true
         }
         return false
     }
 
     fun fieldSellUpgrade(){
-        data[playerClicked].moneyChange(board.fields[position].upgradeCost)
-        board.fields[position].upgrade--
-        board.fields[position].penaltyUpdate()
+        playerClicked.moneyChange(fieldClicked.upgradeCost)
+        fieldClicked.upgrade--
+        fieldClicked.penaltyUpdate()
     }
 
     }

@@ -26,9 +26,9 @@ class Field : Fragment(){
 
     init {
         game.fieldActionInit()
-        companyName.text = game.board.fields[game.position].name
-        typeOfField.text = game.board.fields[game.position].type.toString()
-        when (game.position){
+        companyName.text = game.fieldClicked.name
+        typeOfField.text = game.fieldClicked.type.toString()
+        when (game.fieldClicked.location){
             1 -> with(root){
                 val chanel = imageview("monopoly/fields/Chanel.png")
                 chanel.rotate = -90.0
@@ -136,16 +136,16 @@ class Field : Fragment(){
                 this.add(apple)
             }
         }
-        player.text =  game.data[game.playerClicked].name
-        costLabel.text = "${game.board.fields[game.position].cost}"
-        costOfUpgrade.text = "${game.board.fields[game.position].upgradeCost}"
+        player.text =  game.playerClicked.name
+        costLabel.text = "${game.fieldClicked.cost}"
+        costOfUpgrade.text = "${game.fieldClicked.upgradeCost}"
         changable()
     }
 
 
     private fun changable(){
-        penaltyLabel.text = "${game.board.fields[game.position].penalty}"
-        countUpgrade.text = "${game.board.fields[game.position].upgrade}"
+        penaltyLabel.text = "${game.fieldClicked.penalty}"
+        countUpgrade.text = "${game.fieldClicked.upgrade}"
         if (game.playerHasMonopoly()){
             upgradeButton.disableProperty().value = game.fieldCantBeUpgraded()
             //check for count upgrade
@@ -156,17 +156,17 @@ class Field : Fragment(){
 
     fun sellByHalf(){
         game.fieldSellByHalf()
-        for (current in game.data[game.playerClicked].realty.filter{ it.type == game.board.fields[game.click].type}){
+        for (current in game.playerClicked.realty.filter{ it.type == game.fieldClicked.type}){
             gamePlay.labelUpgradeClear(current.location)
         }
-        gamePlay.paintField(game.position, c("#d2edd7"))
+        gamePlay.paintField(game.fieldClicked.location, c("#d2edd7"))
         close()
     }
 
     fun buildUpgrade(){
         if (game.fieldBuildUpgrade()){
-            gamePlay.updateUpgrade(game.click)
-            gamePlay.sendln(game.data[game.playerClicked].name + " строит филиал. Количество филиалов на поле " + game.board.fields[game.click].name + " - " + game.board.fields[game.click].upgrade)
+            gamePlay.updateUpgrade(game.fieldClicked.location)
+            gamePlay.sendln(game.playerClicked.name + " строит филиал. Количество филиалов на поле " + game.fieldClicked.name + " - " + game.fieldClicked.upgrade)
             changable()
             return
         }
@@ -175,8 +175,8 @@ class Field : Fragment(){
 
     fun sellUpgrade(){
         game.fieldSellUpgrade()
-        gamePlay.updateUpgrade(game.click)
-        gamePlay.sendln(game.data[game.playerClicked].name + " продает филиал. Количество филиалов на поле " + game.board.fields[game.click].name + " - " + game.board.fields[game.click].upgrade)
+        gamePlay.updateUpgrade(game.fieldClicked.location)
+        gamePlay.sendln(game.playerClicked.name + " продает филиал. Количество филиалов на поле " + game.fieldClicked.name + " - " + game.fieldClicked.upgrade)
         changable()
     }
 }
