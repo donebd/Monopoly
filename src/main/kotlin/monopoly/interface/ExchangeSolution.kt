@@ -9,7 +9,7 @@ import javafx.util.Duration
 import tornadofx.*
 import java.lang.NumberFormatException
 
-class OfferSolution : Fragment(){
+class ExchangeSolution : Fragment(){
 
     override val root : AnchorPane by fxml()
 
@@ -24,32 +24,32 @@ class OfferSolution : Fragment(){
     private val sendBtn : Button by fxid()
 
     init {
-        nameSender.text = game.offerSender.name
-        nameReceiver.text = game.offerReceiver.name
+        nameSender.text = game.exchangeSender.name
+        nameReceiver.text = game.exchangeReceiver.name
         tableViewSender.column("Поле", monopoly.logic.Field::nameProperty)
         tableViewSender.column("Стоимость", monopoly.logic.Field::costProperty)
-        tableViewSender.items = game.offerReceiverList.asObservable()
+        tableViewSender.items = game.exchangeReceiverList.asObservable()
         tableViewReceiver.column("Поле", monopoly.logic.Field::nameProperty)
         tableViewReceiver.column("Стоимость", monopoly.logic.Field::costProperty)
-        tableViewReceiver.items = game.offerSenderList.asObservable()
-        money1Lbl.text = "${game.offerMoneyReceiver}$"
-        money2Lbl.text = "$${game.offerMoneySender}"
+        tableViewReceiver.items = game.exchangeSenderList.asObservable()
+        money1Lbl.text = "${game.exchangeMoneyReceiver}$"
+        money2Lbl.text = "$${game.exchangeMoneySender}"
     }
 
-    fun acceptOffer() {
-        game.acceptOffer()
-        gamePlay.updateColor(game.offerSender)
-        gamePlay.updateColor(game.offerReceiver)
+    fun acceptExchange() {
+        game.acceptExchange()
+        gamePlay.updateColor(game.exchangeSender)
+        gamePlay.updateColor(game.exchangeReceiver)
         gamePlay.offerLog()
         exit()
     }
 
-    fun rejectOffer() {
+    fun rejectExchange() {
         exit()
     }
 
     fun exit(){
-        game.offerPause = false
+        game.exchangePause = false
         close()
     }
 }

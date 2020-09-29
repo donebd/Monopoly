@@ -305,37 +305,37 @@ class GamePlay: View("Monopoly"){
     private val pl4 : Label by fxid()
     private val pl5 : Label by fxid()
 
-    fun player1Offer() { if (game.canOffer(game.currentPlayer, game.data[0])) openOfferWindow() }
+    fun player1Offer() { if (game.canExchange(game.currentPlayer, game.data[0])) openOfferWindow() }
 
-    fun player2Offer() { if (game.canOffer(game.currentPlayer, game.data[1])) openOfferWindow() }
+    fun player2Offer() { if (game.canExchange(game.currentPlayer, game.data[1])) openOfferWindow() }
 
-    fun player3Offer() { if (game.data.size > 2 && game.canOffer(game.currentPlayer, game.data[2])) openOfferWindow() }
+    fun player3Offer() { if (game.data.size > 2 && game.canExchange(game.currentPlayer, game.data[2])) openOfferWindow() }
 
-    fun player4Offer() { if (game.data.size > 3 && game.canOffer(game.currentPlayer, game.data[3])) openOfferWindow() }
+    fun player4Offer() { if (game.data.size > 3 && game.canExchange(game.currentPlayer, game.data[3])) openOfferWindow() }
 
-    fun player5Offer() { if (game.data.size > 4 && game.canOffer(game.currentPlayer, game.data[4])) openOfferWindow() }
+    fun player5Offer() { if (game.data.size > 4 && game.canExchange(game.currentPlayer, game.data[4])) openOfferWindow() }
 
     private fun openOfferWindow() {
-        find<OfferToPlayer>().openModal(resizable = false)!!.setOnCloseRequest {
-            game.offerPause = false
+        find<ExchangeToPlayer>().openModal(resizable = false)!!.setOnCloseRequest {
+            game.exchangePause = false
         }
     }
 
     fun offerLog() {
-        send("${game.offerSender.name} получает при обмене: ")
-        for (i in game.offerReceiverList.withIndex()){
-            if (i.index != game.offerReceiverList.size - 1) {
+        send("${game.exchangeSender.name} получает при обмене: ")
+        for (i in game.exchangeReceiverList.withIndex()){
+            if (i.index != game.exchangeReceiverList.size - 1) {
                 send(" ${i.value.name},")
             } else {
-                sendln(" ${i.value.name} и ${game.offerMoneyReceiver}$.")
+                sendln(" ${i.value.name} и ${game.exchangeMoneyReceiver}$.")
             }
         }
-        send("${game.offerReceiver.name} получает при обмене: ")
-        for (i in game.offerSenderList.withIndex()){
-            if (i.index != game.offerSenderList.size - 1) {
+        send("${game.exchangeReceiver.name} получает при обмене: ")
+        for (i in game.exchangeSenderList.withIndex()){
+            if (i.index != game.exchangeSenderList.size - 1) {
                 send(" ${i.value.name}, ")
             } else {
-                sendln(" ${i.value.name} и ${game.offerMoneySender}$.")
+                sendln(" ${i.value.name} и ${game.exchangeMoneySender}$.")
             }
         }
     }
@@ -528,7 +528,7 @@ class GamePlay: View("Monopoly"){
 
     init {
         this.currentStage!!.setOnCloseRequest {
-            game.offerPause = false
+            game.exchangePause = false
         }
         primaryStage.width = 1024.0
         primaryStage.height = 1048.0
@@ -797,6 +797,11 @@ class GamePlay: View("Monopoly"){
     }
 
     private fun fieldEvent(player: Player){
+        //check cycle completed and reward according to the settings
+        if (game.checkCircleComplete()){
+            sendln("Положенная награда в 2000$ за проход круга ваша, " + player.name)
+            if (!player.ai && showAlerts)runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal(resizable = false)}
+        }
         //buy realty
         if (game.realtyCanBuy()){
             sendln("Игрок попал на поле ${game.board.fields[player.position].name}, приобритет ли он его?")
@@ -864,11 +869,6 @@ class GamePlay: View("Monopoly"){
                 2 -> movePlayer3(game.data[2].position, false)
                 3 -> movePlayer4(game.data[3].position, false)
                 else -> movePlayer5(game.data[4].position, false)
-            }
-            //check cycle completed and reward according to the settings
-            if (game.checkCircleComplete()){
-                sendln("Положенная награда в 2000$ за проход круга ваша, " + player.name)
-                if (!player.ai && showAlerts)runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal(resizable = false)}
             }
 
             runAsync {
@@ -993,7 +993,7 @@ class GamePlay: View("Monopoly"){
             }
             game.data[game.motionPlayer].justOutJail = false
             runAsync {
-                    while(game.offerPause) {
+                    while(game.exchangePause) {
                         Thread.sleep(100)
                     }
                 runAsync { Thread.sleep(1000) } ui { if ((game.data[game.motionPlayer].playerInPrison() || game.data[game.motionPlayer].ai) && !game.gameIsEnd) motion() }

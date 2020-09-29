@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane
 import javafx.util.Duration
 import tornadofx.*
 
-class OfferToPlayer : Fragment(){
+class ExchangeToPlayer : Fragment(){
 
     override val root : AnchorPane by fxml()
 
@@ -22,8 +22,8 @@ class OfferToPlayer : Fragment(){
     private val nameReceiver : Label by fxid()
     private val errorLabel : Label by fxid()
 
-    private val realtySender = game.offerSender.realty.asObservable()
-    private val realtyReceiver = game.offerReceiver.realty.asObservable()
+    private val realtySender = game.exchangeSender.realty.asObservable()
+    private val realtyReceiver = game.exchangeReceiver.realty.asObservable()
 
     private val selectedToTrade = mutableListOf<monopoly.logic.Field>().asObservable()
     private val receivedToTrade = mutableListOf<monopoly.logic.Field>().asObservable()
@@ -34,8 +34,8 @@ class OfferToPlayer : Fragment(){
     private val sendBtn : Button by fxid()
 
     init {
-        nameSender.text = game.offerSender.name
-        nameReceiver.text = game.offerReceiver.name
+        nameSender.text = game.exchangeSender.name
+        nameReceiver.text = game.exchangeReceiver.name
         tableViewSender.column("Поле", monopoly.logic.Field::nameProperty)
         tableViewSender.column("Стоимость", monopoly.logic.Field::costProperty)
         tableViewSender.items = realtySender
@@ -81,7 +81,7 @@ class OfferToPlayer : Fragment(){
         }
     }
 
-    fun sendOffer(){
+    fun sendExchange(){
         var temp1 = money1Field.text
         try {
             temp1.toInt().toString()
@@ -96,15 +96,15 @@ class OfferToPlayer : Fragment(){
             temp2 = "0"
         }
         val money2 = temp2.toInt()
-        val checkHasMoney = money1 <= game.offerSender.money && money2 <= game.offerReceiver.money
+        val checkHasMoney = money1 <= game.exchangeSender.money && money2 <= game.exchangeReceiver.money
         if (game.correctExchange(selectedToTrade, receivedToTrade, money1, money2) && checkHasMoney) {
-            game.offerSenderList = selectedToTrade
-            game.offerReceiverList = receivedToTrade
-            game.offerMoneySender = money1
-            game.offerMoneyReceiver = money2
+            game.exchangeSenderList = selectedToTrade
+            game.exchangeReceiverList = receivedToTrade
+            game.exchangeMoneySender = money1
+            game.exchangeMoneyReceiver = money2
             close()
-            find<OfferSolution>().openModal(resizable = false)!!.setOnCloseRequest {
-                game.offerPause = false
+            find<ExchangeSolution>().openModal(resizable = false)!!.setOnCloseRequest {
+                game.exchangePause = false
             }
             return
         }

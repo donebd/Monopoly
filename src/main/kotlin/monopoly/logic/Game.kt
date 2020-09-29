@@ -33,13 +33,13 @@ class Game{
 
     val dice = Dice()
 
-    var offerSender = Player(0)
-    var offerReceiver = Player(0)
-    var offerSenderList = mutableListOf<Field>()
-    var offerReceiverList = mutableListOf<Field>()
-    var offerMoneySender = 0
-    var offerMoneyReceiver = 0
-    var offerPause = false
+    var exchangeSender = Player(0)
+    var exchangeReceiver = Player(0)
+    var exchangeSenderList = mutableListOf<Field>()
+    var exchangeReceiverList = mutableListOf<Field>()
+    var exchangeMoneySender = 0
+    var exchangeMoneyReceiver = 0
+    var exchangePause = false
 
     var playerClicked = Player(228) // for action with realty
     var fieldClicked = Field(50, Type.Secret)
@@ -55,43 +55,43 @@ class Game{
         return false
     }
 
-    fun canOffer(sender: Player, receiver: Player) : Boolean {
+    fun canExchange(sender: Player, receiver: Player) : Boolean {
         if (sender.ai || currentPlayer.id != sender.id) return false
-        offerSender = sender
-        offerReceiver = receiver
-        offerPause = sender.id != receiver.id && receiver.id !in loosers
-        return offerPause
+        exchangeSender = sender
+        exchangeReceiver = receiver
+        exchangePause = sender.id != receiver.id && receiver.id !in loosers
+        return exchangePause
     }
 
-    fun acceptOffer(){
-        for (field in offerSenderList) {
-            offerSender.realty.remove(field)
+    fun acceptExchange(){
+        for (field in exchangeSenderList) {
+            exchangeSender.realty.remove(field)
             field.owner = null
             field.upgrade = 0
-            offerSender.checkForMonopoly(field)
+            exchangeSender.checkForMonopoly(field)
             field.penaltyUpdate()
-            offerReceiver.realty.add(field)
-            field.owner = offerReceiver
-            offerReceiver.checkForMonopoly(field)
+            exchangeReceiver.realty.add(field)
+            field.owner = exchangeReceiver
+            exchangeReceiver.checkForMonopoly(field)
             field.penaltyUpdate()
         }// fields of sender to receiver
 
-        for (field in offerReceiverList) {
-            offerReceiver.realty.remove(field)
+        for (field in exchangeReceiverList) {
+            exchangeReceiver.realty.remove(field)
             field.owner = null
             field.upgrade = 0
-            offerReceiver.checkForMonopoly(field)
+            exchangeReceiver.checkForMonopoly(field)
             field.penaltyUpdate()
-            offerSender.realty.add(field)
-            field.owner = offerSender
-            offerSender.checkForMonopoly(field)
+            exchangeSender.realty.add(field)
+            field.owner = exchangeSender
+            exchangeSender.checkForMonopoly(field)
             field.penaltyUpdate()
         }
 
-        offerSender.moneyChange(offerMoneyReceiver)
-        offerSender.moneyChange(-offerMoneySender)
-        offerReceiver.moneyChange(offerMoneySender)
-        offerReceiver.moneyChange(-offerMoneyReceiver)
+        exchangeSender.moneyChange(exchangeMoneyReceiver)
+        exchangeSender.moneyChange(-exchangeMoneySender)
+        exchangeReceiver.moneyChange(exchangeMoneySender)
+        exchangeReceiver.moneyChange(-exchangeMoneyReceiver)
     }
 
     fun correctExchange(sendingFields : List<Field>, receiveringFields : List<Field>, moneySend : Int, moneyGet : Int) : Boolean {
