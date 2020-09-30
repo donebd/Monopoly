@@ -29,6 +29,7 @@ class Game{
     var prisonInitProperty = SimpleIntegerProperty()
     var penaltyInitProperty = SimpleIntegerProperty()
     var offerToBuyInitProperty = SimpleIntegerProperty()
+    var negativeEventInitProperty = SimpleIntegerProperty()
 
     fun setGameStatus(status : Boolean) {
         gameIsEnd = !status

@@ -33,7 +33,7 @@ class GamePlay: View("Monopoly"){
     private val offerTypeRealty : Label by fxid()
     private val offerNotEnoughMoney : Label by fxid()
 
-    fun initiOfferToBuy(player : Player) {
+    fun offerToBuyInit(player : Player) {
         if (player.ai){
             aiBuyInstructions(player)
         }else
@@ -72,6 +72,24 @@ class GamePlay: View("Monopoly"){
         offerToBuy.opacity = 0.0
         offerToBuy.disableProperty().value = true
         endMotion()
+    }
+
+    private fun aiBuyInstructions(player: Player){
+        when(game.aiBuyInstructions(player)){
+            Buy -> offerAccept()
+            SellUpgrade ->{
+                sellUpgrade(player)
+                aiBuyInstructions(player)
+            }
+            SellField ->{
+                val tmp = game.sellSomeOtherTypeField(player)
+                sellAndVacateField(game.board.fields[tmp], player)
+                aiBuyInstructions(player)
+            }
+            else -> runAsync {
+                Thread.sleep(100)
+            }ui{endMotion()}
+        }
     }
 
     //Pay penalty block
@@ -122,12 +140,40 @@ class GamePlay: View("Monopoly"){
         playerSurrender(game.currentPlayer)
     }
 
+    private fun aiPunisment(player: Player){
+        when (game.aiPunisment(player)){
+            Buy -> penaltyAccept()
+            SellUpgrade -> {
+                sellUpgrade(player)
+                aiPunisment(player)
+            }
+            SellField -> {
+                val tmp = game.sellSomeField(player)
+                sellAndVacateField(game.board.fields[tmp], player)
+                aiPunisment(player)
+            }
+            SellNotMonopoly -> {
+                val tmp = game.sellSomeNotMonopolyField(player)
+                sellAndVacateField(game.board.fields[tmp], player)
+                aiPunisment(player)
+            }
+            else -> playerSurrender(player)
+        }
+    }
+
     //Negative secret action block
     private val negativeAction : AnchorPane by fxid()
     private val negativeText : Text by fxid()
     private val negativeNotEnoughMoney : Label by fxid()
 
-    private fun negativeInit(){
+    fun negativeEventInit(player: Player) {
+        if (game.currentPlayer.ai)
+            aiNegativeEvent(player)
+        else
+            playerNegativeSecret()
+    }
+
+    private fun playerNegativeSecret(){
         negativeAction.opacity = 1.0
         negativeAction.disableProperty().value = false
         when(game.dice.secret.second){
@@ -231,6 +277,29 @@ class GamePlay: View("Monopoly"){
         prisonClose()
         playerSurrender(game.currentPlayer)
     }
+
+    private fun aiPrisonInstructions(player: Player){
+        when(game.aiPrisonInstructions(player)){
+            Buy -> prisonPay()
+            PrisonTry -> prisonTry()
+            SellUpgrade -> {
+                sellUpgrade(player)
+                aiPrisonInstructions(player)
+            }
+            SellField ->{
+                val tmp = game.sellSomeField(player)
+                sellAndVacateField(game.board.fields[tmp], player)
+                aiPrisonInstructions(player)
+            }
+            SellNotMonopoly -> {
+                val tmp = game.sellSomeNotMonopolyField(player)
+                sellAndVacateField(game.board.fields[tmp], player)
+                aiPrisonInstructions(player)
+            }
+            else -> playerSurrender(player)
+        }
+    }
+
 
     //Board functional
     private val idMotion : Label by fxid()
@@ -615,7 +684,8 @@ class GamePlay: View("Monopoly"){
         game.dice.checkRollProperty.onChange { diceRoll(game.dice.first, game.dice.second) }
         game.prisonInitProperty.onChange { prisonInit(game.currentPlayer) }
         game.penaltyInitProperty.onChange { penaltyInit(game.currentPlayer) }
-        game.offerToBuyInitProperty.onChange { initiOfferToBuy(game.currentPlayer) }
+        game.offerToBuyInitProperty.onChange { offerToBuyInit(game.currentPlayer) }
+        game.negativeEventInitProperty.onChange { negativeEventInit(game.currentPlayer) }
     }
 
     private fun linkCostOfField(){
@@ -700,10 +770,7 @@ class GamePlay: View("Monopoly"){
                 else -> "Вы простудились, и потратили 250$ в аптеке"
             })
             sendln(", " + game.currentPlayer.name)
-            if (game.currentPlayer.ai)
-                aiNegativeEvent(game.currentPlayer)
-            else
-                negativeInit()
+            game.negativeEventInitProperty.value++
         }
     }
 
@@ -726,27 +793,6 @@ class GamePlay: View("Monopoly"){
 
     private fun diceDoubleAlert(){
         if (game.diceDoubleCheck() && !game.currentPlayer.ai && showAlerts) find<DiceDouble>().openModal(resizable = false)
-    }
-
-    private fun aiPunisment(player: Player){
-        when (game.aiPunisment(player)){
-            Buy -> penaltyAccept()
-            SellUpgrade -> {
-                sellUpgrade(player)
-                aiPunisment(player)
-            }
-            SellField -> {
-                val tmp = game.sellSomeField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiPunisment(player)
-            }
-            SellNotMonopoly -> {
-                val tmp = game.sellSomeNotMonopolyField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiPunisment(player)
-            }
-            else -> playerSurrender(player)
-        }
     }
 
     private fun aiNegativeEvent(player: Player){
@@ -780,46 +826,6 @@ class GamePlay: View("Monopoly"){
         val tmp = game.sellSomeUpgrade(player, true)
         sendln(player.name + " продает филиал. Количество филиалов на поле " + game.board.fields[tmp].name + " - " + game.board.fields[tmp].upgrade)
         updateUpgrade(tmp)
-    }
-
-    private fun aiBuyInstructions(player: Player){
-        when(game.aiBuyInstructions(player)){
-            Buy -> offerAccept()
-            SellUpgrade ->{
-                sellUpgrade(player)
-                aiBuyInstructions(player)
-            }
-            SellField ->{
-                val tmp = game.sellSomeOtherTypeField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiBuyInstructions(player)
-            }
-            else -> runAsync {
-                Thread.sleep(100)
-            }ui{endMotion()}
-        }
-    }
-
-    private fun aiPrisonInstructions(player: Player){
-        when(game.aiPrisonInstructions(player)){
-            Buy -> prisonPay()
-            PrisonTry -> prisonTry()
-            SellUpgrade -> {
-                sellUpgrade(player)
-                aiPrisonInstructions(player)
-            }
-            SellField ->{
-                val tmp = game.sellSomeField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiPrisonInstructions(player)
-            }
-            SellNotMonopoly -> {
-                val tmp = game.sellSomeNotMonopolyField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiPrisonInstructions(player)
-            }
-            else -> playerSurrender(player)
-        }
     }
 
     private fun fieldEvent(player: Player){
