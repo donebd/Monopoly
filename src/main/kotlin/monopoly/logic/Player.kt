@@ -6,6 +6,7 @@ class Player(val id: Int){
     var name = "Player$id"
     private var numberOfMoves = 0
     var position = 0
+    var positionProperty = SimpleIntegerProperty()
     var money = 15000
     val moneyProperty = SimpleIntegerProperty()
     var prisonDays = 0
@@ -47,6 +48,7 @@ class Player(val id: Int){
         if (finishCircle) circlesCompleted ++
         numberOfMoves += a
         position = numberOfMoves % 28
+        positionProperty.value = position
     }
 
     fun goToPrison(){

@@ -1,5 +1,7 @@
 package monopoly.logic
 
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
 import monopoly.logic.CodeInstruction.*
 
 class Game{
@@ -22,6 +24,13 @@ class Game{
     }
 
     var gameIsEnd = false
+
+    var endProperty = SimpleBooleanProperty(gameIsEnd)
+
+    fun setGameStatus(status : Boolean) {
+        gameIsEnd = !status
+        endProperty.value = gameIsEnd
+    }
 
     val board = GameBoard()
 

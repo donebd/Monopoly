@@ -1,5 +1,6 @@
 package monopoly.`interface`
 
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.control.Button
 import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.Label
@@ -12,10 +13,10 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.util.Duration
+import monopoly.logic.CodeInstruction.*
 import monopoly.logic.Player
 import monopoly.logic.SecretAction
 import tornadofx.*
-import monopoly.logic.CodeInstruction.*
 
 class GamePlay: View("Monopoly"){
 
@@ -187,7 +188,6 @@ class GamePlay: View("Monopoly"){
 
     fun prisonTry(){
         game.dice.roll()
-        diceRoll(game.dice.first,game.dice.second)
         prisonClose()
         runAsync { Thread.sleep(600) }ui{
             if (game.prisonTry()){
@@ -540,27 +540,32 @@ class GamePlay: View("Monopoly"){
 
         pl1.text += game.data[0].name
         moneylbl1.bind(game.data[0].moneyProperty)
+        game.data[0].positionProperty.onChange { movePlayer1(game.data[0].position, game.data[0].playerInPrison()) }
 
         pl2.text += game.data[1].name
         moneylbl2.bind(game.data[1].moneyProperty)
+        game.data[1].positionProperty.onChange { movePlayer2(game.data[1].position, game.data[1].playerInPrison()) }
 
         if (game.cntPls >= 3) {
             playerField3.opacity = 1.0
             model3.opacity = 1.0
             pl3.text += game.data[2].name
             moneylbl3.bind(game.data[2].moneyProperty)
+            game.data[2].positionProperty.onChange { movePlayer3(game.data[2].position, game.data[2].playerInPrison()) }
         }
         if (game.cntPls >= 4) {
             playerField4.opacity = 1.0
             model4.opacity = 1.0
             pl4.text += game.data[3].name
             moneylbl4.bind(game.data[3].moneyProperty)
+            game.data[3].positionProperty.onChange { movePlayer4(game.data[3].position, game.data[3].playerInPrison()) }
         }
         if (game.cntPls >= 5) {
             playerField5.opacity = 1.0
             model5.opacity = 1.0
             pl5.text += game.data[4].name
             moneylbl5.bind(game.data[4].moneyProperty)
+            game.data[4].positionProperty.onChange { movePlayer5(game.data[4].position, game.data[4].playerInPrison()) }
         }
         game.setBalance()
         linkCostOfField()
@@ -583,6 +588,8 @@ class GamePlay: View("Monopoly"){
 
         if (game.data[0].ai) motion()
 
+        game.endProperty.onChange { endGame() }
+        game.dice.checkRollProperty.onChange { diceRoll(game.dice.first, game.dice.second) }
     }
 
     private fun linkCostOfField(){
@@ -687,13 +694,6 @@ class GamePlay: View("Monopoly"){
     private fun playerToPrison(current: Player){
         sendln("Не скучайте за решёткой, ${game.currentPlayer.name}!")
         game.motionIfPrison(current)
-        when(current.id){
-            1 -> movePlayer1(0, true)
-            2 -> movePlayer2(0, true)
-            3 -> movePlayer3(0, true)
-            4 -> movePlayer4(0, true)
-            else -> movePlayer5(0, true)
-        }
         if (!current.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
         runAsync { Thread.sleep(100) }ui{endMotion()}
     }
@@ -863,13 +863,6 @@ class GamePlay: View("Monopoly"){
             Thread.sleep(250)
         }ui{
             player.positionChange(game.dice.count)
-            when(game.data.indexOf(player)){
-                0 -> movePlayer1(game.data[0].position, false)
-                1 -> movePlayer2(game.data[1].position, false)
-                2 -> movePlayer3(game.data[2].position, false)
-                3 -> movePlayer4(game.data[3].position, false)
-                else -> movePlayer5(game.data[4].position, false)
-            }
 
             runAsync {
                 Thread.sleep(500)
@@ -891,7 +884,6 @@ class GamePlay: View("Monopoly"){
             return
         }
         game.dice.roll()
-        diceRoll(game.dice.first, game.dice.second)
 
         runAsync { Thread.sleep(500) }ui {
             if (game.checkPrisonByDouble()) {
@@ -1004,10 +996,13 @@ class GamePlay: View("Monopoly"){
     private fun checkEndGame(){
         runAsync { Thread.sleep(350) }ui {
             if (game.gameIsEnd()) {
-                game.gameIsEnd = true
-                find<FinishGame>().openModal(resizable = false)
+                game.setGameStatus(false)
             }
         }
+    }
+
+    fun endGame(){
+        find<FinishGame>().openModal(resizable = false)
     }
 
     fun howToPlay(){

@@ -1,8 +1,11 @@
 package monopoly.logic
 
+import javafx.beans.property.SimpleIntegerProperty
+
 class Dice{
     var count = 0
     var first = 0
+    var checkRollProperty = SimpleIntegerProperty()
     var second = 0
     var double = false
     var secret = Pair(true,SecretAction.Action1)
@@ -14,6 +17,7 @@ class Dice{
     fun roll() {
         first = (1..4).random()
         second = (1..4).random()
+        checkRollProperty.value++
         count = second + first
         double = first == second
     }
