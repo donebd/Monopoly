@@ -907,7 +907,7 @@
          <effect>
             <ImageInput>
                <source>
-                  <Image url="file:/C:/Users/Пользователь/IdeaProjects/Monopoly/src/main/resources/monopoly/fields/Player1.png" />
+                  <Image url="@../fields/Player1.png" />
                </source>
             </ImageInput>
          </effect>
@@ -916,7 +916,7 @@
          <effect>
             <ImageInput>
                <source>
-                  <Image url="file:/C:/Users/Пользователь/IdeaProjects/Monopoly/src/main/resources/monopoly/fields/Player2.png" />
+                  <Image url="@../fields/Player2.png" />
                </source>
             </ImageInput>
          </effect>
@@ -925,7 +925,7 @@
          <effect>
             <ImageInput>
                <source>
-                  <Image url="file:/C:/Users/Пользователь/IdeaProjects/Monopoly/src/main/resources/monopoly/fields/Player3.png" />
+                  <Image url="@../fields/Player3.png" />
                </source>
             </ImageInput>
          </effect>
@@ -934,7 +934,7 @@
          <effect>
             <ImageInput>
                <source>
-                  <Image url="file:/C:/Users/Пользователь/IdeaProjects/Monopoly/src/main/resources/monopoly/fields/Player4.png" />
+                  <Image url="@../fields/Player4.png" />
                </source>
             </ImageInput>
          </effect>
@@ -943,7 +943,7 @@
          <effect>
             <ImageInput>
                <source>
-                  <Image url="file:/C:/Users/Пользователь/IdeaProjects/Monopoly/src/main/resources/monopoly/fields/Player5.png" />
+                  <Image url="@../fields/Player5.png" />
                </source>
             </ImageInput>
          </effect>
