@@ -33,7 +33,14 @@ class GamePlay: View("Monopoly"){
     private val offerTypeRealty : Label by fxid()
     private val offerNotEnoughMoney : Label by fxid()
 
-    private fun offerToBuy(player: Player){
+    fun initiOfferToBuy(player : Player) {
+        if (player.ai){
+            aiBuyInstructions(player)
+        }else
+            playerOfferToBuy(player)
+    }
+
+    private fun playerOfferToBuy(player: Player){
         offerToBuy.opacity = 1.0
         offerToBuy.disableProperty().value = false
         offerCostRealty.text = "${game.board.fields[player.position].cost}"
@@ -607,7 +614,8 @@ class GamePlay: View("Monopoly"){
         game.endProperty.onChange { endGame() }
         game.dice.checkRollProperty.onChange { diceRoll(game.dice.first, game.dice.second) }
         game.prisonInitProperty.onChange { prisonInit(game.currentPlayer) }
-        game.payPenaltyProperty.onChange { penaltyInit(game.currentPlayer) }
+        game.penaltyInitProperty.onChange { penaltyInit(game.currentPlayer) }
+        game.offerToBuyInitProperty.onChange { initiOfferToBuy(game.currentPlayer) }
     }
 
     private fun linkCostOfField(){
@@ -823,10 +831,7 @@ class GamePlay: View("Monopoly"){
         //buy realty
         if (game.realtyCanBuy()){
             sendln("Игрок попал на поле ${game.board.fields[player.position].name}, приобритет ли он его?")
-            if (player.ai){
-                aiBuyInstructions(player)
-            }else
-                offerToBuy(player)
+            game.offerToBuyInitProperty.value++
             diceDoubleAlert()
             return
         }
@@ -834,7 +839,7 @@ class GamePlay: View("Monopoly"){
         if (game.punishmentOrPenalty()){
             if (!game.ifPunishment()) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
             else sendln("${player.name}, вас уличили за неуплату налогов! Вы должны оплатить штраф 2000$.")
-            game.payPenaltyProperty.value++
+            game.penaltyInitProperty.value++
             diceDoubleAlert()
             return
         }

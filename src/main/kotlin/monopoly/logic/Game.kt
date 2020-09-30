@@ -27,7 +27,8 @@ class Game{
     var gameIsEnd = false
     var endProperty = SimpleBooleanProperty(gameIsEnd)
     var prisonInitProperty = SimpleIntegerProperty()
-    var payPenaltyProperty = SimpleIntegerProperty()
+    var penaltyInitProperty = SimpleIntegerProperty()
+    var offerToBuyInitProperty = SimpleIntegerProperty()
 
     fun setGameStatus(status : Boolean) {
         gameIsEnd = !status
