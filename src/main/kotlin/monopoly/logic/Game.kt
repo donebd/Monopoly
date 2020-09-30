@@ -2,6 +2,7 @@ package monopoly.logic
 
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleIntegerProperty
 import monopoly.logic.CodeInstruction.*
 
 class Game{
@@ -24,8 +25,9 @@ class Game{
     }
 
     var gameIsEnd = false
-
     var endProperty = SimpleBooleanProperty(gameIsEnd)
+    var prisonInitProperty = SimpleIntegerProperty()
+    var payPenaltyProperty = SimpleIntegerProperty()
 
     fun setGameStatus(status : Boolean) {
         gameIsEnd = !status

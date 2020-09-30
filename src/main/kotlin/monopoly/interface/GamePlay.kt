@@ -74,7 +74,15 @@ class GamePlay: View("Monopoly"){
     private val penaltyNotEnoughMoney : Label by fxid()
     private val textPunisment : Label by fxid()
 
-    private fun payPenalty(player: Player) {
+    private fun penaltyInit(player: Player){
+        if (player.ai) {
+            aiPunisment(player)
+        }else {
+            penaltyPlayer(player)
+        }
+    }
+
+    private fun penaltyPlayer(player: Player) {
         textPunisment.text = "Вы платите игроку"
         penaltyOwner.text = ""
         payPenalty.opacity = 1.0
@@ -152,7 +160,15 @@ class GamePlay: View("Monopoly"){
     private val prisonTryButton : Button by fxid()
     private val prisonSurrenderButton : Button by fxid()
 
-    private fun prisonInit(){
+    private fun prisonInit(player : Player) {
+        if (player.ai) {
+            aiPrisonInstructions(player)
+        }else {
+            prisonPlayer()
+        }
+    }
+
+    private fun prisonPlayer(){
         prisonMessage.text = "Заплатите 500, или выбейте дубль"
         prisonNotEnoughMoney.opacity = 0.0
         prison.opacity = 1.0
@@ -590,6 +606,8 @@ class GamePlay: View("Monopoly"){
 
         game.endProperty.onChange { endGame() }
         game.dice.checkRollProperty.onChange { diceRoll(game.dice.first, game.dice.second) }
+        game.prisonInitProperty.onChange { prisonInit(game.currentPlayer) }
+        game.payPenaltyProperty.onChange { penaltyInit(game.currentPlayer) }
     }
 
     private fun linkCostOfField(){
@@ -816,10 +834,7 @@ class GamePlay: View("Monopoly"){
         if (game.punishmentOrPenalty()){
             if (!game.ifPunishment()) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
             else sendln("${player.name}, вас уличили за неуплату налогов! Вы должны оплатить штраф 2000$.")
-            if (player.ai){
-                    aiPunisment(player)
-            }else
-                payPenalty(player)
+            game.payPenaltyProperty.value++
             diceDoubleAlert()
             return
         }
@@ -877,10 +892,7 @@ class GamePlay: View("Monopoly"){
         buttonRoll.disableProperty().value = true
         val player = game.currentPlayer
         if (player.playerInPrison()){
-            if (player.ai)
-                aiPrisonInstructions(player)
-            else
-                prisonInit()
+            game.prisonInitProperty.value ++
             return
         }
         game.dice.roll()
