@@ -39,6 +39,9 @@ class Game{
     var startActionProperty = SimpleBooleanProperty()
     var notifyInView = SimpleStringProperty()
     var updateUpgradeView = SimpleBooleanProperty()
+    var viewEndMotionProperty = SimpleBooleanProperty()
+    var toPrisonViewProperty = SimpleBooleanProperty()
+    var surrenderViewProperty = SimpleBooleanProperty()
 
     fun setGameStatus(status : Boolean) {
         gameIsEnd = !status

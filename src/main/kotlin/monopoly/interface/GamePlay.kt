@@ -140,7 +140,7 @@ class GamePlay: View("Monopoly"){
 
     fun penaltySurrender(){
         penaltyClose()
-        playerSurrender(game.currentPlayer)
+        playerSurrender()
     }
 
     private fun aiPunisment(player: Player){
@@ -160,7 +160,7 @@ class GamePlay: View("Monopoly"){
                 sellAndVacateField(game.board.fields[tmp], player)
                 aiPunisment(player)
             }
-            else -> playerSurrender(player)
+            else -> playerSurrender()
         }
     }
 
@@ -185,7 +185,7 @@ class GamePlay: View("Monopoly"){
     }
 
     fun positiveEventInit(player: Player) {
-        send(game.currentPlayer.name + ", ")
+        send(player.name + ", ")
         sendln(when(game.dice.secret.second){
             SecretAction.Action1 -> "вы нашли в зимней куртке забытые 250$"
             SecretAction.Action2 -> "вы выйграли на ставках 500$"
@@ -193,7 +193,7 @@ class GamePlay: View("Monopoly"){
             SecretAction.Action4 -> "в банке произошла ошибка, на ваш счет перечислено 750$"
             else -> "ваша собака принесла вам 100$"
         })
-        if (!game.currentPlayer.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+        if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
     }
 
     private fun playerNegativeSecret(){
@@ -225,7 +225,7 @@ class GamePlay: View("Monopoly"){
 
     fun negativeSurrender(){
         negativeClose()
-        playerSurrender(game.currentPlayer)
+        playerSurrender()
     }
 
     private fun aiNegativeEvent(player: Player){
@@ -245,7 +245,7 @@ class GamePlay: View("Monopoly"){
                 sellAndVacateField(game.board.fields[tmp], player)
                 aiNegativeEvent(player)
             }
-            else -> playerSurrender(player)
+            else -> playerSurrender()
         }
     }
 
@@ -319,7 +319,7 @@ class GamePlay: View("Monopoly"){
 
     fun prisonSurrender(){
         prisonClose()
-        playerSurrender(game.currentPlayer)
+        playerSurrender()
     }
 
     private fun aiPrisonInstructions(player: Player){
@@ -340,7 +340,7 @@ class GamePlay: View("Monopoly"){
                 sellAndVacateField(game.board.fields[tmp], player)
                 aiPrisonInstructions(player)
             }
-            else -> playerSurrender(player)
+            else -> playerSurrender()
         }
     }
 
@@ -357,6 +357,11 @@ class GamePlay: View("Monopoly"){
     fun startAction(player: Player) {
         sendln("Получите и распишитесь, ${player.name}, 1000$ за попадание на поле Старт!")
         if (!player.ai && showAlerts)find<SomeActionAlert>().openModal(resizable = false)
+    }
+
+    fun playerToPrisonView(player: Player) {
+        game.notifyInView.value = ("Не скучайте за решёткой, ${game.currentPlayer.name}!")
+        if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
     }
 
     //Board functional
@@ -751,6 +756,9 @@ class GamePlay: View("Monopoly"){
         game.startActionProperty.onChange { startAction(game.currentPlayer) }
         game.notifyInView.onChange { sendln(game.notifyInView.value) }
         game.updateUpgradeView.onChange { updateUpgrade() }
+        game.viewEndMotionProperty.onChange { viewEndMotion(game.data[game.motionPlayer]) }
+        game.toPrisonViewProperty.onChange { playerToPrisonView(game.currentPlayer) }
+        game.surrenderViewProperty.onChange { playerSurrenderView(game.currentPlayer) }
     }
 
     private fun linkCostOfField(){
@@ -823,20 +831,23 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    private fun playerSurrender(player: Player){
+    fun playerSurrenderView(player: Player) {
         clearFieldLooser(player)
-        game.playerLose()
         sendln("")
         sendln("${player.name} не справляется с натиском конкурентов, и покиадет наш стол!")
+    }
+
+    private fun playerSurrender(){
+        game.playerLose()
+        game.surrenderViewProperty.value = !game.surrenderViewProperty.value
         game.dice.double = false
         endMotion()
         checkEndGame()
     }
 
     private fun playerToPrison(current: Player){
-        sendln("Не скучайте за решёткой, ${game.currentPlayer.name}!")
         game.motionIfPrison(current)
-        if (!current.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+        game.toPrisonViewProperty.value = !game.toPrisonViewProperty.value
         runAsync { Thread.sleep(100) }ui{endMotion()}
     }
 
@@ -938,7 +949,7 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    fun updateUpgrade(){
+    private fun updateUpgrade(){
         for (i in game.board.fields){
             val upgrade = when (game.board.fields[i.location].upgrade){
                 0 -> ""
@@ -1006,28 +1017,33 @@ class GamePlay: View("Monopoly"){
         }
     }
 
+    private fun viewEndMotion(player: Player) {
+        when (game.data.indexOf(player)){
+            0 -> idMotion.text = "Ход игрока ${game.data[0].name}"
+            1 -> idMotion.text = "Ход игрока ${game.data[1].name}"
+            2 -> idMotion.text = "Ход игрока ${game.data[2].name}"
+            3 -> idMotion.text = "Ход игрока ${game.data[3].name}"
+            else -> idMotion.text = "Ход игрока ${game.data[4].name}"
+        }
+        if (!game.gameIsEnd && !player.ai && !player.playerInPrison()) buttonRoll.disableProperty().value = false
+    }
+
     private fun endMotion(){
         runAsync { Thread.sleep(300) }ui{
             game.endMotionLogic()
-            when (game.motionPlayer){
-                0 -> idMotion.text = "Ход игрока ${game.data[0].name}"
-                1 -> idMotion.text = "Ход игрока ${game.data[1].name}"
-                2 -> idMotion.text = "Ход игрока ${game.data[2].name}"
-                3 -> idMotion.text = "Ход игрока ${game.data[3].name}"
-                else -> idMotion.text = "Ход игрока ${game.data[4].name}"
-            }
-            if (!game.gameIsEnd && !game.data[game.motionPlayer].ai && !game.data[game.motionPlayer].playerInPrison()) buttonRoll.disableProperty().value = false
-            if (game.data[game.motionPlayer].ai) {
-                for (i in game.aiInstructions(game.data[game.motionPlayer])){
-                    game.notifyInView.value = (game.data[game.motionPlayer].name + " строит филиал. Количество филиалов на поле " + game.board.fields[i].name + " - " + game.board.fields[i].upgrade)
+            game.viewEndMotionProperty.value = !game.viewEndMotionProperty.value
+            val player = game.data[game.motionPlayer]
+            if (player.ai) {
+                for (i in game.aiInstructions(player)) {
+                    game.notifyInView.value = (player.name + " строит филиал. Количество филиалов на поле " + game.board.fields[i].name + " - " + game.board.fields[i].upgrade)
                 }
                 game.updateUpgradeView.value = !game.updateUpgradeView.value
             }
-            if (!game.dice.double && !game.data[game.motionPlayer].justOutJail){
+            if (!game.dice.double && !player.justOutJail) {
                 game.notifyInView.value = ""
                 game.notifyInView.value = ("Ваш ход, ${game.data[game.motionPlayer].name} !")
             }
-            game.data[game.motionPlayer].justOutJail = false
+            player.justOutJail = false
             runAsync {
                     while(game.exchangePause) {
                         Thread.sleep(100)
