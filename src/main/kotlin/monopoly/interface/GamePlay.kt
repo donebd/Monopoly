@@ -34,6 +34,7 @@ class GamePlay: View("Monopoly"){
     private val offerNotEnoughMoney : Label by fxid()
 
     fun offerToBuyInit(player : Player) {
+        sendln("Игрок попал на поле ${game.board.fields[player.position].name}, приобритет ли он его?")
         if (player.ai){
             aiBuyInstructions(player)
         }else
@@ -100,6 +101,8 @@ class GamePlay: View("Monopoly"){
     private val textPunisment : Label by fxid()
 
     private fun penaltyInit(player: Player){
+        if (!game.ifPunishment()) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
+        else sendln("${player.name}, вас уличили за неуплату налогов! Вы должны оплатить штраф 2000$.")
         if (player.ai) {
             aiPunisment(player)
         }else {
@@ -161,16 +164,36 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    //Negative secret action block
+    //Secret action block
     private val negativeAction : AnchorPane by fxid()
     private val negativeText : Text by fxid()
     private val negativeNotEnoughMoney : Label by fxid()
 
     fun negativeEventInit(player: Player) {
+        send(when(game.dice.secret.second){
+            SecretAction.Action1 -> "Вас обокрали на 300$"
+            SecretAction.Action2 -> "Вы попали на распродажу и потратили там 500$"
+            SecretAction.Action3 -> "Вы испортили свои любимые штаны за 40$"
+            SecretAction.Action4 -> "В банке произошла ошибка, и с вас списали 750$"
+            else -> "Вы простудились, и потратили 250$ в аптеке"
+        })
+        sendln(", " + game.currentPlayer.name)
         if (game.currentPlayer.ai)
             aiNegativeEvent(player)
         else
             playerNegativeSecret()
+    }
+
+    fun positiveEventInit(player: Player) {
+        send(game.currentPlayer.name + ", ")
+        sendln(when(game.dice.secret.second){
+            SecretAction.Action1 -> "вы нашли в зимней куртке забытые 250$"
+            SecretAction.Action2 -> "вы выйграли на ставках 500$"
+            SecretAction.Action3 -> "вам вернули долг 300$"
+            SecretAction.Action4 -> "в банке произошла ошибка, на ваш счет перечислено 750$"
+            else -> "ваша собака принесла вам 100$"
+        })
+        if (!game.currentPlayer.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
     }
 
     private fun playerNegativeSecret(){
@@ -203,6 +226,27 @@ class GamePlay: View("Monopoly"){
     fun negativeSurrender(){
         negativeClose()
         playerSurrender(game.currentPlayer)
+    }
+
+    private fun aiNegativeEvent(player: Player){
+        when (game.aiNegativeEvent(player)){
+            Buy -> negativePay()
+            SellUpgrade -> {
+                sellUpgrade(player)
+                aiNegativeEvent(player)
+            }
+            SellField -> {
+                val tmp = game.sellSomeField(player)
+                sellAndVacateField(game.board.fields[tmp], player)
+                aiNegativeEvent(player)
+            }
+            SellNotMonopoly -> {
+                val tmp = game.sellSomeNotMonopolyField(player)
+                sellAndVacateField(game.board.fields[tmp], player)
+                aiNegativeEvent(player)
+            }
+            else -> playerSurrender(player)
+        }
     }
 
     //Prison block
@@ -300,6 +344,20 @@ class GamePlay: View("Monopoly"){
         }
     }
 
+    fun cycleComplete(player: Player) {
+        sendln("Положенная награда в 2000$ за проход круга ваша, " + player.name)
+        if (!player.ai && showAlerts)runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal(resizable = false)}
+    }
+
+    fun stonksAction(player: Player){
+        sendln("Выигрышь в лотерею в размере 3000$!")
+        if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+    }
+
+    fun startAction(player: Player) {
+        sendln("Получите и распишитесь, ${player.name}, 1000$ за попадание на поле Старт!")
+        if (!player.ai && showAlerts)find<SomeActionAlert>().openModal(resizable = false)
+    }
 
     //Board functional
     private val idMotion : Label by fxid()
@@ -686,6 +744,13 @@ class GamePlay: View("Monopoly"){
         game.penaltyInitProperty.onChange { penaltyInit(game.currentPlayer) }
         game.offerToBuyInitProperty.onChange { offerToBuyInit(game.currentPlayer) }
         game.negativeEventInitProperty.onChange { negativeEventInit(game.currentPlayer) }
+        game.positiveEventInitProperty.onChange { positiveEventInit(game.currentPlayer) }
+        game.diceDoubleProperty.onChange { diceDoubleAlert() }
+        game.cycleCompleteProperty.onChange { cycleComplete(game.currentPlayer) }
+        game.stonksActionProperty.onChange { stonksAction(game.currentPlayer) }
+        game.startActionProperty.onChange { startAction(game.currentPlayer) }
+        game.notifyInView.onChange { sendln(game.notifyInView.value) }
+        game.updateUpgradeView.onChange { updateUpgrade() }
     }
 
     private fun linkCostOfField(){
@@ -751,26 +816,10 @@ class GamePlay: View("Monopoly"){
         //positive
         if (game.secretIsPositive()){
             game.positiveSecret()
-            send(game.currentPlayer.name + ", ")
-            sendln(when(game.dice.secret.second){
-                SecretAction.Action1 -> "вы нашли в зимней куртке забытые 250$"
-                SecretAction.Action2 -> "вы выйграли на ставках 500$"
-                SecretAction.Action3 -> "вам вернули долг 300$"
-                SecretAction.Action4 -> "в банке произошла ошибка, на ваш счет перечислено 750$"
-                else -> "ваша собака принесла вам 100$"
-            })
-            if (!game.currentPlayer.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+            game.positiveEventInitProperty.value = !game.positiveEventInitProperty.value
             endMotion()
         }else{//negative
-            send(when(game.dice.secret.second){
-                SecretAction.Action1 -> "Вас обокрали на 300$"
-                SecretAction.Action2 -> "Вы попали на распродажу и потратили там 500$"
-                SecretAction.Action3 -> "Вы испортили свои любимые штаны за 40$"
-                SecretAction.Action4 -> "В банке произошла ошибка, и с вас списали 750$"
-                else -> "Вы простудились, и потратили 250$ в аптеке"
-            })
-            sendln(", " + game.currentPlayer.name)
-            game.negativeEventInitProperty.value++
+            game.negativeEventInitProperty.value = !game.negativeEventInitProperty.value
         }
     }
 
@@ -792,28 +841,7 @@ class GamePlay: View("Monopoly"){
     }
 
     private fun diceDoubleAlert(){
-        if (game.diceDoubleCheck() && !game.currentPlayer.ai && showAlerts) find<DiceDouble>().openModal(resizable = false)
-    }
-
-    private fun aiNegativeEvent(player: Player){
-        when (game.aiNegativeEvent(player)){
-            Buy -> negativePay()
-            SellUpgrade -> {
-                sellUpgrade(player)
-                aiNegativeEvent(player)
-            }
-            SellField -> {
-                val tmp = game.sellSomeField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiNegativeEvent(player)
-            }
-            SellNotMonopoly -> {
-                val tmp = game.sellSomeNotMonopolyField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiNegativeEvent(player)
-            }
-            else -> playerSurrender(player)
-        }
+        if (!game.currentPlayer.ai && showAlerts) find<DiceDouble>().openModal(resizable = false)
     }
 
     private fun sellAndVacateField(field: monopoly.logic.Field, player: Player){
@@ -831,22 +859,18 @@ class GamePlay: View("Monopoly"){
     private fun fieldEvent(player: Player){
         //check cycle completed and reward according to the settings
         if (game.checkCircleComplete()){
-            sendln("Положенная награда в 2000$ за проход круга ваша, " + player.name)
-            if (!player.ai && showAlerts)runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal(resizable = false)}
+           game.cycleCompleteProperty.value = !game.cycleCompleteProperty.value
         }
         //buy realty
         if (game.realtyCanBuy()){
-            sendln("Игрок попал на поле ${game.board.fields[player.position].name}, приобритет ли он его?")
-            game.offerToBuyInitProperty.value++
-            diceDoubleAlert()
+            game.offerToBuyInitProperty.value = !game.offerToBuyInitProperty.value
+            if (game.diceDoubleCheck()) game.diceDoubleProperty.value = !game.diceDoubleProperty.value
             return
         }
         //pay penalty
         if (game.punishmentOrPenalty()){
-            if (!game.ifPunishment()) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
-            else sendln("${player.name}, вас уличили за неуплату налогов! Вы должны оплатить штраф 2000$.")
-            game.penaltyInitProperty.value++
-            diceDoubleAlert()
+            game.penaltyInitProperty.value = !game.penaltyInitProperty.value
+            if (game.diceDoubleCheck()) game.diceDoubleProperty.value = !game.diceDoubleProperty.value
             return
         }
         //player to prison
@@ -856,31 +880,28 @@ class GamePlay: View("Monopoly"){
         }
         //get stonks
         if (game.stonksAction()){
-            sendln("Выигрышь в лотерею в размере 3000$!")
-            if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+            game.stonksActionProperty.value = !game.stonksActionProperty.value
         }
         //secret action
         if (game.ifSecret()){
             secretAction()
-            diceDoubleAlert()
+            if (game.diceDoubleCheck()) game.diceDoubleProperty.value = !game.diceDoubleProperty.value
             return
         }
         //start field
         if (game.startAction()){
-            sendln("Получите и распишитесь, ${player.name}, 1000$ за попадание на поле Старт!")
-            if (!player.ai && showAlerts)find<SomeActionAlert>().openModal(resizable = false)
+            game.startActionProperty.value = !game.startActionProperty.value
         }
         //player owner field
-        if (game.board.fields[player.position].owner != null  &&
-            game.board.fields[player.position].owner!!.id == player.id){
-            sendln("Игрок пришел с проверкой на свое поле")
+        if (game.board.fields[player.position].owner != null  && game.board.fields[player.position].owner!!.id == player.id){
+            game.notifyInView.value = "Игрок пришел с проверкой на свое поле"
         }
 
-        if (player.position == 7) sendln(player.name + " решил прогуляться в парке, рядом с темницей.")
+        if (player.position == 7)  game.notifyInView.value = (player.name + " решил прогуляться в парке, рядом с темницей.")
 
-        if (player.position == 14) sendln(player.name + " наслаждается отдыхом на природе.")
+        if (player.position == 14)  game.notifyInView.value = (player.name + " наслаждается отдыхом на природе.")
 
-        diceDoubleAlert()
+        if (game.diceDoubleCheck()) game.diceDoubleProperty.value = !game.diceDoubleProperty.value
         endMotion()
     }
 
@@ -903,7 +924,7 @@ class GamePlay: View("Monopoly"){
         buttonRoll.disableProperty().value = true
         val player = game.currentPlayer
         if (player.playerInPrison()){
-            game.prisonInitProperty.value ++
+            game.prisonInitProperty.value = !game.prisonInitProperty.value
             return
         }
         game.dice.roll()
@@ -998,13 +1019,13 @@ class GamePlay: View("Monopoly"){
             if (!game.gameIsEnd && !game.data[game.motionPlayer].ai && !game.data[game.motionPlayer].playerInPrison()) buttonRoll.disableProperty().value = false
             if (game.data[game.motionPlayer].ai) {
                 for (i in game.aiInstructions(game.data[game.motionPlayer])){
-                    sendln(game.data[game.motionPlayer].name + " строит филиал. Количество филиалов на поле " + game.board.fields[i].name + " - " + game.board.fields[i].upgrade)
+                    game.notifyInView.value = (game.data[game.motionPlayer].name + " строит филиал. Количество филиалов на поле " + game.board.fields[i].name + " - " + game.board.fields[i].upgrade)
                 }
-                updateUpgrade()
+                game.updateUpgradeView.value = !game.updateUpgradeView.value
             }
             if (!game.dice.double && !game.data[game.motionPlayer].justOutJail){
-                sendln("")
-                sendln("Ваш ход, ${game.data[game.motionPlayer].name} !")
+                game.notifyInView.value = ""
+                game.notifyInView.value = ("Ваш ход, ${game.data[game.motionPlayer].name} !")
             }
             game.data[game.motionPlayer].justOutJail = false
             runAsync {

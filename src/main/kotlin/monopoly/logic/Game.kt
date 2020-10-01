@@ -3,6 +3,7 @@ package monopoly.logic
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.SimpleStringProperty
 import monopoly.logic.CodeInstruction.*
 
 class Game{
@@ -24,12 +25,20 @@ class Game{
         cntPls = data.size
     }
 
+    //manipulate with model
     var gameIsEnd = false
     var endProperty = SimpleBooleanProperty(gameIsEnd)
-    var prisonInitProperty = SimpleIntegerProperty()
-    var penaltyInitProperty = SimpleIntegerProperty()
-    var offerToBuyInitProperty = SimpleIntegerProperty()
-    var negativeEventInitProperty = SimpleIntegerProperty()
+    var prisonInitProperty = SimpleBooleanProperty()
+    var penaltyInitProperty = SimpleBooleanProperty()
+    var offerToBuyInitProperty = SimpleBooleanProperty()
+    var negativeEventInitProperty = SimpleBooleanProperty()
+    var positiveEventInitProperty = SimpleBooleanProperty()
+    var diceDoubleProperty = SimpleBooleanProperty()
+    var cycleCompleteProperty = SimpleBooleanProperty()
+    var stonksActionProperty = SimpleBooleanProperty()
+    var startActionProperty = SimpleBooleanProperty()
+    var notifyInView = SimpleStringProperty()
+    var updateUpgradeView = SimpleBooleanProperty()
 
     fun setGameStatus(status : Boolean) {
         gameIsEnd = !status
