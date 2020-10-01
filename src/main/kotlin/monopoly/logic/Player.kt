@@ -2,7 +2,7 @@ package monopoly.logic
 
 import javafx.beans.property.SimpleIntegerProperty
 
-class Player(val id: Int){
+class Player(val id: Int) {
     var name = "Player$id"
     private var numberOfMoves = 0
     var position = 0
@@ -17,7 +17,7 @@ class Player(val id: Int){
     var finishCircle = false
     var circlesCompleted = 0
     var ai = false
-    var aiDifficulty : Difficulty? = null
+    var aiDifficulty: Difficulty? = null
     var justOutJail = false
 
     init {
@@ -28,51 +28,51 @@ class Player(val id: Int){
         return "[Id = $id] [Name = $name] [Money = $money] [Ai = $ai] [Difficulty = $aiDifficulty]"
     }
 
-    fun hasSomething() : Boolean{
+    fun hasSomething(): Boolean {
         return realty.isNotEmpty()
     }
 
-    fun hasSomeNotMonopoly() : Boolean{
+    fun hasSomeNotMonopoly(): Boolean {
         return realty.filter { it.type !in monopolyRealty }.isNotEmpty()
     }
 
-    fun playerInPrison() : Boolean = prisonDays != 0
+    fun playerInPrison(): Boolean = prisonDays != 0
 
-    fun moneyChange(a : Int){
+    fun moneyChange(a: Int) {
         money += a
         moneyProperty.value = money
     }
 
-    fun positionChange(a : Int){
+    fun positionChange(a: Int) {
         finishCircle = position + a > 27
-        if (finishCircle) circlesCompleted ++
+        if (finishCircle) circlesCompleted++
         numberOfMoves += a
         position = numberOfMoves % 28
         positionProperty.value = position
     }
 
-    fun goToPrison(){
+    fun goToPrison() {
         prisonDays = 1
         doubleInARow = 0
         if (position <= 7)
-            positionChange(7-position)
+            positionChange(7 - position)
         else positionChange(-(position - 7))
     }
 
-    fun checkForMonopoly(field: Field) : Boolean {
+    fun checkForMonopoly(field: Field): Boolean {
         val monopolySize = when (field.location) {
             1, 2, 8, 9, 11, 13, 22, 24, 26, 27 -> 2
             else -> 3
         }
-        if (realty.filter { it.type == field.type}.size == monopolySize){
+        if (realty.filter { it.type == field.type }.size == monopolySize) {
             if (field.type !in monopolyRealty) {
                 monopolyRealty.add(field.type)
-                for (current in realty.filter { it.type == field.type})current.monopolyChange()
-                }
-                return true
+                for (current in realty.filter { it.type == field.type }) current.monopolyChange()
+            }
+            return true
         }
         if (field.type in monopolyRealty) {
-            for (current in realty.filter { it.type == field.type && field.hasMonopoly})current.monopolyChange()
+            for (current in realty.filter { it.type == field.type && field.hasMonopoly }) current.monopolyChange()
             field.monopolyChange()
             monopolyRealty.remove(field.type)
         }

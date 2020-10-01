@@ -13,11 +13,11 @@ var showAlerts = true
 
 var showActionLog = true
 
-class MyApp: App(Begin::class){
+class MyApp : App(Begin::class) {
     override fun start(stage: Stage) {
         with(stage) {
-        isResizable = false
-    }
+            isResizable = false
+        }
         stage.icons.add(Image("monopoly/dice.png"))
         super.start(stage)
     }

@@ -9,18 +9,18 @@ import javafx.scene.layout.AnchorPane
 import javafx.util.Duration
 import tornadofx.*
 
-class ExchangeToPlayer : Fragment(){
+class ExchangeToPlayer : Fragment() {
 
-    override val root : AnchorPane by fxml()
+    override val root: AnchorPane by fxml()
 
-    private val tableViewSender : TableView<monopoly.logic.Field> by fxid()
-    private val tableViewReceiver : TableView<monopoly.logic.Field> by fxid()
-    private val senderOfferTrade : TableView<monopoly.logic.Field> by fxid()
-    private val receiverOfferTrade : TableView<monopoly.logic.Field> by fxid()
+    private val tableViewSender: TableView<monopoly.logic.Field> by fxid()
+    private val tableViewReceiver: TableView<monopoly.logic.Field> by fxid()
+    private val senderOfferTrade: TableView<monopoly.logic.Field> by fxid()
+    private val receiverOfferTrade: TableView<monopoly.logic.Field> by fxid()
 
-    private val nameSender : Label by fxid()
-    private val nameReceiver : Label by fxid()
-    private val errorLabel : Label by fxid()
+    private val nameSender: Label by fxid()
+    private val nameReceiver: Label by fxid()
+    private val errorLabel: Label by fxid()
 
     private val realtySender = game.exchangeSender.realty.asObservable()
     private val realtyReceiver = game.exchangeReceiver.realty.asObservable()
@@ -28,10 +28,10 @@ class ExchangeToPlayer : Fragment(){
     private val selectedToTrade = mutableListOf<monopoly.logic.Field>().asObservable()
     private val receivedToTrade = mutableListOf<monopoly.logic.Field>().asObservable()
 
-    private val money1Field : TextField by fxid()
-    private val money2Field : TextField by fxid()
+    private val money1Field: TextField by fxid()
+    private val money2Field: TextField by fxid()
 
-    private val sendBtn : Button by fxid()
+    private val sendBtn: Button by fxid()
 
     init {
         nameSender.text = game.exchangeSender.name
@@ -51,11 +51,11 @@ class ExchangeToPlayer : Fragment(){
         sendBtn.tooltip("Разность в обмене не может превышать двух")
     }
 
-    fun mouseClickedSend(e : MouseEvent) {
+    fun mouseClickedSend(e: MouseEvent) {
         if (e.clickCount == 2) addField()
     }
 
-    fun mouseClickedBack(e : MouseEvent) {
+    fun mouseClickedBack(e: MouseEvent) {
         if (e.clickCount == 2) deleteField()
     }
 
@@ -81,18 +81,18 @@ class ExchangeToPlayer : Fragment(){
         }
     }
 
-    fun sendExchange(){
+    fun sendExchange() {
         var temp1 = money1Field.text
         try {
             temp1.toInt().toString()
-        } catch (e : NumberFormatException){
+        } catch (e: NumberFormatException) {
             temp1 = "0"
         }
         val money1 = temp1.toInt()
         var temp2 = money2Field.text
         try {
             temp2.toInt().toString()
-        } catch (e : NumberFormatException){
+        } catch (e: NumberFormatException) {
             temp2 = "0"
         }
         val money2 = temp2.toInt()

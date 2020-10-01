@@ -6,33 +6,33 @@ import javafx.scene.text.Text
 import monopoly.logic.SecretAction
 import tornadofx.Fragment
 
-class SomeActionAlert : Fragment(){
-    override val root : AnchorPane by fxml()
+class SomeActionAlert : Fragment() {
+    override val root: AnchorPane by fxml()
 
-    private val message : Text by fxid()
+    private val message: Text by fxid()
 
-    private val player : Label by fxid()
+    private val player: Label by fxid()
 
-    private val prisonText : Text by fxid()
+    private val prisonText: Text by fxid()
 
     init {
-        player.text =  game.currentPlayer.name
+        player.text = game.currentPlayer.name
         //prison
-        if (game.currentPlayer.playerInPrison()){
+        if (game.currentPlayer.playerInPrison()) {
             prisonText.opacity = 1.0
-            if (game.prisonByDouble){
+            if (game.prisonByDouble) {
                 message.text = "Вы отправляетесь в тюрьму, за махинации с кубиками."
-            }else{
+            } else {
                 message.text = "Вы отправляетесь в тюрьму, за неуплату налогов."
             }
         }
         //stonks
-        if (game.ifStonks()){
+        if (game.ifStonks()) {
             message.text = "Вы выйграли 3000 в лотерее!"
         }
         //secret only positive
-        if (game.ifSecret()){
-            when(game.dice.secret.second){
+        if (game.ifSecret()) {
+            when (game.dice.secret.second) {
                 SecretAction.Action1 -> message.text = "Вы нашли в зимней куртке забытые 250"
                 SecretAction.Action2 -> message.text = "Вы выйграли на ставках 500"
                 SecretAction.Action3 -> message.text = "Вам вернули долг 300"
@@ -44,7 +44,7 @@ class SomeActionAlert : Fragment(){
         if (game.ifStart()) message.text = "За попадание на поле СТАРТ, вы получаете 1000"
     }
 
-    fun exit(){
+    fun exit() {
         close()
     }
 }

@@ -4,23 +4,24 @@ import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
 import tornadofx.Fragment
 
-class FinishGame : Fragment(){
+class FinishGame : Fragment() {
 
-    override val root : AnchorPane by fxml()
-    private val winner : Label by fxid()
+    override val root: AnchorPane by fxml()
+    private val winner: Label by fxid()
 
     init {
-        winner.text =  game.currentPlayer.name
-        runAsync { Thread.sleep(100) }ui{
-            gamePlay.buttonRoll.disableProperty().value = true}
+        winner.text = game.currentPlayer.name
+        runAsync { Thread.sleep(100) } ui {
+            gamePlay.buttonRoll.disableProperty().value = true
+        }
     }
 
-    fun newGame(){
+    fun newGame() {
         gamePlay.newGame()
         close()
     }
 
-    fun exit(){
+    fun exit() {
         gamePlay.close()
         close()
     }

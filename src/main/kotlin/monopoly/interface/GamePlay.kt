@@ -17,40 +17,40 @@ import monopoly.logic.Player
 import monopoly.logic.SecretAction
 import tornadofx.*
 
-class GamePlay: View("Monopoly"){
+class GamePlay : View("Monopoly") {
 
-    override val root : AnchorPane by fxml()
+    override val root: AnchorPane by fxml()
 
-    private val alertCheck : CheckMenuItem by fxid()
-    private val actionLogChek : CheckMenuItem by fxid()
+    private val alertCheck: CheckMenuItem by fxid()
+    private val actionLogChek: CheckMenuItem by fxid()
 
-    private val textArea : TextArea by fxid()
+    private val textArea: TextArea by fxid()
 
     //Offer to buy field block
-    private val offerToBuy : AnchorPane by fxid()
-    private val offerCostRealty : Label by fxid()
-    private val offerTypeRealty : Label by fxid()
-    private val offerNotEnoughMoney : Label by fxid()
+    private val offerToBuy: AnchorPane by fxid()
+    private val offerCostRealty: Label by fxid()
+    private val offerTypeRealty: Label by fxid()
+    private val offerNotEnoughMoney: Label by fxid()
 
-    fun offerToBuyInit(player : Player) {
+    fun offerToBuyInit(player: Player) {
         sendln("Игрок попал на поле ${game.board.fields[player.position].name}, приобритет ли он его?")
-        if (player.ai){
+        if (player.ai) {
             aiBuyInstructions(player)
-        }else
+        } else
             playerOfferToBuy(player)
     }
 
-    private fun playerOfferToBuy(player: Player){
+    private fun playerOfferToBuy(player: Player) {
         offerToBuy.opacity = 1.0
         offerToBuy.disableProperty().value = false
         offerCostRealty.text = "${game.board.fields[player.position].cost}"
         offerTypeRealty.text = "${game.board.fields[player.position].type}"
     }
 
-    fun offerAccept(){
+    fun offerAccept() {
         val player = game.currentPlayer
-        if (game.playerAcceptBuyRealty()){
-            when(game.data.indexOf(player)){
+        if (game.playerAcceptBuyRealty()) {
+            when (game.data.indexOf(player)) {
                 0 -> paintField(player.position, c("#f13030"))
                 1 -> paintField(player.position, c("#f27330"))
                 2 -> paintField(player.position, c("green"))
@@ -67,44 +67,44 @@ class GamePlay: View("Monopoly"){
         offerNotEnoughMoney.opacity = 1.0
     }
 
-    fun offerReject(){
+    fun offerReject() {
         offerNotEnoughMoney.opacity = 0.0
         offerToBuy.opacity = 0.0
         offerToBuy.disableProperty().value = true
         game.endMotion()
     }
 
-    private fun aiBuyInstructions(player: Player){
-        when(game.aiBuyInstructions(player)){
+    private fun aiBuyInstructions(player: Player) {
+        when (game.aiBuyInstructions(player)) {
             Buy -> offerAccept()
-            SellUpgrade ->{
+            SellUpgrade -> {
                 sellUpgrade(player)
                 aiBuyInstructions(player)
             }
-            SellField ->{
+            SellField -> {
                 val tmp = game.sellSomeOtherTypeField(player)
                 sellAndVacateField(game.board.fields[tmp], player)
                 aiBuyInstructions(player)
             }
             else -> runAsync {
                 Thread.sleep(100)
-            }ui{game.endMotion()}
+            } ui { game.endMotion() }
         }
     }
 
     //Pay penalty block
-    private val payPenalty : AnchorPane by fxid()
-    private val penaltyOwner : Label by fxid()
-    private val penaltyCost : Label by fxid()
-    private val penaltyNotEnoughMoney : Label by fxid()
-    private val textPunisment : Label by fxid()
+    private val payPenalty: AnchorPane by fxid()
+    private val penaltyOwner: Label by fxid()
+    private val penaltyCost: Label by fxid()
+    private val penaltyNotEnoughMoney: Label by fxid()
+    private val textPunisment: Label by fxid()
 
-    private fun penaltyInit(player: Player){
+    private fun penaltyInit(player: Player) {
         if (!game.ifPunishment()) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
         else sendln("${player.name}, вас уличили за неуплату налогов! Вы должны оплатить штраф 2000$.")
         if (player.ai) {
             aiPunisment(player)
-        }else {
+        } else {
             penaltyPlayer(player)
         }
     }
@@ -116,20 +116,20 @@ class GamePlay: View("Monopoly"){
         payPenalty.disableProperty().value = false
         if (!game.ifPunishment()) {
             penaltyOwner.text = game.board.fields[player.position].owner!!.name
-        }else {
+        } else {
             textPunisment.text = "Вас уличили за неуплату налогов!"
         }
         penaltyCost.text = "${game.board.fields[player.position].penalty}"
     }
 
-    private fun penaltyClose(){
+    private fun penaltyClose() {
         penaltyNotEnoughMoney.opacity = 0.0
         payPenalty.opacity = 0.0
         payPenalty.disableProperty().value = true
     }
 
-    fun penaltyAccept(){
-        if (game.playerPayPenalty()){
+    fun penaltyAccept() {
+        if (game.playerPayPenalty()) {
             penaltyClose()
             game.endMotion()
             return
@@ -137,13 +137,13 @@ class GamePlay: View("Monopoly"){
         penaltyNotEnoughMoney.opacity = 1.0
     }
 
-    fun penaltySurrender(){
+    fun penaltySurrender() {
         penaltyClose()
         game.playerSurrender()
     }
 
-    private fun aiPunisment(player: Player){
-        when (game.aiPunisment(player)){
+    private fun aiPunisment(player: Player) {
+        when (game.aiPunisment(player)) {
             Buy -> penaltyAccept()
             SellUpgrade -> {
                 sellUpgrade(player)
@@ -164,18 +164,20 @@ class GamePlay: View("Monopoly"){
     }
 
     //Secret action block
-    private val negativeAction : AnchorPane by fxid()
-    private val negativeText : Text by fxid()
-    private val negativeNotEnoughMoney : Label by fxid()
+    private val negativeAction: AnchorPane by fxid()
+    private val negativeText: Text by fxid()
+    private val negativeNotEnoughMoney: Label by fxid()
 
     fun negativeEventInit(player: Player) {
-        send(when(game.dice.secret.second){
-            SecretAction.Action1 -> "Вас обокрали на 300$"
-            SecretAction.Action2 -> "Вы попали на распродажу и потратили там 500$"
-            SecretAction.Action3 -> "Вы испортили свои любимые штаны за 40$"
-            SecretAction.Action4 -> "В банке произошла ошибка, и с вас списали 750$"
-            else -> "Вы простудились, и потратили 250$ в аптеке"
-        })
+        send(
+            when (game.dice.secret.second) {
+                SecretAction.Action1 -> "Вас обокрали на 300$"
+                SecretAction.Action2 -> "Вы попали на распродажу и потратили там 500$"
+                SecretAction.Action3 -> "Вы испортили свои любимые штаны за 40$"
+                SecretAction.Action4 -> "В банке произошла ошибка, и с вас списали 750$"
+                else -> "Вы простудились, и потратили 250$ в аптеке"
+            }
+        )
         sendln(", " + game.currentPlayer.name)
         if (game.currentPlayer.ai)
             aiNegativeEvent(player)
@@ -185,20 +187,22 @@ class GamePlay: View("Monopoly"){
 
     fun positiveEventInit(player: Player) {
         send(player.name + ", ")
-        sendln(when(game.dice.secret.second){
-            SecretAction.Action1 -> "вы нашли в зимней куртке забытые 250$"
-            SecretAction.Action2 -> "вы выйграли на ставках 500$"
-            SecretAction.Action3 -> "вам вернули долг 300$"
-            SecretAction.Action4 -> "в банке произошла ошибка, на ваш счет перечислено 750$"
-            else -> "ваша собака принесла вам 100$"
-        })
+        sendln(
+            when (game.dice.secret.second) {
+                SecretAction.Action1 -> "вы нашли в зимней куртке забытые 250$"
+                SecretAction.Action2 -> "вы выйграли на ставках 500$"
+                SecretAction.Action3 -> "вам вернули долг 300$"
+                SecretAction.Action4 -> "в банке произошла ошибка, на ваш счет перечислено 750$"
+                else -> "ваша собака принесла вам 100$"
+            }
+        )
         if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
     }
 
-    private fun playerNegativeSecret(){
+    private fun playerNegativeSecret() {
         negativeAction.opacity = 1.0
         negativeAction.disableProperty().value = false
-        when(game.dice.secret.second){
+        when (game.dice.secret.second) {
             SecretAction.Action1 -> negativeText.text = "Вас обокрали на 300"
             SecretAction.Action2 -> negativeText.text = "Вы попали на распродажу и потратили там 500"
             SecretAction.Action3 -> negativeText.text = "Вы испортили свои любимые штаны за 40"
@@ -207,14 +211,14 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    private fun negativeClose(){
+    private fun negativeClose() {
         negativeAction.opacity = 0.0
         negativeAction.disableProperty().value = true
         negativeNotEnoughMoney.opacity = 0.0
     }
 
-    fun negativePay(){
-        if (game.negativePay()){
+    fun negativePay() {
+        if (game.negativePay()) {
             negativeClose()
             game.endMotion()
             return
@@ -222,13 +226,13 @@ class GamePlay: View("Monopoly"){
         negativeNotEnoughMoney.opacity = 1.0
     }
 
-    fun negativeSurrender(){
+    fun negativeSurrender() {
         negativeClose()
         game.playerSurrender()
     }
 
-    private fun aiNegativeEvent(player: Player){
-        when (game.aiNegativeEvent(player)){
+    private fun aiNegativeEvent(player: Player) {
+        when (game.aiNegativeEvent(player)) {
             Buy -> negativePay()
             SellUpgrade -> {
                 sellUpgrade(player)
@@ -249,22 +253,22 @@ class GamePlay: View("Monopoly"){
     }
 
     //Prison block
-    private val prison : AnchorPane by fxid()
-    private val prisonCountMoves : Label by fxid()
-    private val prisonNotEnoughMoney : Label by fxid()
-    private val prisonMessage : Label by fxid()
-    private val prisonTryButton : Button by fxid()
-    private val prisonSurrenderButton : Button by fxid()
+    private val prison: AnchorPane by fxid()
+    private val prisonCountMoves: Label by fxid()
+    private val prisonNotEnoughMoney: Label by fxid()
+    private val prisonMessage: Label by fxid()
+    private val prisonTryButton: Button by fxid()
+    private val prisonSurrenderButton: Button by fxid()
 
-    private fun prisonInit(player : Player) {
+    private fun prisonInit(player: Player) {
         if (player.ai) {
             aiPrisonInstructions(player)
-        }else {
+        } else {
             prisonPlayer()
         }
     }
 
-    private fun prisonPlayer(){
+    private fun prisonPlayer() {
         prisonMessage.text = "Заплатите 500, или выбейте дубль"
         prisonNotEnoughMoney.opacity = 0.0
         prison.opacity = 1.0
@@ -279,16 +283,16 @@ class GamePlay: View("Monopoly"){
         prisonCountMoves.text = "${4 - game.currentPlayer.prisonDays}"
     }
 
-    private fun prisonClose(){
+    private fun prisonClose() {
         prison.opacity = 0.0
         prison.disableProperty().value = true
         prisonSurrenderButton.opacity = 0.0
         prisonSurrenderButton.disableProperty().value = true
     }
 
-    fun prisonPay(){
+    fun prisonPay() {
         val tmp = game.prisonPay()
-        if(tmp in 1..2){
+        if (tmp in 1..2) {
             if (tmp == 1) sendln("${game.currentPlayer.name} выходит из тюрьмы, заплатив 750$.")
             else sendln("${game.currentPlayer.name} выходит из тюрьмы, заплатив 500$.")
             prisonClose()
@@ -298,15 +302,14 @@ class GamePlay: View("Monopoly"){
         prisonNotEnoughMoney.opacity = 1.0
     }
 
-    fun prisonTry(){
+    fun prisonTry() {
         game.dice.roll()
         prisonClose()
-        runAsync { Thread.sleep(600) }ui{
-            if (game.prisonTry()){
+        runAsync { Thread.sleep(600) } ui {
+            if (game.prisonTry()) {
                 sendln("${game.currentPlayer.name} выходит из тюрьмы, выбив дубль!")
                 game.playerMove(game.currentPlayer)
-            }
-            else{
+            } else {
                 if (4 - game.currentPlayer.prisonDays + 1 != 1)
                     sendln("Игрок остается в тюрьме еще на ${4 - game.currentPlayer.prisonDays + 1} хода.")
                 else
@@ -316,20 +319,20 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    fun prisonSurrender(){
+    fun prisonSurrender() {
         prisonClose()
         game.playerSurrender()
     }
 
-    private fun aiPrisonInstructions(player: Player){
-        when(game.aiPrisonInstructions(player)){
+    private fun aiPrisonInstructions(player: Player) {
+        when (game.aiPrisonInstructions(player)) {
             Buy -> prisonPay()
             PrisonTry -> prisonTry()
             SellUpgrade -> {
                 sellUpgrade(player)
                 aiPrisonInstructions(player)
             }
-            SellField ->{
+            SellField -> {
                 val tmp = game.sellSomeField(player)
                 sellAndVacateField(game.board.fields[tmp], player)
                 aiPrisonInstructions(player)
@@ -343,97 +346,101 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    fun cycleComplete(player: Player) {
+    private fun cycleComplete(player: Player) {
         sendln("Положенная награда в 2000$ за проход круга ваша, " + player.name)
-        if (!player.ai && showAlerts)runAsync { Thread.sleep(300) }ui{find<CycleComplete>().openModal(resizable = false)}
+        if (!player.ai && showAlerts) runAsync { Thread.sleep(300) } ui { find<CycleComplete>().openModal(resizable = false) }
     }
 
-    fun stonksAction(player: Player){
+    private fun stonksAction(player: Player) {
         sendln("Выигрышь в лотерею в размере 3000$!")
         if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
     }
 
-    fun startAction(player: Player) {
+    private fun startAction(player: Player) {
         sendln("Получите и распишитесь, ${player.name}, 1000$ за попадание на поле Старт!")
-        if (!player.ai && showAlerts)find<SomeActionAlert>().openModal(resizable = false)
+        if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
     }
 
-    fun playerToPrisonView(player: Player) {
+    private fun playerToPrisonView(player: Player) {
         game.notifyInView.value = ("Не скучайте за решёткой, ${game.currentPlayer.name}!")
         if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
     }
 
     //Board functional
-    private val idMotion : Label by fxid()
+    private val idMotion: Label by fxid()
 
-    val buttonRoll : Button by fxid()
+    val buttonRoll: Button by fxid()
 
     //models of players & moves
-    private val model1 : Rectangle by fxid()
-    private val model2 : Rectangle by fxid()
-    private val model3 : Rectangle by fxid()
-    private val model4 : Rectangle by fxid()
-    private val model5 : Rectangle by fxid()
+    private val model1: Rectangle by fxid()
+    private val model2: Rectangle by fxid()
+    private val model3: Rectangle by fxid()
+    private val model4: Rectangle by fxid()
+    private val model5: Rectangle by fxid()
     //animation
-    private fun movePlayer1(a : Int, prison : Boolean){
+    private fun movePlayer1(a: Int, prison: Boolean) {
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                if (prison){
+                if (prison) {
                     keyvalue(model1.layoutXProperty(), game.player1Default.first + game.prisonPosition.first)
                     keyvalue(model1.layoutYProperty(), game.player1Default.second + game.prisonPosition.second)
-                }else {
+                } else {
                     keyvalue(model1.layoutXProperty(), game.player1Default.first + game.board.fields[a].layoutX)
                     keyvalue(model1.layoutYProperty(), game.player1Default.second + game.board.fields[a].layoutY)
                 }
             }
         }
     }
-    private fun movePlayer2(a : Int, prison : Boolean){
+
+    private fun movePlayer2(a: Int, prison: Boolean) {
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                if (prison){
+                if (prison) {
                     keyvalue(model2.layoutXProperty(), game.player2Default.first + game.prisonPosition.first)
                     keyvalue(model2.layoutYProperty(), game.player2Default.second + game.prisonPosition.second)
-                }else {
+                } else {
                     keyvalue(model2.layoutXProperty(), game.player2Default.first + game.board.fields[a].layoutX)
                     keyvalue(model2.layoutYProperty(), game.player2Default.second + game.board.fields[a].layoutY)
                 }
             }
         }
     }
-    private fun movePlayer3(a : Int, prison : Boolean){
+
+    private fun movePlayer3(a: Int, prison: Boolean) {
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                if (prison){
+                if (prison) {
                     keyvalue(model3.layoutXProperty(), game.player3Default.first + game.prisonPosition.first)
                     keyvalue(model3.layoutYProperty(), game.player3Default.second + game.prisonPosition.second)
-                }else {
+                } else {
                     keyvalue(model3.layoutXProperty(), game.player3Default.first + game.board.fields[a].layoutX)
                     keyvalue(model3.layoutYProperty(), game.player3Default.second + game.board.fields[a].layoutY)
                 }
             }
         }
     }
-    private fun movePlayer4(a : Int, prison : Boolean){
+
+    private fun movePlayer4(a: Int, prison: Boolean) {
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                if (prison){
+                if (prison) {
                     keyvalue(model4.layoutXProperty(), game.player4Default.first + game.prisonPosition.first)
                     keyvalue(model4.layoutYProperty(), game.player4Default.second + game.prisonPosition.second)
-                }else {
+                } else {
                     keyvalue(model4.layoutXProperty(), game.player4Default.first + game.board.fields[a].layoutX)
                     keyvalue(model4.layoutYProperty(), game.player4Default.second + game.board.fields[a].layoutY)
                 }
             }
         }
     }
-    private fun movePlayer5(a : Int, prison : Boolean){
+
+    private fun movePlayer5(a: Int, prison: Boolean) {
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                if (prison){
+                if (prison) {
                     keyvalue(model5.layoutXProperty(), game.player5Default.first + game.prisonPosition.first)
                     keyvalue(model5.layoutYProperty(), game.player5Default.second + game.prisonPosition.second)
-                }else {
+                } else {
                     keyvalue(model5.layoutXProperty(), game.player5Default.first + game.board.fields[a].layoutX)
                     keyvalue(model5.layoutYProperty(), game.player5Default.second + game.board.fields[a].layoutY)
                 }
@@ -443,31 +450,41 @@ class GamePlay: View("Monopoly"){
     //start model position
 
     //player property description
-    private val playerField1 : VBox by fxid()
-    private val playerField2 : VBox by fxid()
-    private val playerField3 : VBox by fxid()
-    private val playerField4 : VBox by fxid()
-    private val playerField5 : VBox by fxid()
-    private val moneylbl1 : Label by fxid()
-    private val moneylbl2 : Label by fxid()
-    private val moneylbl3 : Label by fxid()
-    private val moneylbl4 : Label by fxid()
-    private val moneylbl5 : Label by fxid()
-    private val pl1 : Label by fxid()
-    private val pl2 : Label by fxid()
-    private val pl3 : Label by fxid()
-    private val pl4 : Label by fxid()
-    private val pl5 : Label by fxid()
+    private val playerField1: VBox by fxid()
+    private val playerField2: VBox by fxid()
+    private val playerField3: VBox by fxid()
+    private val playerField4: VBox by fxid()
+    private val playerField5: VBox by fxid()
+    private val moneylbl1: Label by fxid()
+    private val moneylbl2: Label by fxid()
+    private val moneylbl3: Label by fxid()
+    private val moneylbl4: Label by fxid()
+    private val moneylbl5: Label by fxid()
+    private val pl1: Label by fxid()
+    private val pl2: Label by fxid()
+    private val pl3: Label by fxid()
+    private val pl4: Label by fxid()
+    private val pl5: Label by fxid()
 
-    fun player1Offer() { if (game.canExchange(game.currentPlayer, game.data[0])) openOfferWindow() }
+    fun player1Offer() {
+        if (game.canExchange(game.currentPlayer, game.data[0])) openOfferWindow()
+    }
 
-    fun player2Offer() { if (game.canExchange(game.currentPlayer, game.data[1])) openOfferWindow() }
+    fun player2Offer() {
+        if (game.canExchange(game.currentPlayer, game.data[1])) openOfferWindow()
+    }
 
-    fun player3Offer() { if (game.data.size > 2 && game.canExchange(game.currentPlayer, game.data[2])) openOfferWindow() }
+    fun player3Offer() {
+        if (game.data.size > 2 && game.canExchange(game.currentPlayer, game.data[2])) openOfferWindow()
+    }
 
-    fun player4Offer() { if (game.data.size > 3 && game.canExchange(game.currentPlayer, game.data[3])) openOfferWindow() }
+    fun player4Offer() {
+        if (game.data.size > 3 && game.canExchange(game.currentPlayer, game.data[3])) openOfferWindow()
+    }
 
-    fun player5Offer() { if (game.data.size > 4 && game.canExchange(game.currentPlayer, game.data[4])) openOfferWindow() }
+    fun player5Offer() {
+        if (game.data.size > 4 && game.canExchange(game.currentPlayer, game.data[4])) openOfferWindow()
+    }
 
     private fun openOfferWindow() {
         find<ExchangeToPlayer>().openModal(resizable = false)!!.setOnCloseRequest {
@@ -477,7 +494,7 @@ class GamePlay: View("Monopoly"){
 
     fun offerLog() {
         send("${game.exchangeSender.name} получает при обмене: ")
-        for (i in game.exchangeReceiverList.withIndex()){
+        for (i in game.exchangeReceiverList.withIndex()) {
             if (i.index != game.exchangeReceiverList.size - 1) {
                 send(" ${i.value.name},")
             } else {
@@ -485,7 +502,7 @@ class GamePlay: View("Monopoly"){
             }
         }
         send("${game.exchangeReceiver.name} получает при обмене: ")
-        for (i in game.exchangeSenderList.withIndex()){
+        for (i in game.exchangeSenderList.withIndex()) {
             if (i.index != game.exchangeSenderList.size - 1) {
                 send(" ${i.value.name}, ")
             } else {
@@ -494,125 +511,181 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    fun updateColor(player : Player) {
-        val color = when(game.data.indexOf(player)){
+    fun updateColor(player: Player) {
+        val color = when (game.data.indexOf(player)) {
             0 -> c("#f13030")
             1 -> c("#f27330")
             2 -> c("green")
             3 -> c("#03a3d1")
             else -> c("#eb15dc")
         }
-        for (field in player.realty){
+        for (field in player.realty) {
             paintField(field.location, color)
         }
     }
 
     //game realty fields
-    private val field1 : VBox by fxid()
-    private val field1Penalty : Label by fxid()
-    private val labelUpgrade1 : Label by fxid()
-    fun field1Action(){ if (game.canControl(1)) find<Field>().openModal(resizable = false) }
-    private val field2 : VBox by fxid()
-    private val field2Penalty : Label by fxid()
-    private val labelUpgrade2 : Label by fxid()
-    fun field2Action(){ if (game.canControl(2)) find<Field>().openModal(resizable = false) }
-    private val field3 : VBox by fxid()
-    private val field3Penalty : Label by fxid()
-    private val labelUpgrade3 : Label by fxid()
-    fun field3Action(){ if (game.canControl(3)) find<Field>().openModal(resizable = false) }
-    private val field5 : VBox by fxid()
-    private val field5Penalty : Label by fxid()
-    private val labelUpgrade5 : Label by fxid()
-    fun field5Action(){ if (game.canControl(5)) find<Field>().openModal(resizable = false) }
-    private val field6 : VBox by fxid()
-    private val field6Penalty : Label by fxid()
-    private val labelUpgrade6 : Label by fxid()
-    fun field6Action(){ if (game.canControl(6)) find<Field>().openModal(resizable = false) }
-    private val field8 : HBox by fxid()
-    private val field8Penalty : Label by fxid()
-    private val labelUpgrade8 : Label by fxid()
-    fun field8Action(){ if (game.canControl(8))  find<Field>().openModal(resizable = false) }
-    private val field9 : HBox by fxid()
-    private val field9Penalty : Label by fxid()
-    private val labelUpgrade9 : Label by fxid()
-    fun field9Action(){ if (game.canControl(9)) find<Field>().openModal(resizable = false) }
-    private val field10 : HBox by fxid()
-    private val field10Penalty : Label by fxid()
-    private val labelUpgrade10 : Label by fxid()
-    fun field10Action(){ if (game.canControl(10)) find<Field>().openModal(resizable = false) }
-    private val field11 : HBox by fxid()
-    private val field11Penalty : Label by fxid()
-    private val labelUpgrade11 : Label by fxid()
-    fun field11Action(){ if (game.canControl(11)) find<Field>().openModal(resizable = false) }
-    private val field13 : HBox by fxid()
-    private val field13Penalty : Label by fxid()
-    private val labelUpgrade13 : Label by fxid()
-    fun field13Action(){ if (game.canControl(13)) find<Field>().openModal(resizable = false) }
-    private val field15 : VBox by fxid()
-    private val field15Penalty : Label by fxid()
-    private val labelUpgrade15 : Label by fxid()
-    fun field15Action(){ if (game.canControl(15)) find<Field>().openModal(resizable = false) }
-    private val field16 : VBox by fxid()
-    private val field16Penalty : Label by fxid()
-    private val labelUpgrade16 : Label by fxid()
-    fun field16Action(){ if (game.canControl(16)) find<Field>().openModal(resizable = false) }
-    private val field17 : VBox by fxid()
-    private val field17Penalty : Label by fxid()
-    private val labelUpgrade17 : Label by fxid()
-    fun field17Action(){ if (game.canControl(17)) find<Field>().openModal(resizable = false) }
-    private val field19 : VBox by fxid()
-    private val field19Penalty : Label by fxid()
-    private val labelUpgrade19 : Label by fxid()
-    fun field19Action(){ if (game.canControl(19)) find<Field>().openModal(resizable = false) }
-    private val field22 : HBox by fxid()
-    private val field22Penalty : Label by fxid()
-    private val labelUpgrade22 : Label by fxid()
-    fun field22Action(){ if (game.canControl(22)) find<Field>().openModal(resizable = false) }
-    private val field24 : HBox by fxid()
-    private val field24Penalty : Label by fxid()
-    private val labelUpgrade24 : Label by fxid()
-    fun field24Action(){ if (game.canControl(24)) find<Field>().openModal(resizable = false) }
-    private val field25 : HBox by fxid()
-    private val field25Penalty : Label by fxid()
-    private val labelUpgrade25 : Label by fxid()
-    fun field25Action(){ if (game.canControl(25)) find<Field>().openModal(resizable = false) }
-    private val field26 : HBox by fxid()
-    private val field26Penalty : Label by fxid()
-    private val labelUpgrade26 : Label by fxid()
-    fun field26Action(){ if (game.canControl(26)) find<Field>().openModal(resizable = false) }
-    private val field27 : HBox by fxid()
-    private val field27Penalty : Label by fxid()
-    private val labelUpgrade27 : Label by fxid()
-    fun field27Action(){ if (game.canControl(27)) find<Field>().openModal(resizable = false) }
+    private val field1: VBox by fxid()
+    private val field1Penalty: Label by fxid()
+    private val labelUpgrade1: Label by fxid()
+    fun field1Action() {
+        if (game.canControl(1)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field2: VBox by fxid()
+    private val field2Penalty: Label by fxid()
+    private val labelUpgrade2: Label by fxid()
+    fun field2Action() {
+        if (game.canControl(2)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field3: VBox by fxid()
+    private val field3Penalty: Label by fxid()
+    private val labelUpgrade3: Label by fxid()
+    fun field3Action() {
+        if (game.canControl(3)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field5: VBox by fxid()
+    private val field5Penalty: Label by fxid()
+    private val labelUpgrade5: Label by fxid()
+    fun field5Action() {
+        if (game.canControl(5)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field6: VBox by fxid()
+    private val field6Penalty: Label by fxid()
+    private val labelUpgrade6: Label by fxid()
+    fun field6Action() {
+        if (game.canControl(6)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field8: HBox by fxid()
+    private val field8Penalty: Label by fxid()
+    private val labelUpgrade8: Label by fxid()
+    fun field8Action() {
+        if (game.canControl(8)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field9: HBox by fxid()
+    private val field9Penalty: Label by fxid()
+    private val labelUpgrade9: Label by fxid()
+    fun field9Action() {
+        if (game.canControl(9)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field10: HBox by fxid()
+    private val field10Penalty: Label by fxid()
+    private val labelUpgrade10: Label by fxid()
+    fun field10Action() {
+        if (game.canControl(10)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field11: HBox by fxid()
+    private val field11Penalty: Label by fxid()
+    private val labelUpgrade11: Label by fxid()
+    fun field11Action() {
+        if (game.canControl(11)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field13: HBox by fxid()
+    private val field13Penalty: Label by fxid()
+    private val labelUpgrade13: Label by fxid()
+    fun field13Action() {
+        if (game.canControl(13)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field15: VBox by fxid()
+    private val field15Penalty: Label by fxid()
+    private val labelUpgrade15: Label by fxid()
+    fun field15Action() {
+        if (game.canControl(15)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field16: VBox by fxid()
+    private val field16Penalty: Label by fxid()
+    private val labelUpgrade16: Label by fxid()
+    fun field16Action() {
+        if (game.canControl(16)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field17: VBox by fxid()
+    private val field17Penalty: Label by fxid()
+    private val labelUpgrade17: Label by fxid()
+    fun field17Action() {
+        if (game.canControl(17)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field19: VBox by fxid()
+    private val field19Penalty: Label by fxid()
+    private val labelUpgrade19: Label by fxid()
+    fun field19Action() {
+        if (game.canControl(19)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field22: HBox by fxid()
+    private val field22Penalty: Label by fxid()
+    private val labelUpgrade22: Label by fxid()
+    fun field22Action() {
+        if (game.canControl(22)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field24: HBox by fxid()
+    private val field24Penalty: Label by fxid()
+    private val labelUpgrade24: Label by fxid()
+    fun field24Action() {
+        if (game.canControl(24)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field25: HBox by fxid()
+    private val field25Penalty: Label by fxid()
+    private val labelUpgrade25: Label by fxid()
+    fun field25Action() {
+        if (game.canControl(25)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field26: HBox by fxid()
+    private val field26Penalty: Label by fxid()
+    private val labelUpgrade26: Label by fxid()
+    fun field26Action() {
+        if (game.canControl(26)) find<Field>().openModal(resizable = false)
+    }
+
+    private val field27: HBox by fxid()
+    private val field27Penalty: Label by fxid()
+    private val labelUpgrade27: Label by fxid()
+    fun field27Action() {
+        if (game.canControl(27)) find<Field>().openModal(resizable = false)
+    }
 
     //paint field by owner
-    fun paintField(number: Int, color : Color){
+    fun paintField(number: Int, color: Color) {
         labelUpgradeClear(number)
-        when(number){
-            1 -> field1.style(append = true){backgroundColor += color}
-            2 -> field2.style(append = true){backgroundColor += color}
-            3 -> field3.style(append = true){backgroundColor += color}
-            5 -> field5.style(append = true){backgroundColor += color}
-            6 -> field6.style(append = true){backgroundColor += color}
-            8 -> field8.style(append = true){backgroundColor += color}
-            9 -> field9.style(append = true){backgroundColor += color}
-            10 -> field10.style(append = true){backgroundColor += color}
-            11 -> field11.style(append = true){backgroundColor += color}
-            13 -> field13.style(append = true){backgroundColor += color}
-            15 -> field15.style(append = true){backgroundColor += color}
-            16 -> field16.style(append = true){backgroundColor += color}
-            17 -> field17.style(append = true){backgroundColor += color}
-            19 -> field19.style(append = true){backgroundColor += color}
-            22 -> field22.style(append = true){backgroundColor += color}
-            24 -> field24.style(append = true){backgroundColor += color}
-            25 -> field25.style(append = true){backgroundColor += color}
-            26 -> field26.style(append = true){backgroundColor += color}
-            else -> field27.style(append = true){backgroundColor += color}
+        when (number) {
+            1 -> field1.style(append = true) { backgroundColor += color }
+            2 -> field2.style(append = true) { backgroundColor += color }
+            3 -> field3.style(append = true) { backgroundColor += color }
+            5 -> field5.style(append = true) { backgroundColor += color }
+            6 -> field6.style(append = true) { backgroundColor += color }
+            8 -> field8.style(append = true) { backgroundColor += color }
+            9 -> field9.style(append = true) { backgroundColor += color }
+            10 -> field10.style(append = true) { backgroundColor += color }
+            11 -> field11.style(append = true) { backgroundColor += color }
+            13 -> field13.style(append = true) { backgroundColor += color }
+            15 -> field15.style(append = true) { backgroundColor += color }
+            16 -> field16.style(append = true) { backgroundColor += color }
+            17 -> field17.style(append = true) { backgroundColor += color }
+            19 -> field19.style(append = true) { backgroundColor += color }
+            22 -> field22.style(append = true) { backgroundColor += color }
+            24 -> field24.style(append = true) { backgroundColor += color }
+            25 -> field25.style(append = true) { backgroundColor += color }
+            26 -> field26.style(append = true) { backgroundColor += color }
+            else -> field27.style(append = true) { backgroundColor += color }
         }
     }
 
-    fun labelUpgradeClear(number : Int){
-        when(number){
+    fun labelUpgradeClear(number: Int) {
+        when (number) {
             1 -> labelUpgrade1.text = ""
             2 -> labelUpgrade2.text = ""
             3 -> labelUpgrade3.text = ""
@@ -636,27 +709,27 @@ class GamePlay: View("Monopoly"){
     }
 
     //game dice
-    private val firstdice1 : ImageView by fxid()
-    private val firstdice2 : ImageView by fxid()
-    private val firstdice3 : ImageView by fxid()
-    private val firstdice4 : ImageView by fxid()
-    private val seconddice1 : ImageView by fxid()
-    private val seconddice2 : ImageView by fxid()
-    private val seconddice3 : ImageView by fxid()
-    private val seconddice4 : ImageView by fxid()
+    private val firstdice1: ImageView by fxid()
+    private val firstdice2: ImageView by fxid()
+    private val firstdice3: ImageView by fxid()
+    private val firstdice4: ImageView by fxid()
+    private val seconddice1: ImageView by fxid()
+    private val seconddice2: ImageView by fxid()
+    private val seconddice3: ImageView by fxid()
+    private val seconddice4: ImageView by fxid()
     //animation
-    private fun diceRoll(a : Int, b : Int){
-        if (a == b) sendln("Поздравляем, на кубиках выпало ${a+b}, дублем!")
-        else sendln("На кубиках выпало ${a+b}!")
+    private fun diceRoll(a: Int, b: Int) {
+        if (a == b) sendln("Поздравляем, на кубиках выпало ${a + b}, дублем!")
+        else sendln("На кубиках выпало ${a + b}!")
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                when(a){
+                when (a) {
                     1 -> keyvalue(firstdice1.opacityProperty(), 1.0)
                     2 -> keyvalue(firstdice2.opacityProperty(), 1.0)
                     3 -> keyvalue(firstdice3.opacityProperty(), 1.0)
                     else -> keyvalue(firstdice4.opacityProperty(), 1.0)
                 }
-                when(b){
+                when (b) {
                     1 -> keyvalue(seconddice1.opacityProperty(), 1.0)
                     2 -> keyvalue(seconddice2.opacityProperty(), 1.0)
                     3 -> keyvalue(seconddice3.opacityProperty(), 1.0)
@@ -664,7 +737,7 @@ class GamePlay: View("Monopoly"){
                 }
             }
         }
-        runAsync { Thread.sleep(1000) }ui{
+        runAsync { Thread.sleep(1000) } ui {
             timeline {
                 keyframe(Duration.seconds(0.5)) {
                     keyvalue(firstdice1.opacityProperty(), 0.0)
@@ -727,10 +800,10 @@ class GamePlay: View("Monopoly"){
         alertCheck.isSelected = showAlerts
         actionLogChek.isSelected = showActionLog
 
-        if (actionLogChek.isSelected){
+        if (actionLogChek.isSelected) {
             textArea.opacity = 1.0
             textArea.disableProperty().value = false
-        }else{
+        } else {
             textArea.opacity = 0.0
             textArea.disableProperty().value = true
         }
@@ -760,7 +833,7 @@ class GamePlay: View("Monopoly"){
         game.surrenderViewProperty.onChange { playerSurrenderView(game.currentPlayer) }
     }
 
-    private fun linkCostOfField(){
+    private fun linkCostOfField() {
         field1Penalty.bind(game.board.fields[1].penaltyProperty)
         field2Penalty.bind(game.board.fields[2].penaltyProperty)
         field3Penalty.bind(game.board.fields[3].penaltyProperty)
@@ -782,20 +855,20 @@ class GamePlay: View("Monopoly"){
         field27Penalty.bind(game.board.fields[27].penaltyProperty)
     }
 
-    private fun send(str : String){
+    private fun send(str: String) {
         if (showActionLog) textArea.appendText(str)
     }
 
-    fun sendln(str : String){
+    fun sendln(str: String) {
         if (showActionLog) textArea.appendText(str + "\n")
     }
 
-    private fun clearFieldLooser(current : Player){
-        for (i in current.realty){
+    private fun clearFieldLooser(current: Player) {
+        for (i in current.realty) {
             paintField(i.location, c("#d2edd7"))
             game.fieldClear(i)
         }
-        when (current.id){
+        when (current.id) {
             1 -> {
                 playerField1.opacity = 0.0
                 model1.opacity = 0.0
@@ -825,17 +898,17 @@ class GamePlay: View("Monopoly"){
         sendln("${player.name} не справляется с натиском конкурентов, и покиадет наш стол!")
     }
 
-    private fun diceDoubleAlert(){
+    private fun diceDoubleAlert() {
         if (!game.currentPlayer.ai && showAlerts) find<DiceDouble>().openModal(resizable = false)
     }
 
-    private fun sellAndVacateField(field: monopoly.logic.Field, player: Player){
-        sendln(player.name + " продает свое поле " + field.name + " за " + field.cost/2 + ".")
+    private fun sellAndVacateField(field: monopoly.logic.Field, player: Player) {
+        sendln(player.name + " продает свое поле " + field.name + " за " + field.cost / 2 + ".")
         game.fieldSellByHalf(player, field)
         paintField(field.location, c("#d2edd7"))
     }
 
-    private fun sellUpgrade(player: Player){
+    private fun sellUpgrade(player: Player) {
         val tmp = game.sellSomeUpgrade(player, true)
         sendln(player.name + " продает филиал. Количество филиалов на поле " + game.board.fields[tmp].name + " - " + game.board.fields[tmp].upgrade)
         updateUpgrade(tmp)
@@ -846,9 +919,9 @@ class GamePlay: View("Monopoly"){
         game.motion()
     }
 
-    private fun updateUpgrade(){
-        for (i in game.board.fields){
-            val upgrade = when (game.board.fields[i.location].upgrade){
+    private fun updateUpgrade() {
+        for (i in game.board.fields) {
+            val upgrade = when (game.board.fields[i.location].upgrade) {
                 0 -> ""
                 1 -> "*"
                 2 -> "**"
@@ -856,7 +929,7 @@ class GamePlay: View("Monopoly"){
                 4 -> "****"
                 else -> "*****"
             }
-            when(i.location){
+            when (i.location) {
                 1 -> gamePlay.labelUpgrade1.text = upgrade
                 2 -> gamePlay.labelUpgrade2.text = upgrade
                 3 -> gamePlay.labelUpgrade3.text = upgrade
@@ -876,13 +949,14 @@ class GamePlay: View("Monopoly"){
                 25 -> gamePlay.labelUpgrade25.text = upgrade
                 26 -> gamePlay.labelUpgrade26.text = upgrade
                 27 -> gamePlay.labelUpgrade27.text = upgrade
-                else -> {}
+                else -> {
+                }
             }
         }
     }
 
-    fun updateUpgrade(position: Int){
-        val upgrade = when (game.board.fields[position].upgrade){
+    fun updateUpgrade(position: Int) {
+        val upgrade = when (game.board.fields[position].upgrade) {
             0 -> ""
             1 -> "*"
             2 -> "**"
@@ -890,7 +964,7 @@ class GamePlay: View("Monopoly"){
             4 -> "****"
             else -> "*****"
         }
-        when(position){
+        when (position) {
             1 -> gamePlay.labelUpgrade1.text = upgrade
             2 -> gamePlay.labelUpgrade2.text = upgrade
             3 -> gamePlay.labelUpgrade3.text = upgrade
@@ -910,12 +984,13 @@ class GamePlay: View("Monopoly"){
             25 -> gamePlay.labelUpgrade25.text = upgrade
             26 -> gamePlay.labelUpgrade26.text = upgrade
             27 -> gamePlay.labelUpgrade27.text = upgrade
-            else -> {}
+            else -> {
+            }
         }
     }
 
     private fun viewEndMotion(player: Player) {
-        when (game.data.indexOf(player)){
+        when (game.data.indexOf(player)) {
             0 -> idMotion.text = "Ход игрока ${game.data[0].name}"
             1 -> idMotion.text = "Ход игрока ${game.data[1].name}"
             2 -> idMotion.text = "Ход игрока ${game.data[2].name}"
@@ -926,36 +1001,36 @@ class GamePlay: View("Monopoly"){
     }
 
 
-    fun endGame(){
+    fun endGame() {
         find<FinishGame>().openModal(resizable = false)
     }
 
-    fun howToPlay(){
+    fun howToPlay() {
         find<HowToPlay>().openModal(resizable = false)
     }
 
-    fun newGame(){
+    fun newGame() {
         game.gameIsEnd = true
         replaceWith(Begin(), ViewTransition.Implode(0.5.seconds))
     }
 
-    fun alertSwitch(){
+    fun alertSwitch() {
         showAlerts = alertCheck.isSelected
     }
 
-    fun actionLogSwitch(){
+    fun actionLogSwitch() {
         showActionLog = actionLogChek.isSelected
-        if (actionLogChek.isSelected){
+        if (actionLogChek.isSelected) {
             textArea.opacity = 1.0
             textArea.disableProperty().value = false
-        }else{
+        } else {
             textArea.opacity = 0.0
             textArea.disableProperty().value = true
         }
     }
 
 
-    fun exit(){
+    fun exit() {
         primaryStage.close()
     }
 }

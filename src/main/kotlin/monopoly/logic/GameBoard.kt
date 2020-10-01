@@ -1,6 +1,6 @@
 package monopoly.logic
 
-class GameBoard{
+class GameBoard {
     val fields = mutableListOf<Field>()
 
     init {

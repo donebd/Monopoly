@@ -1,6 +1,6 @@
 package monopoly.logic
 
-enum class Type{
+enum class Type {
     Start,
     ToPrison,
     Secret,

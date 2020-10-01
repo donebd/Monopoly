@@ -9,19 +9,19 @@ import javafx.util.Duration
 import tornadofx.*
 import java.lang.NumberFormatException
 
-class ExchangeSolution : Fragment(){
+class ExchangeSolution : Fragment() {
 
-    override val root : AnchorPane by fxml()
+    override val root: AnchorPane by fxml()
 
-    private val tableViewSender : TableView<monopoly.logic.Field> by fxid()
-    private val tableViewReceiver : TableView<monopoly.logic.Field> by fxid()
+    private val tableViewSender: TableView<monopoly.logic.Field> by fxid()
+    private val tableViewReceiver: TableView<monopoly.logic.Field> by fxid()
 
-    private val nameSender : Label by fxid()
-    private val nameReceiver : Label by fxid()
-    private val money1Lbl : Label by fxid()
-    private val money2Lbl : Label by fxid()
+    private val nameSender: Label by fxid()
+    private val nameReceiver: Label by fxid()
+    private val money1Lbl: Label by fxid()
+    private val money2Lbl: Label by fxid()
 
-    private val sendBtn : Button by fxid()
+    private val sendBtn: Button by fxid()
 
     init {
         nameSender.text = game.exchangeSender.name
@@ -48,7 +48,7 @@ class ExchangeSolution : Fragment(){
         exit()
     }
 
-    fun exit(){
+    fun exit() {
         game.exchangePause = false
         close()
     }

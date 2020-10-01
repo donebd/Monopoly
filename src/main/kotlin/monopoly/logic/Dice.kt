@@ -2,13 +2,13 @@ package monopoly.logic
 
 import javafx.beans.property.SimpleIntegerProperty
 
-class Dice{
+class Dice {
     var count = 0
     var first = 0
     var checkRollProperty = SimpleIntegerProperty()
     var second = 0
     var double = false
-    var secret = Pair(true,SecretAction.Action1)
+    var secret = Pair(true, SecretAction.Action1)
 
     init {
         secretAction()
@@ -20,12 +20,11 @@ class Dice{
         checkRollProperty.value++
         count = second + first
         double = first == second
-        double = true
     }
 
     fun secretAction() {
         val answer1 = (1..3).random() == 1
-        val answer2 = when((1..5).random()){
+        val answer2 = when ((1..5).random()) {
             1 -> SecretAction.Action1
             2 -> SecretAction.Action2
             3 -> SecretAction.Action3

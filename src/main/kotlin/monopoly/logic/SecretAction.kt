@@ -1,6 +1,6 @@
 package monopoly.logic
 
-enum class SecretAction{
+enum class SecretAction {
     Action1,
     Action2,
     Action3,
