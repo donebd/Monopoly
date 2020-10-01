@@ -1,6 +1,5 @@
 package monopoly.`interface`
 
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.control.Button
 import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.Label
@@ -62,7 +61,7 @@ class GamePlay: View("Monopoly"){
             offerToBuy.opacity = 0.0
             offerToBuy.disableProperty().value = true
             sendln("${player.name} приобретает поле ${game.board.fields[player.position].name}, за ${game.board.fields[player.position].cost}$!")
-            endMotion()
+            game.endMotion()
             return
         }
         offerNotEnoughMoney.opacity = 1.0
@@ -72,7 +71,7 @@ class GamePlay: View("Monopoly"){
         offerNotEnoughMoney.opacity = 0.0
         offerToBuy.opacity = 0.0
         offerToBuy.disableProperty().value = true
-        endMotion()
+        game.endMotion()
     }
 
     private fun aiBuyInstructions(player: Player){
@@ -89,7 +88,7 @@ class GamePlay: View("Monopoly"){
             }
             else -> runAsync {
                 Thread.sleep(100)
-            }ui{endMotion()}
+            }ui{game.endMotion()}
         }
     }
 
@@ -132,7 +131,7 @@ class GamePlay: View("Monopoly"){
     fun penaltyAccept(){
         if (game.playerPayPenalty()){
             penaltyClose()
-            endMotion()
+            game.endMotion()
             return
         }
         penaltyNotEnoughMoney.opacity = 1.0
@@ -140,7 +139,7 @@ class GamePlay: View("Monopoly"){
 
     fun penaltySurrender(){
         penaltyClose()
-        playerSurrender()
+        game.playerSurrender()
     }
 
     private fun aiPunisment(player: Player){
@@ -160,7 +159,7 @@ class GamePlay: View("Monopoly"){
                 sellAndVacateField(game.board.fields[tmp], player)
                 aiPunisment(player)
             }
-            else -> playerSurrender()
+            else -> game.playerSurrender()
         }
     }
 
@@ -217,7 +216,7 @@ class GamePlay: View("Monopoly"){
     fun negativePay(){
         if (game.negativePay()){
             negativeClose()
-            endMotion()
+            game.endMotion()
             return
         }
         negativeNotEnoughMoney.opacity = 1.0
@@ -225,7 +224,7 @@ class GamePlay: View("Monopoly"){
 
     fun negativeSurrender(){
         negativeClose()
-        playerSurrender()
+        game.playerSurrender()
     }
 
     private fun aiNegativeEvent(player: Player){
@@ -245,7 +244,7 @@ class GamePlay: View("Monopoly"){
                 sellAndVacateField(game.board.fields[tmp], player)
                 aiNegativeEvent(player)
             }
-            else -> playerSurrender()
+            else -> game.playerSurrender()
         }
     }
 
@@ -293,7 +292,7 @@ class GamePlay: View("Monopoly"){
             if (tmp == 1) sendln("${game.currentPlayer.name} выходит из тюрьмы, заплатив 750$.")
             else sendln("${game.currentPlayer.name} выходит из тюрьмы, заплатив 500$.")
             prisonClose()
-            endMotion()
+            game.endMotion()
             return
         }
         prisonNotEnoughMoney.opacity = 1.0
@@ -305,21 +304,21 @@ class GamePlay: View("Monopoly"){
         runAsync { Thread.sleep(600) }ui{
             if (game.prisonTry()){
                 sendln("${game.currentPlayer.name} выходит из тюрьмы, выбив дубль!")
-                playerMove(game.currentPlayer)
+                game.playerMove(game.currentPlayer)
             }
             else{
                 if (4 - game.currentPlayer.prisonDays + 1 != 1)
                     sendln("Игрок остается в тюрьме еще на ${4 - game.currentPlayer.prisonDays + 1} хода.")
                 else
                     sendln("Всего один ход отлучает ${game.currentPlayer.name}, от свободы!")
-                endMotion()
+                game.endMotion()
             }
         }
     }
 
     fun prisonSurrender(){
         prisonClose()
-        playerSurrender()
+        game.playerSurrender()
     }
 
     private fun aiPrisonInstructions(player: Player){
@@ -340,7 +339,7 @@ class GamePlay: View("Monopoly"){
                 sellAndVacateField(game.board.fields[tmp], player)
                 aiPrisonInstructions(player)
             }
-            else -> playerSurrender()
+            else -> game.playerSurrender()
         }
     }
 
@@ -820,35 +819,10 @@ class GamePlay: View("Monopoly"){
         }
     }
 
-    private fun secretAction(){
-        //positive
-        if (game.secretIsPositive()){
-            game.positiveSecret()
-            game.positiveEventInitProperty.value = !game.positiveEventInitProperty.value
-            endMotion()
-        }else{//negative
-            game.negativeEventInitProperty.value = !game.negativeEventInitProperty.value
-        }
-    }
-
     fun playerSurrenderView(player: Player) {
         clearFieldLooser(player)
         sendln("")
         sendln("${player.name} не справляется с натиском конкурентов, и покиадет наш стол!")
-    }
-
-    private fun playerSurrender(){
-        game.playerLose()
-        game.surrenderViewProperty.value = !game.surrenderViewProperty.value
-        game.dice.double = false
-        endMotion()
-        checkEndGame()
-    }
-
-    private fun playerToPrison(current: Player){
-        game.motionIfPrison(current)
-        game.toPrisonViewProperty.value = !game.toPrisonViewProperty.value
-        runAsync { Thread.sleep(100) }ui{endMotion()}
     }
 
     private fun diceDoubleAlert(){
@@ -867,86 +841,9 @@ class GamePlay: View("Monopoly"){
         updateUpgrade(tmp)
     }
 
-    private fun fieldEvent(player: Player){
-        //check cycle completed and reward according to the settings
-        if (game.checkCircleComplete()){
-           game.cycleCompleteProperty.value = !game.cycleCompleteProperty.value
-        }
-        //buy realty
-        if (game.realtyCanBuy()){
-            game.offerToBuyInitProperty.value = !game.offerToBuyInitProperty.value
-            if (game.diceDoubleCheck()) game.diceDoubleProperty.value = !game.diceDoubleProperty.value
-            return
-        }
-        //pay penalty
-        if (game.punishmentOrPenalty()){
-            game.penaltyInitProperty.value = !game.penaltyInitProperty.value
-            if (game.diceDoubleCheck()) game.diceDoubleProperty.value = !game.diceDoubleProperty.value
-            return
-        }
-        //player to prison
-        if (game.ifToPrison()){
-            playerToPrison(player)
-            return
-        }
-        //get stonks
-        if (game.stonksAction()){
-            game.stonksActionProperty.value = !game.stonksActionProperty.value
-        }
-        //secret action
-        if (game.ifSecret()){
-            secretAction()
-            if (game.diceDoubleCheck()) game.diceDoubleProperty.value = !game.diceDoubleProperty.value
-            return
-        }
-        //start field
-        if (game.startAction()){
-            game.startActionProperty.value = !game.startActionProperty.value
-        }
-        //player owner field
-        if (game.board.fields[player.position].owner != null  && game.board.fields[player.position].owner!!.id == player.id){
-            game.notifyInView.value = "Игрок пришел с проверкой на свое поле"
-        }
-
-        if (player.position == 7)  game.notifyInView.value = (player.name + " решил прогуляться в парке, рядом с темницей.")
-
-        if (player.position == 14)  game.notifyInView.value = (player.name + " наслаждается отдыхом на природе.")
-
-        if (game.diceDoubleCheck()) game.diceDoubleProperty.value = !game.diceDoubleProperty.value
-        endMotion()
-    }
-
-    private fun playerMove(player: Player){
-        runAsync {
-            Thread.sleep(250)
-        }ui{
-            player.positionChange(game.dice.count)
-
-            runAsync {
-                Thread.sleep(500)
-            }ui{
-                runAsync { Thread.sleep(50) }ui{fieldEvent(player)}
-                game.motionNext()
-            }
-        }
-    }
-
-    fun motion(){
+    fun motion() {
         buttonRoll.disableProperty().value = true
-        val player = game.currentPlayer
-        if (player.playerInPrison()){
-            game.prisonInitProperty.value = !game.prisonInitProperty.value
-            return
-        }
-        game.dice.roll()
-
-        runAsync { Thread.sleep(500) }ui {
-            if (game.checkPrisonByDouble()) {
-                playerToPrison(player)
-            } else {
-                playerMove(player)
-            }
-        }
+        game.motion()
     }
 
     private fun updateUpgrade(){
@@ -1028,38 +925,6 @@ class GamePlay: View("Monopoly"){
         if (!game.gameIsEnd && !player.ai && !player.playerInPrison()) buttonRoll.disableProperty().value = false
     }
 
-    private fun endMotion(){
-        runAsync { Thread.sleep(300) }ui{
-            game.endMotionLogic()
-            game.viewEndMotionProperty.value = !game.viewEndMotionProperty.value
-            val player = game.data[game.motionPlayer]
-            if (player.ai) {
-                for (i in game.aiInstructions(player)) {
-                    game.notifyInView.value = (player.name + " строит филиал. Количество филиалов на поле " + game.board.fields[i].name + " - " + game.board.fields[i].upgrade)
-                }
-                game.updateUpgradeView.value = !game.updateUpgradeView.value
-            }
-            if (!game.dice.double && !player.justOutJail) {
-                game.notifyInView.value = ""
-                game.notifyInView.value = ("Ваш ход, ${game.data[game.motionPlayer].name} !")
-            }
-            player.justOutJail = false
-            runAsync {
-                    while(game.exchangePause) {
-                        Thread.sleep(100)
-                    }
-                runAsync { Thread.sleep(1000) } ui { if ((game.data[game.motionPlayer].playerInPrison() || game.data[game.motionPlayer].ai) && !game.gameIsEnd) motion() }
-            }
-        }
-    }
-
-    private fun checkEndGame(){
-        runAsync { Thread.sleep(350) }ui {
-            if (game.gameIsEnd()) {
-                game.setGameStatus(false)
-            }
-        }
-    }
 
     fun endGame(){
         find<FinishGame>().openModal(resizable = false)

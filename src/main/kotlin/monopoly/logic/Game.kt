@@ -1,10 +1,11 @@
 package monopoly.logic
 
-import javafx.beans.property.BooleanProperty
+
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import monopoly.logic.CodeInstruction.*
+import tornadofx.runAsync
+import tornadofx.ui
 
 class Game{
 
@@ -400,24 +401,12 @@ class Game{
         return false
     }
 
-    fun motionIfPrison(current: Player){
-        current.goToPrison()
-        if (dice.double){
-            motionPlayer++
-            motionPlayer %= cntPls
-            dice.double = false
-        }
-    }
-
-    fun motionNext(){
-        if (!dice.double) {
-            motionPlayer ++
-        motionPlayer %= cntPls
-        }
-    }
-
     fun endMotionLogic(){
         currentPlayer.currentMotionUpgrade.clear()
+        if (!dice.double && !currentPlayer.justOutJail) {
+            motionPlayer ++
+            motionPlayer %= cntPls
+        }
         while (motionPlayer in loosers) {
             motionPlayer++
             motionPlayer %= cntPls
@@ -635,7 +624,154 @@ class Game{
         fieldClicked.upgrade--
         fieldClicked.penaltyUpdate()
     }
+    //---------------------------------------------------------------
+    //---------------------------------------------------------------
+    //-------------------The logic of one move-----------------------
 
+    fun motion() {
+        val player = currentPlayer
+        if (player.playerInPrison()){
+            prisonInitProperty.value = !prisonInitProperty.value
+            return
+        }
+        dice.roll()
+
+        runAsync { Thread.sleep(500) }ui {
+            if (checkPrisonByDouble()) {
+                playerToPrison(player)
+            } else {
+                playerMove(player)
+            }
+        }
     }
+
+    fun playerMove(player: Player){
+        runAsync {
+            Thread.sleep(250)
+        }ui{
+            player.positionChange(dice.count)
+
+            runAsync {
+                Thread.sleep(500)
+            }ui{
+                fieldEvent(player)
+            }
+        }
+    }
+
+    private fun fieldEvent(player: Player){
+        //check cycle completed and reward according to the settings
+        if (checkCircleComplete()){
+            cycleCompleteProperty.value = !cycleCompleteProperty.value
+        }
+        //buy realty
+        if (realtyCanBuy()){
+            offerToBuyInitProperty.value = !offerToBuyInitProperty.value
+            if (diceDoubleCheck()) diceDoubleProperty.value = !diceDoubleProperty.value
+            return
+        }
+        //pay penalty
+        if (punishmentOrPenalty()){
+            penaltyInitProperty.value = !penaltyInitProperty.value
+            if (diceDoubleCheck()) diceDoubleProperty.value = !diceDoubleProperty.value
+            return
+        }
+        //player to prison
+        if (ifToPrison()){
+            playerToPrison(player)
+            return
+        }
+        //get stonks
+        if (stonksAction()){
+            stonksActionProperty.value = !stonksActionProperty.value
+        }
+        //secret action
+        if (ifSecret()){
+            secretAction()
+            if (diceDoubleCheck()) diceDoubleProperty.value = !diceDoubleProperty.value
+            return
+        }
+        //start field
+        if (startAction()){
+            startActionProperty.value = !startActionProperty.value
+        }
+        //player owner field
+        if (board.fields[player.position].owner != null  && board.fields[player.position].owner!!.id == player.id){
+            notifyInView.value = "Игрок пришел с проверкой на свое поле"
+        }
+
+        if (player.position == 7)  notifyInView.value = (player.name + " решил прогуляться в парке, рядом с темницей.")
+
+        if (player.position == 14)  notifyInView.value = (player.name + " наслаждается отдыхом на природе.")
+
+        if (diceDoubleCheck()) diceDoubleProperty.value = !diceDoubleProperty.value
+        endMotion()
+    }
+
+    fun endMotion(){
+        runAsync { Thread.sleep(300) }ui{
+            endMotionLogic()
+            viewEndMotionProperty.value = !viewEndMotionProperty.value
+            val player = data[motionPlayer]
+            if (player.ai) {
+                for (i in aiInstructions(player)) {
+                    notifyInView.value = (player.name + " строит филиал. Количество филиалов на поле " + board.fields[i].name + " - " + board.fields[i].upgrade)
+                }
+                updateUpgradeView.value = !updateUpgradeView.value
+            }
+            if (!dice.double && !player.justOutJail) {
+                notifyInView.value = ""
+                notifyInView.value = ("Ваш ход, ${data[motionPlayer].name} !")
+            }
+            player.justOutJail = false
+            runAsync {
+                while(exchangePause) {
+                    Thread.sleep(100)
+                }
+                runAsync { Thread.sleep(500) } ui {
+                    if ((player.playerInPrison() || player.ai) && !gameIsEnd) {
+                        println("motoion by ai or player in prison")
+                        motion()
+                    }
+                }
+            }
+        }
+    }
+
+    fun playerToPrison(current: Player){
+        current.goToPrison()
+        dice.double = false
+        toPrisonViewProperty.value = !toPrisonViewProperty.value
+        runAsync { Thread.sleep(200) }ui{endMotion()}
+    }
+
+    private fun secretAction(){
+        //positive
+        if (secretIsPositive()){
+            positiveSecret()
+            positiveEventInitProperty.value = !positiveEventInitProperty.value
+            endMotion()
+        }else{//negative
+            negativeEventInitProperty.value = !negativeEventInitProperty.value
+        }
+    }
+
+    fun playerSurrender(){
+        playerLose()
+        surrenderViewProperty.value = !surrenderViewProperty.value
+        dice.double = false
+        endMotion()
+        checkEndGame()
+    }
+
+    private fun checkEndGame(){
+        runAsync { Thread.sleep(350) }ui {
+            if (gameIsEnd()) {
+                setGameStatus(false)
+            }
+        }
+    }
+
+}
 
 

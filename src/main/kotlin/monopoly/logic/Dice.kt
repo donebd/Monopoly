@@ -20,6 +20,7 @@ class Dice{
         checkRollProperty.value++
         count = second + first
         double = first == second
+        double = true
     }
 
     fun secretAction() {

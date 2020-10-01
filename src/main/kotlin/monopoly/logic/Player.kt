@@ -52,11 +52,11 @@ class Player(val id: Int){
     }
 
     fun goToPrison(){
+        prisonDays = 1
+        doubleInARow = 0
         if (position <= 7)
             positionChange(7-position)
         else positionChange(-(position - 7))
-        prisonDays = 1
-        doubleInARow = 0
     }
 
     fun checkForMonopoly(field: Field) : Boolean {
