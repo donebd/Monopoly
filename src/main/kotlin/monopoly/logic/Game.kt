@@ -16,6 +16,8 @@ class Game {
     val player5Default = Pair(10.0, 50.0)
     val prisonPosition = Pair(810.0, 50.0)
 
+    var delay = true
+
     val data = mutableListOf<Player>()
 
     var cntPls = 0 // count of players
@@ -28,6 +30,7 @@ class Game {
 
     //manipulate with view
     var gameIsEnd = false
+    var gameWinner : Player? = null
     var endProperty = SimpleBooleanProperty(gameIsEnd)
     var prisonInitProperty = SimpleBooleanProperty()
     var penaltyInitProperty = SimpleBooleanProperty()
@@ -54,6 +57,7 @@ class Game {
 
     private fun setGameStatus(status: Boolean) {
         gameIsEnd = !status
+        gameWinner = data.filter { data.indexOf(it) !in loosers }.first()
         endProperty.value = gameIsEnd
     }
 
@@ -710,7 +714,7 @@ class Game {
 
     fun prisonTryLogic() {
         dice.roll()
-        runAsync { Thread.sleep(600) } ui {
+        runAsync { if (delay) Thread.sleep(600) } ui {
             if (prisonTry()) {
                 notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, выбив дубль!")
                 playerMove(currentPlayer)
@@ -817,8 +821,7 @@ class Game {
             return
         }
         dice.roll()
-
-        runAsync { Thread.sleep(500) } ui {
+        runAsync { if (delay) Thread.sleep(500) } ui {
             if (checkPrisonByDouble()) {
                 playerToPrison(player)
             } else {
@@ -829,12 +832,12 @@ class Game {
 
     private fun playerMove(player: Player) {
         runAsync {
-            Thread.sleep(250)
+            if (delay) Thread.sleep(250)
         } ui {
             player.positionChange(dice.count)
 
             runAsync {
-                Thread.sleep(500)
+                if (delay) Thread.sleep(500)
             } ui {
                 fieldEvent(player)
             }
@@ -898,7 +901,7 @@ class Game {
     }
 
     fun endMotion() {
-        runAsync { Thread.sleep(300) } ui {
+        runAsync { if (delay) Thread.sleep(300) } ui {
             endMotionLogic()
             triggerProperty(viewEndMotionProperty)
             val player = data[motionPlayer]
@@ -918,7 +921,7 @@ class Game {
                 while (exchangePause) {
                     Thread.sleep(100)
                 }
-                runAsync { Thread.sleep(500) } ui {
+                runAsync { if (delay) Thread.sleep(500) } ui {
                     if ((player.playerInPrison() || player.ai) && !gameIsEnd) {
                         motion()
                     }
@@ -931,7 +934,7 @@ class Game {
         current.goToPrison()
         dice.double = false
         triggerProperty(toPrisonViewProperty)
-        runAsync { Thread.sleep(200) } ui { endMotion() }
+        runAsync { if (delay) Thread.sleep(200) } ui { endMotion() }
     }
 
     private fun secretAction() {
@@ -957,7 +960,7 @@ class Game {
     }
 
     private fun checkEndGame() {
-        runAsync { Thread.sleep(350) } ui {
+        runAsync { if (delay) Thread.sleep(350) } ui {
             if (gameIsEnd()) {
                 setGameStatus(false)
             }

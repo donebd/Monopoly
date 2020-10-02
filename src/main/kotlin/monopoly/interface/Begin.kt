@@ -62,9 +62,12 @@ class Begin : View("Monopoly"){
         }
         else {
             playfield3.disableProperty().value = true
-            playfield3.text = ""
             botCheck3.disableProperty().value = true
             botCheck3.isSelected = false
+            difficultyBox3.disableProperty().value = true
+            difficultyBox3.value = "null"
+            difficultyBox3.opacity = 0.0
+            playfield3.text = ""
         }
     }
 
@@ -79,6 +82,11 @@ class Begin : View("Monopoly"){
             playfield4.text = ""
             botCheck4.disableProperty().value = true
             botCheck4.isSelected = false
+            difficultyBox4.disableProperty().value = true
+            difficultyBox4.value = "null"
+            difficultyBox4.opacity = 0.0
+            playfield4.text = ""
+
         }
     }
 
@@ -90,9 +98,12 @@ class Begin : View("Monopoly"){
         }
         else {
             playfield5.disableProperty().value = true
-            playfield5.text = ""
             botCheck5.disableProperty().value = true
             botCheck5.isSelected = false
+            difficultyBox5.disableProperty().value = true
+            difficultyBox5.value = "null"
+            difficultyBox5.opacity = 0.0
+            playfield5.text = ""
         }
     }
 
