@@ -700,7 +700,7 @@
                                     <Font size="20.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="prisonTryButton" layoutX="151.0" layoutY="315.0" mnemonicParsing="false" onAction="#prisonTry" text="Бросать кубики">
+                              <Button fx:id="prisonTryButton" layoutX="151.0" layoutY="315.0" mnemonicParsing="false" onAction="#prisonTryView" text="Бросать кубики">
                                  <font>
                                     <Font size="20.0" />
                                  </font>

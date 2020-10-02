@@ -12,7 +12,6 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.util.Duration
-import monopoly.logic.CodeInstruction.*
 import monopoly.logic.Player
 import monopoly.logic.SecretAction
 import tornadofx.*
@@ -34,10 +33,9 @@ class GamePlay : View("Monopoly") {
 
     fun offerToBuyInit(player: Player) {
         sendln("Игрок попал на поле ${game.board.fields[player.position].name}, приобритет ли он его?")
-        if (player.ai) {
-            aiBuyInstructions(player)
-        } else
+        if (!player.ai) {
             playerOfferToBuy(player)
+        }
     }
 
     private fun playerOfferToBuy(player: Player) {
@@ -50,21 +48,25 @@ class GamePlay : View("Monopoly") {
     fun offerAccept() {
         val player = game.currentPlayer
         if (game.playerAcceptBuyRealty()) {
-            when (game.data.indexOf(player)) {
-                0 -> paintField(player.position, c("#f13030"))
-                1 -> paintField(player.position, c("#f27330"))
-                2 -> paintField(player.position, c("green"))
-                3 -> paintField(player.position, c("#03a3d1"))
-                else -> paintField(player.position, c("#eb15dc"))
-            }
             offerNotEnoughMoney.opacity = 0.0
             offerToBuy.opacity = 0.0
             offerToBuy.disableProperty().value = true
-            sendln("${player.name} приобретает поле ${game.board.fields[player.position].name}, за ${game.board.fields[player.position].cost}$!")
+            offerAcceptView(player)
             game.endMotion()
             return
         }
         offerNotEnoughMoney.opacity = 1.0
+    }
+
+    fun offerAcceptView(player: Player) {
+        when (game.data.indexOf(player)) {
+            0 -> paintField(player.position, c("#f13030"))
+            1 -> paintField(player.position, c("#f27330"))
+            2 -> paintField(player.position, c("green"))
+            3 -> paintField(player.position, c("#03a3d1"))
+            else -> paintField(player.position, c("#eb15dc"))
+        }
+        sendln("${player.name} приобретает поле ${game.board.fields[player.position].name}, за ${game.board.fields[player.position].cost}$!")
     }
 
     fun offerReject() {
@@ -72,24 +74,6 @@ class GamePlay : View("Monopoly") {
         offerToBuy.opacity = 0.0
         offerToBuy.disableProperty().value = true
         game.endMotion()
-    }
-
-    private fun aiBuyInstructions(player: Player) {
-        when (game.aiBuyInstructions(player)) {
-            Buy -> offerAccept()
-            SellUpgrade -> {
-                sellUpgrade(player)
-                aiBuyInstructions(player)
-            }
-            SellField -> {
-                val tmp = game.sellSomeOtherTypeField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiBuyInstructions(player)
-            }
-            else -> runAsync {
-                Thread.sleep(100)
-            } ui { game.endMotion() }
-        }
     }
 
     //Pay penalty block
@@ -102,9 +86,7 @@ class GamePlay : View("Monopoly") {
     private fun penaltyInit(player: Player) {
         if (!game.ifPunishment()) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
         else sendln("${player.name}, вас уличили за неуплату налогов! Вы должны оплатить штраф 2000$.")
-        if (player.ai) {
-            aiPunisment(player)
-        } else {
+        if (!player.ai) {
             penaltyPlayer(player)
         }
     }
@@ -142,26 +124,6 @@ class GamePlay : View("Monopoly") {
         game.playerSurrender()
     }
 
-    private fun aiPunisment(player: Player) {
-        when (game.aiPunisment(player)) {
-            Buy -> penaltyAccept()
-            SellUpgrade -> {
-                sellUpgrade(player)
-                aiPunisment(player)
-            }
-            SellField -> {
-                val tmp = game.sellSomeField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiPunisment(player)
-            }
-            SellNotMonopoly -> {
-                val tmp = game.sellSomeNotMonopolyField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiPunisment(player)
-            }
-            else -> game.playerSurrender()
-        }
-    }
 
     //Secret action block
     private val negativeAction: AnchorPane by fxid()
@@ -178,11 +140,8 @@ class GamePlay : View("Monopoly") {
                 else -> "Вы простудились, и потратили 250$ в аптеке"
             }
         )
-        sendln(", " + game.currentPlayer.name)
-        if (game.currentPlayer.ai)
-            aiNegativeEvent(player)
-        else
-            playerNegativeSecret()
+        sendln(", " + player.name)
+        if (!player.ai) playerNegativeSecret()
     }
 
     fun positiveEventInit(player: Player) {
@@ -231,27 +190,6 @@ class GamePlay : View("Monopoly") {
         game.playerSurrender()
     }
 
-    private fun aiNegativeEvent(player: Player) {
-        when (game.aiNegativeEvent(player)) {
-            Buy -> negativePay()
-            SellUpgrade -> {
-                sellUpgrade(player)
-                aiNegativeEvent(player)
-            }
-            SellField -> {
-                val tmp = game.sellSomeField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiNegativeEvent(player)
-            }
-            SellNotMonopoly -> {
-                val tmp = game.sellSomeNotMonopolyField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiNegativeEvent(player)
-            }
-            else -> game.playerSurrender()
-        }
-    }
-
     //Prison block
     private val prison: AnchorPane by fxid()
     private val prisonCountMoves: Label by fxid()
@@ -261,9 +199,7 @@ class GamePlay : View("Monopoly") {
     private val prisonSurrenderButton: Button by fxid()
 
     private fun prisonInit(player: Player) {
-        if (player.ai) {
-            aiPrisonInstructions(player)
-        } else {
+        if (!player.ai) {
             prisonPlayer()
         }
     }
@@ -293,8 +229,6 @@ class GamePlay : View("Monopoly") {
     fun prisonPay() {
         val tmp = game.prisonPay()
         if (tmp in 1..2) {
-            if (tmp == 1) sendln("${game.currentPlayer.name} выходит из тюрьмы, заплатив 750$.")
-            else sendln("${game.currentPlayer.name} выходит из тюрьмы, заплатив 500$.")
             prisonClose()
             game.endMotion()
             return
@@ -302,48 +236,14 @@ class GamePlay : View("Monopoly") {
         prisonNotEnoughMoney.opacity = 1.0
     }
 
-    fun prisonTry() {
-        game.dice.roll()
+    fun prisonTryView() {
         prisonClose()
-        runAsync { Thread.sleep(600) } ui {
-            if (game.prisonTry()) {
-                sendln("${game.currentPlayer.name} выходит из тюрьмы, выбив дубль!")
-                game.playerMove(game.currentPlayer)
-            } else {
-                if (4 - game.currentPlayer.prisonDays + 1 != 1)
-                    sendln("Игрок остается в тюрьме еще на ${4 - game.currentPlayer.prisonDays + 1} хода.")
-                else
-                    sendln("Всего один ход отлучает ${game.currentPlayer.name}, от свободы!")
-                game.endMotion()
-            }
-        }
+        game.prisonTryLogic()
     }
 
     fun prisonSurrender() {
         prisonClose()
         game.playerSurrender()
-    }
-
-    private fun aiPrisonInstructions(player: Player) {
-        when (game.aiPrisonInstructions(player)) {
-            Buy -> prisonPay()
-            PrisonTry -> prisonTry()
-            SellUpgrade -> {
-                sellUpgrade(player)
-                aiPrisonInstructions(player)
-            }
-            SellField -> {
-                val tmp = game.sellSomeField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiPrisonInstructions(player)
-            }
-            SellNotMonopoly -> {
-                val tmp = game.sellSomeNotMonopolyField(player)
-                sellAndVacateField(game.board.fields[tmp], player)
-                aiPrisonInstructions(player)
-            }
-            else -> game.playerSurrender()
-        }
     }
 
     private fun cycleComplete(player: Player) {
@@ -831,6 +731,14 @@ class GamePlay : View("Monopoly") {
         game.viewEndMotionProperty.onChange { viewEndMotion(game.data[game.motionPlayer]) }
         game.toPrisonViewProperty.onChange { playerToPrisonView(game.currentPlayer) }
         game.surrenderViewProperty.onChange { playerSurrenderView(game.currentPlayer) }
+        game.fieldBoughtProperty.onChange { offerAcceptView(game.currentPlayer) }
+        game.sellUpgradeViewProperty.onChange { sellUpgradeView(game.currentPlayer) }
+        game.fieldSelledProperty.onChange {
+            sellAndVacateFieldView(
+                game.board.fields[game.fieldSelledProperty.value],
+                game.currentPlayer
+            )
+        }
     }
 
     private fun linkCostOfField() {
@@ -892,7 +800,7 @@ class GamePlay : View("Monopoly") {
         }
     }
 
-    fun playerSurrenderView(player: Player) {
+    private fun playerSurrenderView(player: Player) {
         clearFieldLooser(player)
         sendln("")
         sendln("${player.name} не справляется с натиском конкурентов, и покиадет наш стол!")
@@ -902,16 +810,14 @@ class GamePlay : View("Monopoly") {
         if (!game.currentPlayer.ai && showAlerts) find<DiceDouble>().openModal(resizable = false)
     }
 
-    private fun sellAndVacateField(field: monopoly.logic.Field, player: Player) {
+    private fun sellAndVacateFieldView(field: monopoly.logic.Field, player: Player) {
         sendln(player.name + " продает свое поле " + field.name + " за " + field.cost / 2 + ".")
-        game.fieldSellByHalf(player, field)
         paintField(field.location, c("#d2edd7"))
     }
 
-    private fun sellUpgrade(player: Player) {
-        val tmp = game.sellSomeUpgrade(player, true)
-        sendln(player.name + " продает филиал. Количество филиалов на поле " + game.board.fields[tmp].name + " - " + game.board.fields[tmp].upgrade)
-        updateUpgrade(tmp)
+    private fun sellUpgradeView(player: Player) {
+        sendln(player.name + " продает филиал. Количество филиалов на поле " + game.board.fields[game.fieldDegradeProperty.value].name + " - " + game.board.fields[game.fieldDegradeProperty.value].upgrade)
+        updateUpgrade(game.fieldDegradeProperty.value)
     }
 
     fun motion() {
@@ -1028,7 +934,6 @@ class GamePlay : View("Monopoly") {
             textArea.disableProperty().value = true
         }
     }
-
 
     fun exit() {
         primaryStage.close()
