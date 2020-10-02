@@ -177,7 +177,6 @@ class Game {
                 if (!prisonPayDay(player)) {
                     if ((player.money >= 10000 || (player.monopolyRealty.isEmpty() && playerNearlyHasSomeMonopoly(player))) && onBoardHasBuyableFields() && player.money >= 500) {
                         prisonPay()
-                        endMotion()
                         return//buyOut
                     }
                     prisonTryLogic()
@@ -185,7 +184,6 @@ class Game {
                 } else {
                     if (player.money >= 750) {
                         prisonPay()
-                        endMotion()
                         return//buyOut
                     }
                     if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1) {
@@ -208,12 +206,10 @@ class Game {
                 if (!prisonPayDay(player)) {
                     if (player.aiDifficulty == Difficulty.Easy && player.money >= 500 && (0..1).random() == 1) {
                         prisonPay()
-                        endMotion()
                         return//buyOut
                     }
                     if (player.aiDifficulty == Difficulty.Medium && player.money >= 500 && player.monopolyRealty.isEmpty() && onBoardHasBuyableFields()) {
                         prisonPay()
-                        endMotion()
                         return//buyOut
                     }
                     prisonTryLogic()
@@ -221,7 +217,6 @@ class Game {
                 } else {
                     if (player.money >= 750) {
                         prisonPay()
-                        endMotion()
                         return//buyOut
                     }
                     if (player.hasSomeNotMonopoly()) {
@@ -700,6 +695,7 @@ class Game {
             currentPlayer.moneyChange(-750)
             currentPlayer.justOutJail = true
             notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, заплатив 750$.")
+            endMotion()
             return 1
         }
         if (currentPlayer.prisonDays != 4 && currentPlayer.money >= 500) {
@@ -707,6 +703,7 @@ class Game {
             currentPlayer.moneyChange(-500)
             currentPlayer.justOutJail = true
             notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, заплатив 500$.")
+            endMotion()
             return 2
         }
         return -1
@@ -737,8 +734,6 @@ class Game {
             dice.double = false
             return true
         }
-        motionPlayer++
-        motionPlayer %= cntPls
         currentPlayer.prisonDays++
         return false
     }

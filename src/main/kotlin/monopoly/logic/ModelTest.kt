@@ -1,9 +1,6 @@
-package monopoly.`interface`
+package monopoly.logic
 
 import javafx.embed.swing.JFXPanel
-import monopoly.logic.Difficulty
-import monopoly.logic.Game
-import monopoly.logic.Player
 
 fun main() {
     testHardVsEasy()
@@ -12,7 +9,7 @@ fun main() {
     MediumVsEasyVsHard()
 
     //one of the conclusions
-    //there is no dependence in the order of the move in the approximation
+    //there is dependence in the order of the move in the approximation
 }
 
 fun testHardVsEasy() {//Hard move first

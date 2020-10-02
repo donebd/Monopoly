@@ -230,7 +230,6 @@ class GamePlay : View("Monopoly") {
         val tmp = game.prisonPay()
         if (tmp in 1..2) {
             prisonClose()
-            game.endMotion()
             return
         }
         prisonNotEnoughMoney.opacity = 1.0
