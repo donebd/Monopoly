@@ -16,11 +16,18 @@ class Game {
     val player5Default = Pair(10.0, 50.0)
     val prisonPosition = Pair(810.0, 50.0)
 
+    var statsCntOfMotion = 0
+    val statsVisitedField = IntArray(28)
+
     var delay = true
 
     val data = mutableListOf<Player>()
 
     var cntPls = 0 // count of players
+
+    fun cntPlsUpdate() {
+        cntPls = data.size
+    }
 
     init {
         data.add(Player(1))
@@ -30,7 +37,7 @@ class Game {
 
     //manipulate with view
     var gameIsEnd = false
-    var gameWinner : Player? = null
+    var gameWinner: Player? = null
     var endProperty = SimpleBooleanProperty(gameIsEnd)
     var prisonInitProperty = SimpleBooleanProperty()
     var penaltyInitProperty = SimpleBooleanProperty()
@@ -562,6 +569,7 @@ class Game {
         if (!dice.double && !currentPlayer.justOutJail) {
             motionPlayer++
             motionPlayer %= cntPls
+            statsCntOfMotion++
         }
         while (motionPlayer in loosers) {
             motionPlayer++
@@ -830,6 +838,7 @@ class Game {
             if (delay) Thread.sleep(250)
         } ui {
             player.positionChange(dice.count)
+            statsVisitedField[player.position]++
 
             runAsync {
                 if (delay) Thread.sleep(500)
@@ -927,6 +936,7 @@ class Game {
 
     private fun playerToPrison(current: Player) {
         current.goToPrison()
+        statsVisitedField[current.position]++
         dice.double = false
         triggerProperty(toPrisonViewProperty)
         runAsync { if (delay) Thread.sleep(200) } ui { endMotion() }

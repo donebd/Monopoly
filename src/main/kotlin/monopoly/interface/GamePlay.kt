@@ -660,7 +660,7 @@ class GamePlay : View("Monopoly") {
         primaryStage.height = 1048.0
         primaryStage.centerOnScreen()
 
-        game.cntPls = game.data.size
+        game.cntPlsUpdate()
 
         idMotion.text = "Ход игрока ${game.data[0].name}"
 
