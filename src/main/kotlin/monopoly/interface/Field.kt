@@ -156,16 +156,11 @@ class Field : Fragment() {
 
     fun sellByHalf() {
         game.fieldSellByHalf()
-        for (current in game.playerClicked.realty.filter { it.type == game.fieldClicked.type }) {
-            gamePlay.labelUpgradeClear(current.location)
-        }
-        gamePlay.paintField(game.fieldClicked.location, c("#d2edd7"))
         close()
     }
 
     fun buildUpgrade() {
         if (game.fieldBuildUpgrade()) {
-            gamePlay.updateUpgrade(game.fieldClicked.location)
             gamePlay.sendln(game.playerClicked.name + " строит филиал. Количество филиалов на поле " + game.fieldClicked.name + " - " + game.fieldClicked.upgrade)
             changable()
             return
@@ -175,7 +170,6 @@ class Field : Fragment() {
 
     fun sellUpgrade() {
         game.fieldSellUpgrade()
-        gamePlay.updateUpgrade(game.fieldClicked.location)
         gamePlay.sendln(game.playerClicked.name + " продает филиал. Количество филиалов на поле " + game.fieldClicked.name + " - " + game.fieldClicked.upgrade)
         changable()
     }

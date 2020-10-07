@@ -12,6 +12,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.util.Duration
+import monopoly.logic.ExchangeOffer
 import monopoly.logic.Player
 import monopoly.logic.SecretAction
 import tornadofx.*
@@ -59,13 +60,6 @@ class GamePlay : View("Monopoly") {
     }
 
     fun offerAcceptView(player: Player) {
-        when (game.data.indexOf(player)) {
-            0 -> paintField(player.position, c("#f13030"))
-            1 -> paintField(player.position, c("#f27330"))
-            2 -> paintField(player.position, c("green"))
-            3 -> paintField(player.position, c("#03a3d1"))
-            else -> paintField(player.position, c("#eb15dc"))
-        }
         sendln("${player.name} приобретает поле ${game.board.fields[player.position].name}, за ${game.board.fields[player.position].cost}$!")
     }
 
@@ -261,7 +255,7 @@ class GamePlay : View("Monopoly") {
     }
 
     private fun playerToPrisonView(player: Player) {
-        game.notifyInView.value = ("Не скучайте за решёткой, ${game.currentPlayer.name}!")
+        game.view.notifyInView.value = ("Не скучайте за решёткой, ${game.currentPlayer.name}!")
         if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
     }
 
@@ -277,15 +271,21 @@ class GamePlay : View("Monopoly") {
     private val model4: Rectangle by fxid()
     private val model5: Rectangle by fxid()
     //animation
+    private val player1Default = Pair(10.0, 30.0)
+    private val player2Default = Pair(10.0, 40.0)
+    private val player3Default = Pair(30.0, 30.0)
+    private val player4Default = Pair(30.0, 40.0)
+    private val player5Default = Pair(10.0, 50.0)
+    private val prisonPosition = Pair(810.0, 50.0)
     private fun movePlayer1(a: Int, prison: Boolean) {
         timeline {
             keyframe(Duration.seconds(0.5)) {
                 if (prison) {
-                    keyvalue(model1.layoutXProperty(), game.player1Default.first + game.prisonPosition.first)
-                    keyvalue(model1.layoutYProperty(), game.player1Default.second + game.prisonPosition.second)
+                    keyvalue(model1.layoutXProperty(), player1Default.first + prisonPosition.first)
+                    keyvalue(model1.layoutYProperty(), player1Default.second + prisonPosition.second)
                 } else {
-                    keyvalue(model1.layoutXProperty(), game.player1Default.first + game.board.fields[a].layoutX)
-                    keyvalue(model1.layoutYProperty(), game.player1Default.second + game.board.fields[a].layoutY)
+                    keyvalue(model1.layoutXProperty(), player1Default.first + game.board.fields[a].layoutX)
+                    keyvalue(model1.layoutYProperty(), player1Default.second + game.board.fields[a].layoutY)
                 }
             }
         }
@@ -295,11 +295,11 @@ class GamePlay : View("Monopoly") {
         timeline {
             keyframe(Duration.seconds(0.5)) {
                 if (prison) {
-                    keyvalue(model2.layoutXProperty(), game.player2Default.first + game.prisonPosition.first)
-                    keyvalue(model2.layoutYProperty(), game.player2Default.second + game.prisonPosition.second)
+                    keyvalue(model2.layoutXProperty(), player2Default.first + prisonPosition.first)
+                    keyvalue(model2.layoutYProperty(), player2Default.second + prisonPosition.second)
                 } else {
-                    keyvalue(model2.layoutXProperty(), game.player2Default.first + game.board.fields[a].layoutX)
-                    keyvalue(model2.layoutYProperty(), game.player2Default.second + game.board.fields[a].layoutY)
+                    keyvalue(model2.layoutXProperty(), player2Default.first + game.board.fields[a].layoutX)
+                    keyvalue(model2.layoutYProperty(), player2Default.second + game.board.fields[a].layoutY)
                 }
             }
         }
@@ -309,11 +309,11 @@ class GamePlay : View("Monopoly") {
         timeline {
             keyframe(Duration.seconds(0.5)) {
                 if (prison) {
-                    keyvalue(model3.layoutXProperty(), game.player3Default.first + game.prisonPosition.first)
-                    keyvalue(model3.layoutYProperty(), game.player3Default.second + game.prisonPosition.second)
+                    keyvalue(model3.layoutXProperty(), player3Default.first + prisonPosition.first)
+                    keyvalue(model3.layoutYProperty(), player3Default.second + prisonPosition.second)
                 } else {
-                    keyvalue(model3.layoutXProperty(), game.player3Default.first + game.board.fields[a].layoutX)
-                    keyvalue(model3.layoutYProperty(), game.player3Default.second + game.board.fields[a].layoutY)
+                    keyvalue(model3.layoutXProperty(), player3Default.first + game.board.fields[a].layoutX)
+                    keyvalue(model3.layoutYProperty(), player3Default.second + game.board.fields[a].layoutY)
                 }
             }
         }
@@ -323,11 +323,11 @@ class GamePlay : View("Monopoly") {
         timeline {
             keyframe(Duration.seconds(0.5)) {
                 if (prison) {
-                    keyvalue(model4.layoutXProperty(), game.player4Default.first + game.prisonPosition.first)
-                    keyvalue(model4.layoutYProperty(), game.player4Default.second + game.prisonPosition.second)
+                    keyvalue(model4.layoutXProperty(), player4Default.first + prisonPosition.first)
+                    keyvalue(model4.layoutYProperty(), player4Default.second + prisonPosition.second)
                 } else {
-                    keyvalue(model4.layoutXProperty(), game.player4Default.first + game.board.fields[a].layoutX)
-                    keyvalue(model4.layoutYProperty(), game.player4Default.second + game.board.fields[a].layoutY)
+                    keyvalue(model4.layoutXProperty(), player4Default.first + game.board.fields[a].layoutX)
+                    keyvalue(model4.layoutYProperty(), player4Default.second + game.board.fields[a].layoutY)
                 }
             }
         }
@@ -337,11 +337,11 @@ class GamePlay : View("Monopoly") {
         timeline {
             keyframe(Duration.seconds(0.5)) {
                 if (prison) {
-                    keyvalue(model5.layoutXProperty(), game.player5Default.first + game.prisonPosition.first)
-                    keyvalue(model5.layoutYProperty(), game.player5Default.second + game.prisonPosition.second)
+                    keyvalue(model5.layoutXProperty(), player5Default.first + prisonPosition.first)
+                    keyvalue(model5.layoutYProperty(), player5Default.second + prisonPosition.second)
                 } else {
-                    keyvalue(model5.layoutXProperty(), game.player5Default.first + game.board.fields[a].layoutX)
-                    keyvalue(model5.layoutYProperty(), game.player5Default.second + game.board.fields[a].layoutY)
+                    keyvalue(model5.layoutXProperty(), player5Default.first + game.board.fields[a].layoutX)
+                    keyvalue(model5.layoutYProperty(), player5Default.second + game.board.fields[a].layoutY)
                 }
             }
         }
@@ -387,39 +387,27 @@ class GamePlay : View("Monopoly") {
 
     private fun openOfferWindow() {
         find<ExchangeToPlayer>().openModal(resizable = false)!!.setOnCloseRequest {
-            game.exchangePause = false
+            game.currentExchange.exchangePause = false
         }
     }
 
-    fun offerLog() {
-        send("${game.exchangeSender.name} получает при обмене: ")
-        for (i in game.exchangeReceiverList.withIndex()) {
-            if (i.index != game.exchangeReceiverList.size - 1) {
+    fun exchangeOfferLog(exchange: ExchangeOffer) {
+
+        send("${exchange.exchangeSender.name} получает при обмене: ")
+        for (i in exchange.exchangeReceiverList.withIndex()) {
+            if (i.index != exchange.exchangeReceiverList.size - 1) {
                 send(" ${i.value.name},")
             } else {
-                sendln(" ${i.value.name} и ${game.exchangeMoneyReceiver}$.")
+                sendln(" ${i.value.name} и ${exchange.exchangeMoneyReceiver}$.")
             }
         }
-        send("${game.exchangeReceiver.name} получает при обмене: ")
-        for (i in game.exchangeSenderList.withIndex()) {
-            if (i.index != game.exchangeSenderList.size - 1) {
+        send("${exchange.exchangeReceiver.name} получает при обмене: ")
+        for (i in exchange.exchangeSenderList.withIndex()) {
+            if (i.index != exchange.exchangeSenderList.size - 1) {
                 send(" ${i.value.name}, ")
             } else {
-                sendln(" ${i.value.name} и ${game.exchangeMoneySender}$.")
+                sendln(" ${i.value.name} и ${exchange.exchangeMoneySender}$.")
             }
-        }
-    }
-
-    fun updateColor(player: Player) {
-        val color = when (game.data.indexOf(player)) {
-            0 -> c("#f13030")
-            1 -> c("#f27330")
-            2 -> c("green")
-            3 -> c("#03a3d1")
-            else -> c("#eb15dc")
-        }
-        for (field in player.realty) {
-            paintField(field.location, color)
         }
     }
 
@@ -557,56 +545,6 @@ class GamePlay : View("Monopoly") {
         if (game.canControl(27)) find<Field>().openModal(resizable = false)
     }
 
-    //paint field by owner
-    fun paintField(number: Int, color: Color) {
-        labelUpgradeClear(number)
-        when (number) {
-            1 -> field1.style(append = true) { backgroundColor += color }
-            2 -> field2.style(append = true) { backgroundColor += color }
-            3 -> field3.style(append = true) { backgroundColor += color }
-            5 -> field5.style(append = true) { backgroundColor += color }
-            6 -> field6.style(append = true) { backgroundColor += color }
-            8 -> field8.style(append = true) { backgroundColor += color }
-            9 -> field9.style(append = true) { backgroundColor += color }
-            10 -> field10.style(append = true) { backgroundColor += color }
-            11 -> field11.style(append = true) { backgroundColor += color }
-            13 -> field13.style(append = true) { backgroundColor += color }
-            15 -> field15.style(append = true) { backgroundColor += color }
-            16 -> field16.style(append = true) { backgroundColor += color }
-            17 -> field17.style(append = true) { backgroundColor += color }
-            19 -> field19.style(append = true) { backgroundColor += color }
-            22 -> field22.style(append = true) { backgroundColor += color }
-            24 -> field24.style(append = true) { backgroundColor += color }
-            25 -> field25.style(append = true) { backgroundColor += color }
-            26 -> field26.style(append = true) { backgroundColor += color }
-            else -> field27.style(append = true) { backgroundColor += color }
-        }
-    }
-
-    fun labelUpgradeClear(number: Int) {
-        when (number) {
-            1 -> labelUpgrade1.text = ""
-            2 -> labelUpgrade2.text = ""
-            3 -> labelUpgrade3.text = ""
-            5 -> labelUpgrade5.text = ""
-            6 -> labelUpgrade6.text = ""
-            8 -> labelUpgrade8.text = ""
-            9 -> labelUpgrade9.text = ""
-            10 -> labelUpgrade10.text = ""
-            11 -> labelUpgrade11.text = ""
-            13 -> labelUpgrade13.text = ""
-            15 -> labelUpgrade15.text = ""
-            16 -> labelUpgrade16.text = ""
-            17 -> labelUpgrade17.text = ""
-            19 -> labelUpgrade19.text = ""
-            22 -> labelUpgrade22.text = ""
-            24 -> labelUpgrade24.text = ""
-            25 -> labelUpgrade25.text = ""
-            26 -> labelUpgrade26.text = ""
-            else -> labelUpgrade27.text = ""
-        }
-    }
-
     //game dice
     private val firstdice1: ImageView by fxid()
     private val firstdice2: ImageView by fxid()
@@ -654,7 +592,7 @@ class GamePlay : View("Monopoly") {
 
     init {
         this.currentStage!!.setOnCloseRequest {
-            game.exchangePause = false
+            game.currentExchange.exchangePause = false
         }
         primaryStage.width = 1024.0
         primaryStage.height = 1048.0
@@ -694,7 +632,7 @@ class GamePlay : View("Monopoly") {
             game.data[4].positionProperty.onChange { movePlayer5(game.data[4].position, game.data[4].playerInPrison()) }
         }
         game.setBalance()
-        linkCostOfField()
+        linkFieldInfo()
 
         alertCheck.isSelected = showAlerts
         actionLogChek.isSelected = showActionLog
@@ -712,54 +650,117 @@ class GamePlay : View("Monopoly") {
         sendln("Игра начинается!")
         sendln("Ваш ход, ${game.data[0].name} !")
 
-        if (game.data[0].ai) motion()
+        connectToModel()
 
+        if (game.data[0].ai) motion()
+    }
+
+    private fun connectToModel() {
         game.endProperty.onChange { endGame() }
         game.dice.checkRollProperty.onChange { diceRoll(game.dice.first, game.dice.second) }
-        game.prisonInitProperty.onChange { prisonInit(game.currentPlayer) }
-        game.penaltyInitProperty.onChange { penaltyInit(game.currentPlayer) }
-        game.offerToBuyInitProperty.onChange { offerToBuyInit(game.currentPlayer) }
-        game.negativeEventInitProperty.onChange { negativeEventInit(game.currentPlayer) }
-        game.positiveEventInitProperty.onChange { positiveEventInit(game.currentPlayer) }
-        game.diceDoubleProperty.onChange { diceDoubleAlert() }
-        game.cycleCompleteProperty.onChange { cycleComplete(game.currentPlayer) }
-        game.stonksActionProperty.onChange { stonksAction(game.currentPlayer) }
-        game.startActionProperty.onChange { startAction(game.currentPlayer) }
-        game.notifyInView.onChange { sendln(game.notifyInView.value) }
-        game.updateUpgradeView.onChange { updateUpgrade() }
-        game.viewEndMotionProperty.onChange { viewEndMotion(game.data[game.motionPlayer]) }
-        game.toPrisonViewProperty.onChange { playerToPrisonView(game.currentPlayer) }
-        game.surrenderViewProperty.onChange { playerSurrenderView(game.currentPlayer) }
-        game.fieldBoughtProperty.onChange { offerAcceptView(game.currentPlayer) }
-        game.sellUpgradeViewProperty.onChange { sellUpgradeView(game.currentPlayer) }
-        game.fieldSelledProperty.onChange {
+        game.view.prisonInitProperty.onChange { prisonInit(game.currentPlayer) }
+        game.view.penaltyInitProperty.onChange { penaltyInit(game.currentPlayer) }
+        game.view.offerToBuyInitProperty.onChange { offerToBuyInit(game.currentPlayer) }
+        game.view.negativeEventInitProperty.onChange { negativeEventInit(game.currentPlayer) }
+        game.view.positiveEventInitProperty.onChange { positiveEventInit(game.currentPlayer) }
+        game.view.diceDoubleProperty.onChange { diceDoubleAlert() }
+        game.view.cycleCompleteProperty.onChange { cycleComplete(game.currentPlayer) }
+        game.view.stonksActionProperty.onChange { stonksAction(game.currentPlayer) }
+        game.view.startActionProperty.onChange { startAction(game.currentPlayer) }
+        game.view.notifyInView.onChange { sendln(game.view.notifyInView.value) }
+        game.view.viewEndMotionProperty.onChange { viewEndMotion(game.data[game.motionPlayer]) }
+        game.view.toPrisonViewProperty.onChange { playerToPrisonView(game.currentPlayer) }
+        game.view.surrenderViewProperty.onChange { playerSurrenderView(game.currentPlayer) }
+        game.view.fieldBoughtProperty.onChange { offerAcceptView(game.currentPlayer) }
+        game.view.sellUpgradeViewProperty.onChange { sellUpgradeView(game.currentPlayer) }
+        game.view.fieldSelledProperty.onChange {
             sellAndVacateFieldView(
-                game.board.fields[game.fieldSelledProperty.value],
+                game.board.fields[game.view.fieldSelledProperty.value],
                 game.currentPlayer
             )
         }
     }
 
-    private fun linkCostOfField() {
+    private fun linkFieldInfo() {
+        for (field in game.board.fields) {
+            if (field.couldBuy) game.board.fields[field.location].ownerProperty.onChange { paintField(field) }
+        }
+        labelUpgrade1.bind(game.board.fields[1].view)
         field1Penalty.bind(game.board.fields[1].penaltyProperty)
+        labelUpgrade2.bind(game.board.fields[2].view)
         field2Penalty.bind(game.board.fields[2].penaltyProperty)
+        labelUpgrade3.bind(game.board.fields[3].view)
         field3Penalty.bind(game.board.fields[3].penaltyProperty)
+        labelUpgrade5.bind(game.board.fields[5].view)
         field5Penalty.bind(game.board.fields[5].penaltyProperty)
+        labelUpgrade6.bind(game.board.fields[6].view)
         field6Penalty.bind(game.board.fields[6].penaltyProperty)
+        labelUpgrade8.bind(game.board.fields[8].view)
         field8Penalty.bind(game.board.fields[8].penaltyProperty)
+        labelUpgrade9.bind(game.board.fields[9].view)
         field9Penalty.bind(game.board.fields[9].penaltyProperty)
+        labelUpgrade10.bind(game.board.fields[10].view)
         field10Penalty.bind(game.board.fields[10].penaltyProperty)
+        labelUpgrade11.bind(game.board.fields[11].view)
         field11Penalty.bind(game.board.fields[11].penaltyProperty)
+        labelUpgrade13.bind(game.board.fields[13].view)
         field13Penalty.bind(game.board.fields[13].penaltyProperty)
+        labelUpgrade15.bind(game.board.fields[15].view)
         field15Penalty.bind(game.board.fields[15].penaltyProperty)
+        labelUpgrade16.bind(game.board.fields[16].view)
         field16Penalty.bind(game.board.fields[16].penaltyProperty)
+        labelUpgrade17.bind(game.board.fields[17].view)
         field17Penalty.bind(game.board.fields[17].penaltyProperty)
+        labelUpgrade19.bind(game.board.fields[19].view)
         field19Penalty.bind(game.board.fields[19].penaltyProperty)
+        labelUpgrade22.bind(game.board.fields[22].view)
         field22Penalty.bind(game.board.fields[22].penaltyProperty)
+        labelUpgrade24.bind(game.board.fields[24].view)
         field24Penalty.bind(game.board.fields[24].penaltyProperty)
+        labelUpgrade25.bind(game.board.fields[25].view)
         field25Penalty.bind(game.board.fields[25].penaltyProperty)
+        labelUpgrade26.bind(game.board.fields[26].view)
         field26Penalty.bind(game.board.fields[26].penaltyProperty)
+        labelUpgrade27.bind(game.board.fields[27].view)
         field27Penalty.bind(game.board.fields[27].penaltyProperty)
+    }
+
+    private val player1Color = c("#f13030")
+    private val player2Color =c("#f27330")
+    private val player3Color =  c("green")
+    private val player4Color = c("#03a3d1")
+    private val player5Color = c("#eb15dc")
+    private val defaultColor = c("#d2edd7")
+    fun paintField(field : monopoly.logic.Field) {
+        val color = when (game.data.indexOf(field.owner)){
+            0 -> player1Color
+            1 -> player2Color
+            2 -> player3Color
+            3 -> player4Color
+            4 -> player5Color
+            else -> defaultColor
+        }
+        when (field.location) {
+            1 -> field1.style(append = true) { backgroundColor += color }
+            2 -> field2.style(append = true) { backgroundColor += color }
+            3 -> field3.style(append = true) { backgroundColor += color }
+            5 -> field5.style(append = true) { backgroundColor += color }
+            6 -> field6.style(append = true) { backgroundColor += color }
+            8 -> field8.style(append = true) { backgroundColor += color }
+            9 -> field9.style(append = true) { backgroundColor += color }
+            10 -> field10.style(append = true) { backgroundColor += color }
+            11 -> field11.style(append = true) { backgroundColor += color }
+            13 -> field13.style(append = true) { backgroundColor += color }
+            15 -> field15.style(append = true) { backgroundColor += color }
+            16 -> field16.style(append = true) { backgroundColor += color }
+            17 -> field17.style(append = true) { backgroundColor += color }
+            19 -> field19.style(append = true) { backgroundColor += color }
+            22 -> field22.style(append = true) { backgroundColor += color }
+            24 -> field24.style(append = true) { backgroundColor += color }
+            25 -> field25.style(append = true) { backgroundColor += color }
+            26 -> field26.style(append = true) { backgroundColor += color }
+            else -> field27.style(append = true) { backgroundColor += color }
+        }
     }
 
     private fun send(str: String) {
@@ -771,10 +772,6 @@ class GamePlay : View("Monopoly") {
     }
 
     private fun clearFieldLooser(current: Player) {
-        for (i in current.realty) {
-            paintField(i.location, c("#d2edd7"))
-            game.fieldClear(i)
-        }
         when (current.id) {
             1 -> {
                 playerField1.opacity = 0.0
@@ -811,87 +808,17 @@ class GamePlay : View("Monopoly") {
 
     private fun sellAndVacateFieldView(field: monopoly.logic.Field, player: Player) {
         sendln(player.name + " продает свое поле " + field.name + " за " + field.cost / 2 + ".")
-        paintField(field.location, c("#d2edd7"))
     }
 
     private fun sellUpgradeView(player: Player) {
-        sendln(player.name + " продает филиал. Количество филиалов на поле " + game.board.fields[game.fieldDegradeProperty.value].name + " - " + game.board.fields[game.fieldDegradeProperty.value].upgrade)
-        updateUpgrade(game.fieldDegradeProperty.value)
+        sendln(player.name + " продает филиал. Количество филиалов на поле "
+                + game.board.fields[game.view.fieldDegradeProperty.value].name + " - "
+                + game.board.fields[game.view.fieldDegradeProperty.value].upgrade)
     }
 
     fun motion() {
         buttonRoll.disableProperty().value = true
         game.motion()
-    }
-
-    private fun updateUpgrade() {
-        for (i in game.board.fields) {
-            val upgrade = when (game.board.fields[i.location].upgrade) {
-                0 -> ""
-                1 -> "*"
-                2 -> "**"
-                3 -> "***"
-                4 -> "****"
-                else -> "*****"
-            }
-            when (i.location) {
-                1 -> gamePlay.labelUpgrade1.text = upgrade
-                2 -> gamePlay.labelUpgrade2.text = upgrade
-                3 -> gamePlay.labelUpgrade3.text = upgrade
-                5 -> gamePlay.labelUpgrade5.text = upgrade
-                6 -> gamePlay.labelUpgrade6.text = upgrade
-                8 -> gamePlay.labelUpgrade8.text = upgrade
-                9 -> gamePlay.labelUpgrade9.text = upgrade
-                10 -> gamePlay.labelUpgrade10.text = upgrade
-                11 -> gamePlay.labelUpgrade11.text = upgrade
-                13 -> gamePlay.labelUpgrade13.text = upgrade
-                15 -> gamePlay.labelUpgrade15.text = upgrade
-                16 -> gamePlay.labelUpgrade16.text = upgrade
-                17 -> gamePlay.labelUpgrade17.text = upgrade
-                19 -> gamePlay.labelUpgrade19.text = upgrade
-                22 -> gamePlay.labelUpgrade22.text = upgrade
-                24 -> gamePlay.labelUpgrade24.text = upgrade
-                25 -> gamePlay.labelUpgrade25.text = upgrade
-                26 -> gamePlay.labelUpgrade26.text = upgrade
-                27 -> gamePlay.labelUpgrade27.text = upgrade
-                else -> {
-                }
-            }
-        }
-    }
-
-    fun updateUpgrade(position: Int) {
-        val upgrade = when (game.board.fields[position].upgrade) {
-            0 -> ""
-            1 -> "*"
-            2 -> "**"
-            3 -> "***"
-            4 -> "****"
-            else -> "*****"
-        }
-        when (position) {
-            1 -> gamePlay.labelUpgrade1.text = upgrade
-            2 -> gamePlay.labelUpgrade2.text = upgrade
-            3 -> gamePlay.labelUpgrade3.text = upgrade
-            5 -> gamePlay.labelUpgrade5.text = upgrade
-            6 -> gamePlay.labelUpgrade6.text = upgrade
-            8 -> gamePlay.labelUpgrade8.text = upgrade
-            9 -> gamePlay.labelUpgrade9.text = upgrade
-            10 -> gamePlay.labelUpgrade10.text = upgrade
-            11 -> gamePlay.labelUpgrade11.text = upgrade
-            13 -> gamePlay.labelUpgrade13.text = upgrade
-            15 -> gamePlay.labelUpgrade15.text = upgrade
-            16 -> gamePlay.labelUpgrade16.text = upgrade
-            17 -> gamePlay.labelUpgrade17.text = upgrade
-            19 -> gamePlay.labelUpgrade19.text = upgrade
-            22 -> gamePlay.labelUpgrade22.text = upgrade
-            24 -> gamePlay.labelUpgrade24.text = upgrade
-            25 -> gamePlay.labelUpgrade25.text = upgrade
-            26 -> gamePlay.labelUpgrade26.text = upgrade
-            27 -> gamePlay.labelUpgrade27.text = upgrade
-            else -> {
-            }
-        }
     }
 
     private fun viewEndMotion(player: Player) {
@@ -907,6 +834,7 @@ class GamePlay : View("Monopoly") {
 
 
     fun endGame() {
+        sendln("${game.gameWinner!!.name}, вы переиграли всех своих оппонентов!")
         find<FinishGame>().openModal(resizable = false)
     }
 

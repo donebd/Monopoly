@@ -23,24 +23,24 @@ class ExchangeSolution : Fragment() {
 
     private val sendBtn: Button by fxid()
 
+    var exchange = game.currentExchange
+
     init {
-        nameSender.text = game.exchangeSender.name
-        nameReceiver.text = game.exchangeReceiver.name
+        nameSender.text = exchange.exchangeSender.name
+        nameReceiver.text = exchange.exchangeReceiver.name
         tableViewSender.column("Поле", monopoly.logic.Field::nameProperty)
         tableViewSender.column("Стоимость", monopoly.logic.Field::costProperty)
-        tableViewSender.items = game.exchangeReceiverList.asObservable()
+        tableViewSender.items = exchange.exchangeReceiverList.asObservable()
         tableViewReceiver.column("Поле", monopoly.logic.Field::nameProperty)
         tableViewReceiver.column("Стоимость", monopoly.logic.Field::costProperty)
-        tableViewReceiver.items = game.exchangeSenderList.asObservable()
-        money1Lbl.text = "${game.exchangeMoneyReceiver}$"
-        money2Lbl.text = "$${game.exchangeMoneySender}"
+        tableViewReceiver.items = exchange.exchangeSenderList.asObservable()
+        money1Lbl.text = "${exchange.exchangeMoneyReceiver}$"
+        money2Lbl.text = "$${exchange.exchangeMoneySender}"
     }
 
     fun acceptExchange() {
-        game.acceptExchange()
-        gamePlay.updateColor(game.exchangeSender)
-        gamePlay.updateColor(game.exchangeReceiver)
-        gamePlay.offerLog()
+        exchange.acceptExchange()
+        gamePlay.exchangeOfferLog(exchange)
         exit()
     }
 
@@ -49,7 +49,7 @@ class ExchangeSolution : Fragment() {
     }
 
     fun exit() {
-        game.exchangePause = false
+        exchange.exchangePause = false
         close()
     }
 }

@@ -11,6 +11,7 @@ class Field(val location: Int, val type: Type) {
     var layoutX = 0.0
     var layoutY = 0.0
     var owner: Player? = null
+    var ownerProperty = SimpleStringProperty("null")
     var cost = 2000 + location * 100
     val costProperty = SimpleIntegerProperty(cost)
     val upgradeCost = cost / 2
@@ -18,9 +19,15 @@ class Field(val location: Int, val type: Type) {
     var particular = false
     val penaltyProperty = SimpleIntegerProperty()
     var hasMonopoly = false
+    var view = SimpleStringProperty("")
 
     init {
         penaltyUpdate()
+    }
+
+    fun ownerUpdate(new : Player?) {
+        owner = new
+        ownerProperty.value = new?.name ?: "null"
     }
 
     fun nameUpdate(name: String) {
@@ -36,6 +43,7 @@ class Field(val location: Int, val type: Type) {
             if (owner != null) (cost / 6)
             else cost
         }
+        view.value = "*".repeat(upgrade)
         penaltyProperty.value = penalty
     }
 

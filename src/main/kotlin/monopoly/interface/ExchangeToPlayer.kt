@@ -22,8 +22,10 @@ class ExchangeToPlayer : Fragment() {
     private val nameReceiver: Label by fxid()
     private val errorLabel: Label by fxid()
 
-    private val realtySender = game.exchangeSender.realty.asObservable()
-    private val realtyReceiver = game.exchangeReceiver.realty.asObservable()
+    private var exchange = game.currentExchange
+
+    private val realtySender = exchange.exchangeSender.realty.asObservable()
+    private val realtyReceiver = exchange.exchangeReceiver.realty.asObservable()
 
     private val selectedToTrade = mutableListOf<monopoly.logic.Field>().asObservable()
     private val receivedToTrade = mutableListOf<monopoly.logic.Field>().asObservable()
@@ -34,8 +36,8 @@ class ExchangeToPlayer : Fragment() {
     private val sendBtn: Button by fxid()
 
     init {
-        nameSender.text = game.exchangeSender.name
-        nameReceiver.text = game.exchangeReceiver.name
+        nameSender.text = exchange.exchangeSender.name
+        nameReceiver.text = exchange.exchangeReceiver.name
         tableViewSender.column("Поле", monopoly.logic.Field::nameProperty)
         tableViewSender.column("Стоимость", monopoly.logic.Field::costProperty)
         tableViewSender.items = realtySender
@@ -96,15 +98,15 @@ class ExchangeToPlayer : Fragment() {
             temp2 = "0"
         }
         val money2 = temp2.toInt()
-        val checkHasMoney = money1 <= game.exchangeSender.money && money2 <= game.exchangeReceiver.money
-        if (game.correctExchange(selectedToTrade, receivedToTrade, money1, money2) && checkHasMoney) {
-            game.exchangeSenderList = selectedToTrade
-            game.exchangeReceiverList = receivedToTrade
-            game.exchangeMoneySender = money1
-            game.exchangeMoneyReceiver = money2
+        val checkHasMoney = money1 <= exchange.exchangeSender.money && money2 <= exchange.exchangeReceiver.money
+        if (exchange.possibleExchange(selectedToTrade, receivedToTrade, money1, money2) && checkHasMoney) {
+            exchange.exchangeSenderList = selectedToTrade
+            exchange.exchangeReceiverList = receivedToTrade
+            exchange.exchangeMoneySender = money1
+            exchange.exchangeMoneyReceiver = money2
             close()
             find<ExchangeSolution>().openModal(resizable = false)!!.setOnCloseRequest {
-                game.exchangePause = false
+                exchange.exchangePause = false
             }
             return
         }

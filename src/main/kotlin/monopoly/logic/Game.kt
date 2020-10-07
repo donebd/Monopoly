@@ -2,19 +2,10 @@ package monopoly.logic
 
 
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.property.SimpleStringProperty
 import tornadofx.runAsync
 import tornadofx.ui
 
 class Game {
-
-    val player1Default = Pair(10.0, 30.0)
-    val player2Default = Pair(10.0, 40.0)
-    val player3Default = Pair(30.0, 30.0)
-    val player4Default = Pair(30.0, 40.0)
-    val player5Default = Pair(10.0, 50.0)
-    val prisonPosition = Pair(810.0, 50.0)
 
     var statsCntOfMotion = 0
     val statsVisitedField = IntArray(28)
@@ -39,24 +30,7 @@ class Game {
     var gameIsEnd = false
     var gameWinner: Player? = null
     var endProperty = SimpleBooleanProperty(gameIsEnd)
-    var prisonInitProperty = SimpleBooleanProperty()
-    var penaltyInitProperty = SimpleBooleanProperty()
-    var offerToBuyInitProperty = SimpleBooleanProperty()
-    var negativeEventInitProperty = SimpleBooleanProperty()
-    var positiveEventInitProperty = SimpleBooleanProperty()
-    var diceDoubleProperty = SimpleBooleanProperty()
-    var cycleCompleteProperty = SimpleBooleanProperty()
-    var stonksActionProperty = SimpleBooleanProperty()
-    var startActionProperty = SimpleBooleanProperty()
-    var notifyInView = SimpleStringProperty()
-    var updateUpgradeView = SimpleBooleanProperty()
-    var viewEndMotionProperty = SimpleBooleanProperty()
-    var toPrisonViewProperty = SimpleBooleanProperty()
-    var surrenderViewProperty = SimpleBooleanProperty()
-    var fieldBoughtProperty = SimpleBooleanProperty()
-    var sellUpgradeViewProperty = SimpleBooleanProperty()
-    var fieldDegradeProperty = SimpleIntegerProperty()
-    var fieldSelledProperty = SimpleIntegerProperty()
+    val view = NotifyInView()
 
     fun triggerProperty(property: SimpleBooleanProperty) {
         property.value = !property.value
@@ -78,13 +52,7 @@ class Game {
 
     val dice = Dice()
 
-    var exchangeSender = Player(0)
-    var exchangeReceiver = Player(0)
-    var exchangeSenderList = mutableListOf<Field>()
-    var exchangeReceiverList = mutableListOf<Field>()
-    var exchangeMoneySender = 0
-    var exchangeMoneyReceiver = 0
-    var exchangePause = false
+    var currentExchange =  ExchangeOffer()
 
     var playerClicked = Player(228) // for action with realty
     var fieldClicked = Field(50, Type.Secret)
@@ -102,60 +70,9 @@ class Game {
 
     fun canExchange(sender: Player, receiver: Player): Boolean {
         if (sender.ai || currentPlayer.id != sender.id) return false
-        exchangeSender = sender
-        exchangeReceiver = receiver
-        exchangePause = sender.id != receiver.id && receiver.id !in loosers
-        return exchangePause
-    }
-
-    fun acceptExchange() {
-        for (field in exchangeSenderList) {
-            exchangeSender.realty.remove(field)
-            field.owner = null
-            field.upgrade = 0
-            exchangeSender.checkForMonopoly(field)
-            field.penaltyUpdate()
-            exchangeReceiver.realty.add(field)
-            field.owner = exchangeReceiver
-            exchangeReceiver.checkForMonopoly(field)
-            field.penaltyUpdate()
-        }// fields of sender to receiver
-
-        for (field in exchangeReceiverList) {
-            exchangeReceiver.realty.remove(field)
-            field.owner = null
-            field.upgrade = 0
-            exchangeReceiver.checkForMonopoly(field)
-            field.penaltyUpdate()
-            exchangeSender.realty.add(field)
-            field.owner = exchangeSender
-            exchangeSender.checkForMonopoly(field)
-            field.penaltyUpdate()
-        }
-
-        exchangeSender.moneyChange(exchangeMoneyReceiver)
-        exchangeSender.moneyChange(-exchangeMoneySender)
-        exchangeReceiver.moneyChange(exchangeMoneySender)
-        exchangeReceiver.moneyChange(-exchangeMoneyReceiver)
-    }
-
-    fun correctExchange(
-        sendingFields: List<Field>,
-        receiveringFields: List<Field>,
-        moneySend: Int,
-        moneyGet: Int
-    ): Boolean {
-        if (sendingFields.isEmpty() && receiveringFields.isEmpty()) return false
-        var costSend = moneySend
-        var costReceive = moneyGet
-        for (field in sendingFields) {
-            costSend += field.cost
-        }
-        for (field in receiveringFields) {
-            costReceive += field.cost
-        }
-        if (costSend > costReceive * 2 || 2 * costSend < costReceive) return false
-        return true
+        currentExchange = ExchangeOffer(sender, receiver)
+        currentExchange.exchangePause = sender.id != receiver.id && receiver.id !in loosers
+        return currentExchange.exchangePause
     }
 
     private fun aiInstructions(player: Player): List<Int> {
@@ -195,15 +112,15 @@ class Game {
                     }
                     if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1) {
                         val idDegradeField = sellSomeUpgrade(player, true)
-                        fieldDegradeProperty.value = idDegradeField
-                        triggerProperty(sellUpgradeViewProperty)
+                        view.fieldDegradeProperty.value = idDegradeField
+                        triggerProperty(view.sellUpgradeViewProperty)
                         aiPrisonInstructions(player)
                         return//sellUpgrade
                     }
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
                         fieldSellByHalf(player, board.fields[selledFieldId])
-                        fieldSelledProperty.value = selledFieldId
+                        view.fieldSelledProperty.value = selledFieldId
                         aiPrisonInstructions(player)
                         return//sellField
                     }
@@ -229,21 +146,21 @@ class Game {
                     if (player.hasSomeNotMonopoly()) {
                         val selledFieldId = sellSomeNotMonopolyField(player)
                         fieldSellByHalf(player, board.fields[selledFieldId])
-                        fieldSelledProperty.value = selledFieldId
+                        view.fieldSelledProperty.value = selledFieldId
                         aiPrisonInstructions(player)
                         return//sellField
                     }
                     if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1) {
                         val idDegradeField = sellSomeUpgrade(player, true)
-                        fieldDegradeProperty.value = idDegradeField
-                        triggerProperty(sellUpgradeViewProperty)
+                        view.fieldDegradeProperty.value = idDegradeField
+                        triggerProperty(view.sellUpgradeViewProperty)
                         aiPrisonInstructions(player)
                         return//sellUpgrade
                     }
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
                         fieldSellByHalf(player, board.fields[selledFieldId])
-                        fieldSelledProperty.value = selledFieldId
+                        view.fieldSelledProperty.value = selledFieldId
                         aiPrisonInstructions(player)
                         return//sellField
                     }
@@ -262,7 +179,7 @@ class Game {
             Difficulty.Hard -> {
                 if (player.money >= board.fields[player.position].cost + 500 && (player.monopolyRealty.isEmpty() || player.money >= 10000 || someOnBoardNearlyHasMonopoly())) {
                     playerAcceptBuyRealty()
-                    triggerProperty(fieldBoughtProperty)
+                    triggerProperty(view.fieldBoughtProperty)
                     return//buy
                 }
                 if (playerNearlyHasMonopoly(player, board.fields[player.position])
@@ -270,8 +187,8 @@ class Game {
                     && player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1
                 ) {
                     val idDegradeField = sellSomeUpgrade(player, true)
-                    fieldDegradeProperty.value = idDegradeField
-                    triggerProperty(sellUpgradeViewProperty)
+                    view.fieldDegradeProperty.value = idDegradeField
+                    triggerProperty(view.sellUpgradeViewProperty)
                     aiBuyInstructions(player)
                     return//sellUpgrade
                 }
@@ -281,7 +198,7 @@ class Game {
                 ) {
                     val selledFieldId = sellSomeOtherTypeField(player)
                     fieldSellByHalf(player, board.fields[selledFieldId])
-                    fieldSelledProperty.value = selledFieldId
+                    view.fieldSelledProperty.value = selledFieldId
                     aiBuyInstructions(player)
                     return//sellField
                 }
@@ -289,14 +206,14 @@ class Game {
             Difficulty.Medium -> {
                 if (player.money >= board.fields[player.position].cost && (player.monopolyRealty.isEmpty() || someOnBoardNearlyHasMonopoly())) {
                     playerAcceptBuyRealty()
-                    triggerProperty(fieldBoughtProperty)
+                    triggerProperty(view.fieldBoughtProperty)
                     return//buy
                 }
 
             }
             else -> if (player.money >= board.fields[player.position].cost) {
                 playerAcceptBuyRealty()
-                triggerProperty(fieldBoughtProperty)
+                triggerProperty(view.fieldBoughtProperty)
                 return//buy
             }
         }
@@ -375,15 +292,15 @@ class Game {
             Difficulty.Hard, Difficulty.Medium -> {
                 if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1) {
                     val idDegradeField = sellSomeUpgrade(player, true)
-                    fieldDegradeProperty.value = idDegradeField
-                    triggerProperty(sellUpgradeViewProperty)
+                    view.fieldDegradeProperty.value = idDegradeField
+                    triggerProperty(view.sellUpgradeViewProperty)
                     aiNegativeEvent(player)
                     return//sellUpgrade
                 } else {
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
                         fieldSellByHalf(player, board.fields[selledFieldId])
-                        fieldSelledProperty.value = selledFieldId
+                        view.fieldSelledProperty.value = selledFieldId
                         aiNegativeEvent(player)
                         return//sellField
                     }
@@ -393,21 +310,21 @@ class Game {
                 if (player.hasSomeNotMonopoly()) {
                     val selledFieldId = sellSomeNotMonopolyField(player)
                     fieldSellByHalf(player, board.fields[selledFieldId])
-                    fieldSelledProperty.value = selledFieldId
+                    view.fieldSelledProperty.value = selledFieldId
                     aiNegativeEvent(player)
                     return//sellNotMonopolyField
                 }
                 if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1) {
                     val idDegradeField = sellSomeUpgrade(player, true)
-                    fieldDegradeProperty.value = idDegradeField
-                    triggerProperty(sellUpgradeViewProperty)
+                    view.fieldDegradeProperty.value = idDegradeField
+                    triggerProperty(view.sellUpgradeViewProperty)
                     aiNegativeEvent(player)
                     return//sellUpgrade
                 } else {
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
                         fieldSellByHalf(player, board.fields[selledFieldId])
-                        fieldSelledProperty.value = selledFieldId
+                        view.fieldSelledProperty.value = selledFieldId
                         aiNegativeEvent(player)
                         return//sellField
                     }
@@ -428,15 +345,15 @@ class Game {
             Difficulty.Hard, Difficulty.Medium -> {
                 if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1) {
                     val idDegradeField = sellSomeUpgrade(player, true)
-                    fieldDegradeProperty.value = idDegradeField
-                    triggerProperty(sellUpgradeViewProperty)
+                    view.fieldDegradeProperty.value = idDegradeField
+                    triggerProperty(view.sellUpgradeViewProperty)
                     aiPunisment(player)
                     return//sellUpgrade
                 } else {
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
                         fieldSellByHalf(player, board.fields[selledFieldId])
-                        fieldSelledProperty.value = selledFieldId
+                        view.fieldSelledProperty.value = selledFieldId
                         aiPunisment(player)
                         return//sellField
                     }
@@ -446,21 +363,21 @@ class Game {
                 if (player.hasSomeNotMonopoly()) {
                     val selledFieldId = sellSomeNotMonopolyField(player)
                     fieldSellByHalf(player, board.fields[selledFieldId])
-                    fieldSelledProperty.value = selledFieldId
+                    view.fieldSelledProperty.value = selledFieldId
                     aiPunisment(player)
                     return//sellNotMonopolyField
                 }
                 if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1) {
                     val idDegradeField = sellSomeUpgrade(player, true)
-                    fieldDegradeProperty.value = idDegradeField
-                    triggerProperty(sellUpgradeViewProperty)
+                    view.fieldDegradeProperty.value = idDegradeField
+                    triggerProperty(view.sellUpgradeViewProperty)
                     aiPunisment(player)
                     return//sellUpgrade
                 } else {
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
                         fieldSellByHalf(player, board.fields[selledFieldId])
-                        fieldSelledProperty.value = selledFieldId
+                        view.fieldSelledProperty.value = selledFieldId
                         aiPunisment(player)
                         return//sellField
                     }
@@ -623,7 +540,7 @@ class Game {
         if (currentPlayer.money >= board.fields[currentPlayer.position].cost) {
             currentPlayer.moneyChange(-board.fields[currentPlayer.position].cost)
             currentPlayer.realty.add(board.fields[currentPlayer.position])
-            board.fields[currentPlayer.position].owner = currentPlayer
+            board.fields[currentPlayer.position].ownerUpdate(currentPlayer)
             currentPlayer.checkForMonopoly(board.fields[currentPlayer.position])
             board.fields[currentPlayer.position].penaltyUpdate()
             return true
@@ -656,8 +573,8 @@ class Game {
         }
     }
 
-    fun fieldClear(i: Field) {
-        board.fields[i.location].owner = null
+    private fun fieldClear(i: Field) {
+        board.fields[i.location].ownerUpdate(null)
         board.fields[i.location].upgrade = 0
         if (board.fields[i.location].hasMonopoly) board.fields[i.location].monopolyChange()
         board.fields[i.location].penaltyUpdate()
@@ -702,7 +619,7 @@ class Game {
             currentPlayer.prisonDays = 0
             currentPlayer.moneyChange(-750)
             currentPlayer.justOutJail = true
-            notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, заплатив 750$.")
+            view.notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, заплатив 750$.")
             endMotion()
             return 1
         }
@@ -710,7 +627,7 @@ class Game {
             currentPlayer.prisonDays = 0
             currentPlayer.moneyChange(-500)
             currentPlayer.justOutJail = true
-            notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, заплатив 500$.")
+            view.notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, заплатив 500$.")
             endMotion()
             return 2
         }
@@ -721,13 +638,13 @@ class Game {
         dice.roll()
         runAsync { if (delay) Thread.sleep(600) } ui {
             if (prisonTry()) {
-                notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, выбив дубль!")
+                view.notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, выбив дубль!")
                 playerMove(currentPlayer)
             } else {
                 if (4 - currentPlayer.prisonDays + 1 != 1)
-                    notifyInView.value = ("Игрок остается в тюрьме еще на ${4 - currentPlayer.prisonDays + 1} хода.")
+                    view.notifyInView.value = ("Игрок остается в тюрьме еще на ${4 - currentPlayer.prisonDays + 1} хода.")
                 else
-                    notifyInView.value = ("Всего один ход отлучает ${currentPlayer.name}, от свободы!")
+                    view.notifyInView.value = ("Всего один ход отлучает ${currentPlayer.name}, от свободы!")
                 endMotion()
             }
         }
@@ -777,7 +694,7 @@ class Game {
     fun fieldSellByHalf() {
         playerClicked.moneyChange(fieldClicked.cost / 2)
         playerClicked.realty.remove(fieldClicked)
-        fieldClicked.owner = null
+        fieldClicked.ownerUpdate(null)
         fieldClicked.upgrade = 0
         playerClicked.checkForMonopoly(fieldClicked)
         fieldClicked.penaltyUpdate()
@@ -786,7 +703,7 @@ class Game {
     private fun fieldSellByHalf(player: Player, field: Field) {
         player.moneyChange(field.cost / 2)
         player.realty.remove(field)
-        field.owner = null
+        field.ownerUpdate(null)
         field.upgrade = 0
         player.checkForMonopoly(field)
         field.penaltyUpdate()
@@ -817,7 +734,7 @@ class Game {
     fun motion() {//function start
         val player = currentPlayer
         if (player.playerInPrison()) {
-            triggerProperty(prisonInitProperty)
+            triggerProperty(view.prisonInitProperty)
             if (player.ai) {
                 aiPrisonInstructions(player)
             }
@@ -851,25 +768,25 @@ class Game {
     private fun fieldEvent(player: Player) {
         //check cycle completed and reward according to the settings
         if (checkCircleComplete()) {
-            triggerProperty(cycleCompleteProperty)
+            triggerProperty(view.cycleCompleteProperty)
         }
         //buy realty
         if (realtyCanBuy()) {
-            triggerProperty(offerToBuyInitProperty)
+            triggerProperty(view.offerToBuyInitProperty)
             if (player.ai) {
                 aiBuyInstructions(player)
                 endMotion()
             }
-            if (diceDoubleCheck()) triggerProperty(diceDoubleProperty)
+            if (diceDoubleCheck()) triggerProperty(view.diceDoubleProperty)
             return
         }
         //pay penalty
         if (punishmentOrPenalty()) {
-            triggerProperty(penaltyInitProperty)
+            triggerProperty(view.penaltyInitProperty)
             if (player.ai) {
                 aiPunisment(player)
             }
-            if (diceDoubleCheck()) triggerProperty(diceDoubleProperty)
+            if (diceDoubleCheck()) triggerProperty(view.diceDoubleProperty)
             return
         }
         //player to prison
@@ -879,50 +796,50 @@ class Game {
         }
         //get stonks
         if (stonksAction()) {
-            triggerProperty(stonksActionProperty)
+            triggerProperty(view.stonksActionProperty)
         }
         //secret action
         if (ifSecret()) {
             secretAction()
-            if (diceDoubleCheck()) triggerProperty(diceDoubleProperty)
+            if (diceDoubleCheck()) triggerProperty(view.diceDoubleProperty)
             return
         }
         //start field
         if (startAction()) {
-            triggerProperty(startActionProperty)
+            triggerProperty(view.startActionProperty)
         }
         //player owner field
         if (board.fields[player.position].owner != null && board.fields[player.position].owner!!.id == player.id) {
-            notifyInView.value = "Игрок пришел с проверкой на свое поле"
+            view.notifyInView.value = "Игрок пришел с проверкой на свое поле"
         }
 
-        if (player.position == 7) notifyInView.value = (player.name + " решил прогуляться в парке, рядом с темницей.")
+        if (player.position == 7) view.notifyInView.value = (player.name + " решил прогуляться в парке, рядом с темницей.")
 
-        if (player.position == 14) notifyInView.value = (player.name + " наслаждается отдыхом на природе.")
+        if (player.position == 14) view.notifyInView.value = (player.name + " наслаждается отдыхом на природе.")
 
-        if (diceDoubleCheck()) triggerProperty(diceDoubleProperty)
+        if (diceDoubleCheck()) triggerProperty(view.diceDoubleProperty)
         endMotion()
     }
 
     fun endMotion() {
         runAsync { if (delay) Thread.sleep(300) } ui {
             endMotionLogic()
-            triggerProperty(viewEndMotionProperty)
+            triggerProperty(view.viewEndMotionProperty)
             val player = data[motionPlayer]
             if (player.ai) {
                 for (i in aiInstructions(player)) {
-                    notifyInView.value =
+                    view.notifyInView.value =
                         (player.name + " строит филиал. Количество филиалов на поле " + board.fields[i].name + " - " + board.fields[i].upgrade)
                 }
-                triggerProperty(updateUpgradeView)
+                triggerProperty(view.updateUpgradeView)
             }
             if (!dice.double && !player.justOutJail) {
-                notifyInView.value = ""
-                notifyInView.value = ("Ваш ход, ${data[motionPlayer].name} !")
+                view.notifyInView.value = ""
+                view.notifyInView.value = ("Ваш ход, ${data[motionPlayer].name} !")
             }
             player.justOutJail = false
             runAsync {
-                while (exchangePause) {
+                while (currentExchange.exchangePause) {
                     Thread.sleep(100)
                 }
                 runAsync { if (delay) Thread.sleep(500) } ui {
@@ -938,7 +855,7 @@ class Game {
         current.goToPrison()
         statsVisitedField[current.position]++
         dice.double = false
-        triggerProperty(toPrisonViewProperty)
+        triggerProperty(view.toPrisonViewProperty)
         runAsync { if (delay) Thread.sleep(200) } ui { endMotion() }
     }
 
@@ -946,10 +863,10 @@ class Game {
         //positive
         if (secretIsPositive()) {
             positiveSecret()
-            triggerProperty(positiveEventInitProperty)
+            triggerProperty(view.positiveEventInitProperty)
             endMotion()
         } else {//negative
-            triggerProperty(negativeEventInitProperty)
+            triggerProperty(view.negativeEventInitProperty)
             if (currentPlayer.ai) {
                 aiNegativeEvent(currentPlayer)
             }
@@ -958,7 +875,10 @@ class Game {
 
     fun playerSurrender() {
         playerLose()
-        triggerProperty(surrenderViewProperty)
+        for (i in currentPlayer.realty) {
+            fieldClear(i)
+        }
+        triggerProperty(view.surrenderViewProperty)
         dice.double = false
         endMotion()
         checkEndGame()
