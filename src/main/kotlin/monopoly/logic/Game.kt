@@ -825,7 +825,7 @@ class Game {
         runAsync { if (delay) Thread.sleep(300) } ui {
             endMotionLogic()
             triggerProperty(view.viewEndMotionProperty)
-            val player = data[motionPlayer]
+            val player = currentPlayer
             if (player.ai) {
                 for (i in aiInstructions(player)) {
                     view.notifyInView.value =
@@ -835,7 +835,7 @@ class Game {
             }
             if (!dice.double && !player.justOutJail) {
                 view.notifyInView.value = ""
-                view.notifyInView.value = ("Ваш ход, ${data[motionPlayer].name} !")
+                view.notifyInView.value = ("Ваш ход, ${player.name} !")
             }
             player.justOutJail = false
             runAsync {

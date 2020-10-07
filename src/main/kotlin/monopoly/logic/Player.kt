@@ -33,7 +33,7 @@ class Player(val id: Int) {
     }
 
     fun hasSomeNotMonopoly(): Boolean {
-        return realty.filter { it.type !in monopolyRealty }.isNotEmpty()
+        return realty.any { it.type !in monopolyRealty }
     }
 
     fun playerInPrison(): Boolean = prisonDays != 0

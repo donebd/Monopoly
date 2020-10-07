@@ -49,6 +49,7 @@ class Field(val location: Int, val type: Type) {
 
     fun monopolyChange() {
         hasMonopoly = !hasMonopoly
+        if (!hasMonopoly) upgrade = 0
         penaltyUpdate()
     }
 
