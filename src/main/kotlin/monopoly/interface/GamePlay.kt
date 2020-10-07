@@ -6,9 +6,9 @@ import javafx.scene.control.Label
 import javafx.scene.control.TextArea
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
+import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
-import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.util.Duration
@@ -412,138 +412,10 @@ class GamePlay : View("Monopoly") {
     }
 
     //game realty fields
-    private val field1: VBox by fxid()
-    private val field1Penalty: Label by fxid()
-    private val labelUpgrade1: Label by fxid()
-    fun field1Action() {
-        if (game.canControl(1)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field2: VBox by fxid()
-    private val field2Penalty: Label by fxid()
-    private val labelUpgrade2: Label by fxid()
-    fun field2Action() {
-        if (game.canControl(2)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field3: VBox by fxid()
-    private val field3Penalty: Label by fxid()
-    private val labelUpgrade3: Label by fxid()
-    fun field3Action() {
-        if (game.canControl(3)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field5: VBox by fxid()
-    private val field5Penalty: Label by fxid()
-    private val labelUpgrade5: Label by fxid()
-    fun field5Action() {
-        if (game.canControl(5)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field6: VBox by fxid()
-    private val field6Penalty: Label by fxid()
-    private val labelUpgrade6: Label by fxid()
-    fun field6Action() {
-        if (game.canControl(6)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field8: HBox by fxid()
-    private val field8Penalty: Label by fxid()
-    private val labelUpgrade8: Label by fxid()
-    fun field8Action() {
-        if (game.canControl(8)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field9: HBox by fxid()
-    private val field9Penalty: Label by fxid()
-    private val labelUpgrade9: Label by fxid()
-    fun field9Action() {
-        if (game.canControl(9)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field10: HBox by fxid()
-    private val field10Penalty: Label by fxid()
-    private val labelUpgrade10: Label by fxid()
-    fun field10Action() {
-        if (game.canControl(10)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field11: HBox by fxid()
-    private val field11Penalty: Label by fxid()
-    private val labelUpgrade11: Label by fxid()
-    fun field11Action() {
-        if (game.canControl(11)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field13: HBox by fxid()
-    private val field13Penalty: Label by fxid()
-    private val labelUpgrade13: Label by fxid()
-    fun field13Action() {
-        if (game.canControl(13)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field15: VBox by fxid()
-    private val field15Penalty: Label by fxid()
-    private val labelUpgrade15: Label by fxid()
-    fun field15Action() {
-        if (game.canControl(15)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field16: VBox by fxid()
-    private val field16Penalty: Label by fxid()
-    private val labelUpgrade16: Label by fxid()
-    fun field16Action() {
-        if (game.canControl(16)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field17: VBox by fxid()
-    private val field17Penalty: Label by fxid()
-    private val labelUpgrade17: Label by fxid()
-    fun field17Action() {
-        if (game.canControl(17)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field19: VBox by fxid()
-    private val field19Penalty: Label by fxid()
-    private val labelUpgrade19: Label by fxid()
-    fun field19Action() {
-        if (game.canControl(19)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field22: HBox by fxid()
-    private val field22Penalty: Label by fxid()
-    private val labelUpgrade22: Label by fxid()
-    fun field22Action() {
-        if (game.canControl(22)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field24: HBox by fxid()
-    private val field24Penalty: Label by fxid()
-    private val labelUpgrade24: Label by fxid()
-    fun field24Action() {
-        if (game.canControl(24)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field25: HBox by fxid()
-    private val field25Penalty: Label by fxid()
-    private val labelUpgrade25: Label by fxid()
-    fun field25Action() {
-        if (game.canControl(25)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field26: HBox by fxid()
-    private val field26Penalty: Label by fxid()
-    private val labelUpgrade26: Label by fxid()
-    fun field26Action() {
-        if (game.canControl(26)) find<Field>().openModal(resizable = false)
-    }
-
-    private val field27: HBox by fxid()
-    private val field27Penalty: Label by fxid()
-    private val labelUpgrade27: Label by fxid()
-    fun field27Action() {
-        if (game.canControl(27)) find<Field>().openModal(resizable = false)
-    }
+    private val upperPane: GridPane by fxid()//0..7
+    private val rightPane: GridPane by fxid()//8..13
+    private val bottomPane: GridPane by fxid()//14..21
+    private val leftPane: GridPane by fxid()//15..27
 
     //game dice
     private val firstdice1: ImageView by fxid()
@@ -685,54 +557,41 @@ class GamePlay : View("Monopoly") {
         for (field in game.board.fields) {
             if (field.couldBuy) game.board.fields[field.location].ownerProperty.onChange { paintField(field) }
         }
-        labelUpgrade1.bind(game.board.fields[1].view)
-        field1Penalty.bind(game.board.fields[1].penaltyProperty)
-        labelUpgrade2.bind(game.board.fields[2].view)
-        field2Penalty.bind(game.board.fields[2].penaltyProperty)
-        labelUpgrade3.bind(game.board.fields[3].view)
-        field3Penalty.bind(game.board.fields[3].penaltyProperty)
-        labelUpgrade5.bind(game.board.fields[5].view)
-        field5Penalty.bind(game.board.fields[5].penaltyProperty)
-        labelUpgrade6.bind(game.board.fields[6].view)
-        field6Penalty.bind(game.board.fields[6].penaltyProperty)
-        labelUpgrade8.bind(game.board.fields[8].view)
-        field8Penalty.bind(game.board.fields[8].penaltyProperty)
-        labelUpgrade9.bind(game.board.fields[9].view)
-        field9Penalty.bind(game.board.fields[9].penaltyProperty)
-        labelUpgrade10.bind(game.board.fields[10].view)
-        field10Penalty.bind(game.board.fields[10].penaltyProperty)
-        labelUpgrade11.bind(game.board.fields[11].view)
-        field11Penalty.bind(game.board.fields[11].penaltyProperty)
-        labelUpgrade13.bind(game.board.fields[13].view)
-        field13Penalty.bind(game.board.fields[13].penaltyProperty)
-        labelUpgrade15.bind(game.board.fields[15].view)
-        field15Penalty.bind(game.board.fields[15].penaltyProperty)
-        labelUpgrade16.bind(game.board.fields[16].view)
-        field16Penalty.bind(game.board.fields[16].penaltyProperty)
-        labelUpgrade17.bind(game.board.fields[17].view)
-        field17Penalty.bind(game.board.fields[17].penaltyProperty)
-        labelUpgrade19.bind(game.board.fields[19].view)
-        field19Penalty.bind(game.board.fields[19].penaltyProperty)
-        labelUpgrade22.bind(game.board.fields[22].view)
-        field22Penalty.bind(game.board.fields[22].penaltyProperty)
-        labelUpgrade24.bind(game.board.fields[24].view)
-        field24Penalty.bind(game.board.fields[24].penaltyProperty)
-        labelUpgrade25.bind(game.board.fields[25].view)
-        field25Penalty.bind(game.board.fields[25].penaltyProperty)
-        labelUpgrade26.bind(game.board.fields[26].view)
-        field26Penalty.bind(game.board.fields[26].penaltyProperty)
-        labelUpgrade27.bind(game.board.fields[27].view)
-        field27Penalty.bind(game.board.fields[27].penaltyProperty)
+
+        for (i in 1..7) {
+            if (game.board.fields[i].couldBuy) {
+                (upperPane.children[i].getChildList()!![1] as Label).bind(game.board.fields[i].penaltyProperty)
+                upperPane.children[i].setOnMouseClicked { if (game.canControl(i)) find<Field>().openModal(resizable = false) }
+            }
+        }
+        for (i in 8..13) {
+            if (game.board.fields[i].couldBuy) {
+                (rightPane.children[i - 8].getChildList()!![0].getChildList()!![0] as Label).bind(game.board.fields[i].penaltyProperty)
+                rightPane.children[i - 8].setOnMouseClicked { if (game.canControl(i)) find<Field>().openModal(resizable = false) }
+            }
+        }
+        for (i in 15..19) {
+            if (game.board.fields[i].couldBuy) {
+                (bottomPane.children.reversed()[i - 14].getChildList()!![0] as Label).bind(game.board.fields[i].penaltyProperty)
+                bottomPane.children[i - 14].setOnMouseClicked { if (game.canControl(i)) find<Field>().openModal(resizable = false) }
+            }
+        }
+        for (i in 22..27) {
+            if (game.board.fields[i].couldBuy) {
+                (leftPane.children.reversed()[i - 22].getChildList()!![1].getChildList()!![0] as Label).bind(game.board.fields[i].penaltyProperty)
+                leftPane.children[i - 22].setOnMouseClicked { if (game.canControl(i)) find<Field>().openModal(resizable = false) }
+            }
+        }
     }
 
     private val player1Color = c("#f13030")
-    private val player2Color =c("#f27330")
-    private val player3Color =  c("green")
+    private val player2Color = c("#f27330")
+    private val player3Color = c("green")
     private val player4Color = c("#03a3d1")
     private val player5Color = c("#eb15dc")
     private val defaultColor = c("#d2edd7")
-    fun paintField(field : monopoly.logic.Field) {
-        val color = when (game.data.indexOf(field.owner)){
+    fun paintField(field: monopoly.logic.Field) {
+        val color = when (game.data.indexOf(field.owner)) {
             0 -> player1Color
             1 -> player2Color
             2 -> player3Color
@@ -741,25 +600,10 @@ class GamePlay : View("Monopoly") {
             else -> defaultColor
         }
         when (field.location) {
-            1 -> field1.style(append = true) { backgroundColor += color }
-            2 -> field2.style(append = true) { backgroundColor += color }
-            3 -> field3.style(append = true) { backgroundColor += color }
-            5 -> field5.style(append = true) { backgroundColor += color }
-            6 -> field6.style(append = true) { backgroundColor += color }
-            8 -> field8.style(append = true) { backgroundColor += color }
-            9 -> field9.style(append = true) { backgroundColor += color }
-            10 -> field10.style(append = true) { backgroundColor += color }
-            11 -> field11.style(append = true) { backgroundColor += color }
-            13 -> field13.style(append = true) { backgroundColor += color }
-            15 -> field15.style(append = true) { backgroundColor += color }
-            16 -> field16.style(append = true) { backgroundColor += color }
-            17 -> field17.style(append = true) { backgroundColor += color }
-            19 -> field19.style(append = true) { backgroundColor += color }
-            22 -> field22.style(append = true) { backgroundColor += color }
-            24 -> field24.style(append = true) { backgroundColor += color }
-            25 -> field25.style(append = true) { backgroundColor += color }
-            26 -> field26.style(append = true) { backgroundColor += color }
-            else -> field27.style(append = true) { backgroundColor += color }
+            in 0..7 -> upperPane.children[field.location].style(append = true) { backgroundColor += color }
+            in 8..13 -> rightPane.children[field.location - 8].style(append = true) { backgroundColor += color }
+            in 15..19 -> bottomPane.children.reversed()[field.location - 14].style(append = true) { backgroundColor += color }
+            else -> leftPane.children.reversed()[field.location - 22].style(append = true) { backgroundColor += color }
         }
     }
 
@@ -811,9 +655,11 @@ class GamePlay : View("Monopoly") {
     }
 
     private fun sellUpgradeView(player: Player) {
-        sendln(player.name + " продает филиал. Количество филиалов на поле "
-                + game.board.fields[game.view.fieldDegradeProperty.value].name + " - "
-                + game.board.fields[game.view.fieldDegradeProperty.value].upgrade)
+        sendln(
+            player.name + " продает филиал. Количество филиалов на поле "
+                    + game.board.fields[game.view.fieldDegradeProperty.value].name + " - "
+                    + game.board.fields[game.view.fieldDegradeProperty.value].upgrade
+        )
     }
 
     fun motion() {
