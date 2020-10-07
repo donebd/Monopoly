@@ -407,7 +407,7 @@ class GamePlay : View("Monopoly") {
         view.stonksActionProperty.onChange { stonksAction(game.currentPlayer) }
         view.startActionProperty.onChange { startAction(game.currentPlayer) }
         view.notifyInView.onChange { sendln(view.notifyInView.value) }
-        view.viewEndMotionProperty.onChange { viewEndMotion(game.data[game.motionPlayer]) }
+        view.viewEndMotionProperty.onChange { viewEndMotion(game.currentPlayer) }
         view.toPrisonViewProperty.onChange { playerToPrisonView(game.currentPlayer) }
         view.surrenderViewProperty.onChange { playerSurrenderView(game.currentPlayer) }
         view.fieldBoughtProperty.onChange { offerAcceptView(game.currentPlayer) }
@@ -496,6 +496,7 @@ class GamePlay : View("Monopoly") {
 
     private fun clearFieldLooser(current: Player) {
         arrayModel[game.data.indexOf(current)].opacity = 0.0
+        playerPane.children[game.data.indexOf(current)].opacity = 0.0
     }
 
     private fun playerSurrenderView(player: Player) {
