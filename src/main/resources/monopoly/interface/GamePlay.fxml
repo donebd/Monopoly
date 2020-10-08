@@ -315,7 +315,7 @@
                                  <children>
                                     <ImageView fitHeight="91.0" fitWidth="164.0" layoutX="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../fields/Mcdonalds.png" />
+                                          <Image url="@../fields/McDonald's.png" />
                                        </image>
                                     </ImageView>
                                     <Label layoutX="142.0" layoutY="24.0" prefHeight="47.0" prefWidth="94.0" rotate="-90.0" style="-fx-background-color: #fc9032;" text="4.200K">
@@ -402,7 +402,7 @@
                                  <children>
                                     <ImageView fitHeight="113.0" fitWidth="166.0" layoutX="47.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../fields/Mercedes.png" />
+                                          <Image url="@../fields/Mercedes-Benz.png" />
                                        </image>
                                     </ImageView>
                                     <Label layoutX="-22.0" layoutY="24.0" prefHeight="47.0" prefWidth="94.0" rotate="90.0" style="-fx-background-color: #e43c3c;" text="3.000K">

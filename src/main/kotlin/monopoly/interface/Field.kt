@@ -24,119 +24,28 @@ class Field : Fragment() {
     private val companyName: Label by fxid()
     private val typeOfField: Label by fxid()
 
-    val act = game.currentAct
+    private val act = game.currentAct
 
     init {
         companyName.text = act.fieldClicked.name
         typeOfField.text = act.fieldClicked.type.toString()
+        val image = imageview("monopoly/fields/${act.fieldClicked.name}.png")
         when (act.fieldClicked.location) {
-            1 -> with(root) {
-                val chanel = imageview("monopoly/fields/Chanel.png")
-                chanel.rotate = -90.0
-                chanel.layoutX = 40.0
-                this.add(chanel)
+            in 1..6 -> {
+                image.layoutX = 50.0
+                image.rotate = -90.0
             }
-            2 -> with(root) {
-                val lacoste = imageview("monopoly/fields/Lacoste.png")
-                lacoste.rotate = -90.0
-                lacoste.layoutX = 40.0
-                this.add(lacoste)
+            8,9,10,11,13,22,24,25,26,27 -> {
+                image.layoutX = 25.0
+                image.layoutY = 25.0
             }
-            3 -> with(root) {
-                val adidas = imageview("monopoly/fields/Adidas.png")
-                adidas.rotate = -90.0
-                adidas.layoutX = 40.0
-                this.add(adidas)
-            }
-            5 -> with(root) {
-                val puma = imageview("monopoly/fields/Puma.png")
-                puma.rotate = -90.0
-                puma.layoutX = 60.0
-                this.add(puma)
-            }
-            6 -> with(root) {
-                val nike = imageview("monopoly/fields/Nike.png")
-                nike.rotate = -90.0
-                nike.layoutX = 60.0
-                this.add(nike)
-            }
-            8 -> with(root) {
-                val facebook = imageview("monopoly/fields/Facebook.png")
-                facebook.layoutY = 40.0
-                this.add(facebook)
-            }
-            9 -> with(root) {
-                val twitter = imageview("monopoly/fields/Twitter.png")
-                this.add(twitter)
-            }
-            10 -> with(root) {
-                val mercedes = imageview("monopoly/fields/Mercedes.png")
-                this.add(mercedes)
-            }
-            11 -> with(root) {
-                val cola = imageview("monopoly/fields/Coca-cola.png")
-                cola.layoutY = 25.0
-                cola.layoutX = 25.0
-                this.add(cola)
-            }
-            13 -> with(root) {
-                val pepsi = imageview("monopoly/fields/Pepsi.png")
-                pepsi.layoutY = 30.0
-                this.add(pepsi)
-            }
-            15 -> with(root) {
-                val lufthansa = imageview("monopoly/fields/Lufthansa.png")
-                lufthansa.rotate = 90.0
-                lufthansa.layoutX = 50.0
-                this.add(lufthansa)
-            }
-            16 -> with(root) {
-                val evaAir = imageview("monopoly/fields/Eva air.png")
-                evaAir.rotate = 90.0
-                evaAir.layoutX = 80.0
-                this.add(evaAir)
-            }
-            17 -> with(root) {
-                val audi = imageview("monopoly/fields/Audi.png")
-                audi.rotate = 90.0
-                audi.layoutX = 50.0
-                this.add(audi)
-            }
-            19 -> with(root) {
-                val aeroFlot = imageview("monopoly/fields/Aeroflot.png")
-                aeroFlot.rotate = 90.0
-                aeroFlot.layoutX = 50.0
-                this.add(aeroFlot)
-            }
-            22 -> with(root) {
-                val mcDonalds = imageview("monopoly/fields/Mcdonalds.png")
-                mcDonalds.layoutX = 50.0
-                mcDonalds.layoutY = 20.0
-                this.add(mcDonalds)
-            }
-            24 -> with(root) {
-                val kfc = imageview("monopoly/fields/Kfc.png")
-                kfc.layoutY = 30.0
-                this.add(kfc)
-            }
-            25 -> with(root) {
-                val bmw = imageview("monopoly/fields/Bmw.png")
-                bmw.layoutX = 50.0
-                bmw.layoutY = 40.0
-                this.add(bmw)
-            }
-            26 -> with(root) {
-                val microsoft = imageview("monopoly/fields/Microsoft.png")
-                microsoft.layoutY = 30.0
-                this.add(microsoft)
-            }
-            else -> with(root) {
-                val apple = imageview("monopoly/fields/Apple.png")
-                apple.layoutY = 45.0
-                apple.layoutX = 20.0
-                this.add(apple)
+            in 15..19 -> {
+                image.layoutX = 50.0
+                if (act.fieldClicked.location == 16) image.layoutX = 80.0
+                image.rotate = 90.0
             }
         }
+        with(root) {this.add(image)}
         player.text = act.playerClicked.name
         costLabel.text = "${act.fieldClicked.cost}"
         costOfUpgrade.text = "${act.fieldClicked.upgradeCost}"

@@ -76,7 +76,7 @@ fun initBoard(board: GameBoard) {
     board.fields[18].layoutX = 380.0
     board.fields[18].layoutY = 820.0
     board.fields.add(Field(19, Type.Airlanes))
-    board.fields[19].nameUpdate("Аэрофлот")
+    board.fields[19].nameUpdate("Aeroflot")
     board.fields[19].layoutX = 280.0
     board.fields[19].layoutY = 820.0
     board.fields.add(Field(20, Type.Secret))
