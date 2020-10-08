@@ -203,7 +203,7 @@ class GamePlay : View("Monopoly") {
         prison.opacity = 1.0
         prison.disableProperty().value = false
         prisonTryButton.disableProperty().value = false
-        if (game.prisonPayDay()) {
+        if (game.prisonPayDay(game.currentPlayer)) {
             prisonMessage.text = "Заплатите 750"
             prisonTryButton.disableProperty().value = true
             prisonSurrenderButton.opacity = 1.0

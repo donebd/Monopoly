@@ -36,6 +36,10 @@ class Player(val id: Int) {
         return realty.any { it.type !in monopolyRealty }
     }
 
+    fun hasMonopoly(field: Field) : Boolean{
+        return monopolyRealty.contains(field.type)
+    }
+
     fun playerInPrison(): Boolean = prisonDays != 0
 
     fun moneyChange(a: Int) {
