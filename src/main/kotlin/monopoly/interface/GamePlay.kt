@@ -254,7 +254,8 @@ class GamePlay : View("Monopoly") {
     }
 
     private fun playerToPrisonView(player: Player) {
-        game.view.notifyInView.value = ("Не скучайте за решёткой, ${game.currentPlayer.name}!")
+        if (game.prisonByDouble) { sendln("Вы отправляетесь в тюрьму, за махинации с кубиками, ${game.currentPlayer.name}!") }
+        else { sendln("Вы отправляетесь в тюрьму, за неуплату налогов, ${game.currentPlayer.name}.") }
         if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
     }
 
@@ -272,13 +273,8 @@ class GamePlay : View("Monopoly") {
     private val model5: Rectangle by fxid()
     private val arrayModel = arrayListOf(model1, model2, model3, model4, model5)
     //animation
-    private val player1Default = Pair(10.0, 30.0)
-    private val player2Default = Pair(10.0, 40.0)
-    private val player3Default = Pair(30.0, 30.0)
-    private val player4Default = Pair(30.0, 40.0)
-    private val player5Default = Pair(10.0, 50.0)
     private val prisonPosition = Pair(810.0, 50.0)
-    private val arrayPosition = arrayOf(player1Default, player2Default, player3Default, player4Default, player5Default)
+    private val arrayPosition = arrayOf(Pair(10.0, 30.0), Pair(10.0, 40.0), Pair(30.0, 30.0), Pair(30.0, 40.0), Pair(10.0, 50.0))
     private fun movePlayer(a: Int, prison: Boolean, player: Int) {
         timeline {
             keyframe(Duration.seconds(0.5)) {
@@ -469,15 +465,10 @@ class GamePlay : View("Monopoly") {
         }
     }
 
-    private val player1Color = c("#f13030")
-    private val player2Color = c("#f27330")
-    private val player3Color = c("green")
-    private val player4Color = c("#03a3d1")
-    private val player5Color = c("#eb15dc")
     private val defaultColor = c("#d2edd7")
-    private val arrayColor = arrayOf(player1Color, player2Color, player3Color, player4Color, player5Color)
+    private val arrayPlayerColor = arrayOf(c("#f13030"), c("#f27330"), c("green"), c("#03a3d1"), c("#eb15dc"))
     private fun paintField(field: monopoly.logic.Field) {
-        val color =  if (game.data.indexOf(field.owner) == -1) defaultColor else arrayColor[game.data.indexOf(field.owner)]
+        val color =  if (game.data.indexOf(field.owner) == -1) defaultColor else arrayPlayerColor[game.data.indexOf(field.owner)]
         when (field.location) {
             in 0..7 -> upperPane.children[field.location].style(append = true) { backgroundColor += color }
             in 8..13 -> rightPane.children[field.location - 8].style(append = true) { backgroundColor += color }

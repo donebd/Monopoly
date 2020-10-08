@@ -54,7 +54,7 @@ class Game {
 
     var currentExchange =  ExchangeOffer()
 
-    val Ai = AiInstruction(this)
+    private val Ai = AiInstruction(this)
 
     fun canExchange(sender: Player, receiver: Player): Boolean {
         if (sender.ai || currentPlayer.id != sender.id) return false
@@ -76,18 +76,10 @@ class Game {
     var prisonByDouble = false
 
     fun setBalance() {
-        if (data.size == 2) {
-            for (i in 0..1) data[i].moneyChange(10000)
-        }
-        if (data.size == 3) {
-            for (i in 0..2) data[i].moneyChange(1000)
-        }
-        if (data.size == 4) {
-            for (i in 0..2) data[i].moneyChange(-2000)
-        }
-        if (data.size == 5) {
-            for (i in 0..4) data[i].moneyChange(-5000)
-        }
+        if (data.size == 2) { for (i in 0..1) data[i].moneyChange(10000) }
+        if (data.size == 3) { for (i in 0..2) data[i].moneyChange(1000) }
+        if (data.size == 4) { for (i in 0..2) data[i].moneyChange(-2000) }
+        if (data.size == 5) { for (i in 0..4) data[i].moneyChange(-5000) }
     }
 
     //settings reward

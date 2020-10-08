@@ -10,7 +10,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -28,158 +31,173 @@
                         <Font size="27.0" />
                      </font>
                   </Label>
-                  <HBox prefHeight="43.0" prefWidth="564.0">
+                  <GridPane fx:id="playerPane">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <children>
-                        <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="80.0" selected="true" text="Игрок 1">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </CheckBox>
-                        <TextField fx:id="playfield1" prefHeight="36.0" prefWidth="260.0" text="Player 1">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <CheckBox fx:id="botCheck1" mnemonicParsing="false" onAction="#botAction1" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </CheckBox>
-                        <ComboBox fx:id="difficultyBox1" accessibleRole="IMAGE_VIEW" disable="true" onAction="#difficultyAct1" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
-                           <HBox.margin>
-                              <Insets top="6.0" />
-                           </HBox.margin>
-                        </ComboBox>
+                        <HBox prefHeight="43.0" prefWidth="564.0">
+                           <children>
+                              <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="80.0" selected="true" text="Игрок 1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <TextField prefHeight="36.0" prefWidth="260.0" text="Player 1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <CheckBox mnemonicParsing="false" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                              <ComboBox fx:id="difficultBox1" accessibleRole="IMAGE_VIEW" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                                 <HBox.margin>
+                                    <Insets top="6.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="43.0" prefWidth="564.0" GridPane.rowIndex="1">
+                           <children>
+                              <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="80.0" selected="true" text="Игрок 2">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <TextField fx:id="playfiel2" prefHeight="36.0" prefWidth="260.0" text="Player 2">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <CheckBox mnemonicParsing="false" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                              <ComboBox disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                                 <HBox.margin>
+                                    <Insets top="6.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="43.0" prefWidth="564.0" GridPane.rowIndex="2">
+                           <children>
+                              <CheckBox mnemonicParsing="false" prefHeight="35.0" prefWidth="80.0" text="Игрок 3">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <TextField disable="true" prefHeight="36.0" prefWidth="260.0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                              <ComboBox fx:id="difficultyox3" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                                 <HBox.margin>
+                                    <Insets top="6.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="43.0" prefWidth="564.0" GridPane.rowIndex="3">
+                           <children>
+                              <CheckBox mnemonicParsing="false" prefHeight="35.0" prefWidth="80.0" text="Игрок 4">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <TextField disable="true" prefHeight="36.0" prefWidth="260.0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                              <ComboBox fx:id="difficultyBo4" disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                                 <HBox.margin>
+                                    <Insets top="6.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="37.0" prefWidth="564.0" GridPane.rowIndex="4">
+                           <children>
+                              <CheckBox mnemonicParsing="false" prefHeight="35.0" prefWidth="80.0" text="Игрок 5">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <TextField disable="true" prefHeight="36.0" prefWidth="260.0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                              <ComboBox disable="true" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
+                                 <HBox.margin>
+                                    <Insets top="6.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="80.0" prefWidth="564.0" GridPane.rowIndex="5">
+                           <children>
+                              <ImageView fitHeight="109.0" fitWidth="106.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../dice.png" />
+                                 </image>
+                              </ImageView>
+                              <Button mnemonicParsing="false" onAction="#startGame" prefHeight="36.0" prefWidth="104.0" text="Начать игру" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="350.0" top="30.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
-                  </HBox>
-                  <HBox prefHeight="43.0" prefWidth="564.0">
-                     <children>
-                        <CheckBox disable="true" mnemonicParsing="false" prefHeight="35.0" prefWidth="80.0" selected="true" text="Игрок 2">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </CheckBox>
-                        <TextField fx:id="playfield2" prefHeight="36.0" prefWidth="260.0" text="Player 2">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <CheckBox fx:id="botCheck2" mnemonicParsing="false" onAction="#botAction2" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </CheckBox>
-                        <ComboBox fx:id="difficultyBox2" disable="true" onAction="#difficultyAct2" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
-                           <HBox.margin>
-                              <Insets top="6.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="43.0" prefWidth="564.0">
-                     <children>
-                        <CheckBox fx:id="player3Check" mnemonicParsing="false" onAction="#active3" prefHeight="35.0" prefWidth="80.0" text="Игрок 3">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </CheckBox>
-                        <TextField fx:id="playfield3" disable="true" prefHeight="36.0" prefWidth="260.0">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <CheckBox fx:id="botCheck3" disable="true" mnemonicParsing="false" onAction="#botAction3" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </CheckBox>
-                        <ComboBox fx:id="difficultyBox3" disable="true" onAction="#difficultyAct3" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
-                           <HBox.margin>
-                              <Insets top="6.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="43.0" prefWidth="564.0">
-                     <children>
-                        <CheckBox fx:id="player4Check" mnemonicParsing="false" onAction="#active4" prefHeight="35.0" prefWidth="80.0" text="Игрок 4">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </CheckBox>
-                        <TextField fx:id="playfield4" disable="true" prefHeight="36.0" prefWidth="260.0">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <CheckBox fx:id="botCheck4" disable="true" mnemonicParsing="false" onAction="#botAction4" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </CheckBox>
-                        <ComboBox fx:id="difficultyBox4" disable="true" onAction="#difficultyAct4" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
-                           <HBox.margin>
-                              <Insets top="6.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="37.0" prefWidth="564.0">
-                     <children>
-                        <CheckBox fx:id="player5Check" mnemonicParsing="false" onAction="#active5" prefHeight="35.0" prefWidth="80.0" text="Игрок 5">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </CheckBox>
-                        <TextField fx:id="playfield5" disable="true" prefHeight="95.0" prefWidth="260.0">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <CheckBox fx:id="botCheck5" disable="true" mnemonicParsing="false" onAction="#botAction5" prefHeight="35.0" prefWidth="110.0" text="Компьютер">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </CheckBox>
-                        <ComboBox fx:id="difficultyBox5" disable="true" onAction="#difficultyAct5" opacity="0.0" prefHeight="25.0" prefWidth="104.0" promptText="null">
-                           <HBox.margin>
-                              <Insets top="6.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="80.0" prefWidth="564.0">
-                     <children>
-                        <ImageView fitHeight="109.0" fitWidth="106.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../dice.png" />
-                           </image>
-                        </ImageView>
-                        <Button mnemonicParsing="false" onAction="#startGame" prefHeight="36.0" prefWidth="104.0" text="Начать игру" HBox.hgrow="ALWAYS">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="350.0" top="30.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
+                  </GridPane>
                </children>
             </VBox>
             <Button layoutX="240.0" layoutY="295.0" mnemonicParsing="false" onAction="#howToPlay" prefHeight="30.0" prefWidth="89.0" text="Как играть?" />
