@@ -46,7 +46,7 @@ class GamePlay : View("Monopoly") {
 
     fun offerAccept() {
         val player = game.currentPlayer
-        if (game.playerAcceptBuyRealty()) {
+        if (game.playerAnswer.playerAcceptBuyRealty(player)) {
             offerNotEnoughMoney.opacity = 0.0
             offerToBuy.opacity = 0.0
             offerToBuy.disableProperty().value = true
@@ -76,7 +76,7 @@ class GamePlay : View("Monopoly") {
     private val textPunisment: Label by fxid()
 
     private fun penaltyInit(player: Player) {
-        if (!game.event.ifPunishment()) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
+        if (!game.event.ifPunishment(player)) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
         else sendln("${player.name}, вас уличили за неуплату налогов! Вы должны оплатить штраф 2000$.")
         if (!player.ai) {
             penaltyPlayer(player)
@@ -88,7 +88,7 @@ class GamePlay : View("Monopoly") {
         penaltyOwner.text = ""
         payPenalty.opacity = 1.0
         payPenalty.disableProperty().value = false
-        if (!game.event.ifPunishment()) {
+        if (!game.event.ifPunishment(player)) {
             penaltyOwner.text = game.board.fields[player.position].owner!!.name
         } else {
             textPunisment.text = "Вас уличили за неуплату налогов!"
@@ -103,7 +103,7 @@ class GamePlay : View("Monopoly") {
     }
 
     fun penaltyAccept() {
-        if (game.playerPayPenalty()) {
+        if (game.playerAnswer.playerPayPenalty(game.currentPlayer)) {
             penaltyClose()
             game.endMotion()
             return
@@ -169,7 +169,7 @@ class GamePlay : View("Monopoly") {
     }
 
     fun negativePay() {
-        if (game.negativePay()) {
+        if (game.playerAnswer.negativePay(game.currentPlayer)) {
             negativeClose()
             game.endMotion()
             return
@@ -203,7 +203,7 @@ class GamePlay : View("Monopoly") {
         prison.opacity = 1.0
         prison.disableProperty().value = false
         prisonTryButton.disableProperty().value = false
-        if (game.prisonPayDay(game.currentPlayer)) {
+        if (game.currentPlayer.isPrisonPayDay()) {
             prisonMessage.text = "Заплатите 750"
             prisonTryButton.disableProperty().value = true
             prisonSurrenderButton.opacity = 1.0
@@ -220,7 +220,7 @@ class GamePlay : View("Monopoly") {
     }
 
     fun prisonPay() {
-        val tmp = game.prisonPay()
+        val tmp = game.playerAnswer.prisonPay(game.currentPlayer)
         if (tmp in 1..2) {
             prisonClose()
             return
@@ -230,7 +230,7 @@ class GamePlay : View("Monopoly") {
 
     fun prisonTryView() {
         prisonClose()
-        game.prisonTryLogic()
+        game.playerAnswer.prisonTryLogic(game.currentPlayer)
     }
 
     fun prisonSurrender() {
@@ -353,15 +353,13 @@ class GamePlay : View("Monopoly") {
         primaryStage.height = 1048.0
         primaryStage.centerOnScreen()
 
-        game.cntPlsUpdate()
-        game.setBalance()
         checkSettings()
         connectToModel()
 
         sendln("Игра начинается!")
         sendln("Ваш ход, ${game.data[0].name} !")
 
-        if (game.data[0].ai) motion()
+        game.start()
     }
 
     fun motion() {

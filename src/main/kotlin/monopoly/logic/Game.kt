@@ -9,22 +9,7 @@ class Game {
 
     var statsCntOfMotion = 0
     val statsVisitedField = IntArray(28)
-
     var delay = true
-
-    val data = mutableListOf<Player>()
-
-    var cntPls = 0 // count of players
-
-    fun cntPlsUpdate() {
-        cntPls = data.size
-    }
-
-    init {
-        data.add(Player(1))
-        data.add(Player(2))
-        cntPls = data.size
-    }
 
     //manipulate with view
     var gameIsEnd = false
@@ -32,31 +17,34 @@ class Game {
     var endProperty = SimpleBooleanProperty(gameIsEnd)
     val view = NotifyInView()
 
+    val data = mutableListOf<Player>()
+    var cntPls = 0 // count of players
+    val board = GameBoard()
+    var motionPlayer = 0
+    var currentPlayer = Player(1) //the player who is currently walking in action
+    var loosers = mutableListOf<Int>()
+    val dice = Dice()
+    var Ai = AiInstruction(this)
+    var event = Event(this)
+    var playerAnswer = FeedBackPlayer(this)
+    var currentExchange = ExchangeOffer()
+    var currentAct = FieldAction() // for action with realty
+    var prisonByDouble = false
+
+    init {
+        data.add(currentPlayer)
+        data.add(Player(2))
+        currentPlayer = data.first()
+        cntPlsUpdate()
+    }
+
+    private fun cntPlsUpdate() {
+        cntPls = data.size
+    }
+
     fun triggerProperty(property: SimpleBooleanProperty) {
         property.value = !property.value
     }
-
-    private fun setGameStatus(status: Boolean) {
-        gameIsEnd = !status
-        gameWinner = data.first { data.indexOf(it) !in loosers }
-        endProperty.value = gameIsEnd
-    }
-
-    val board = GameBoard()
-
-    var motionPlayer = 0
-
-    var currentPlayer = data.first() //the player who is currently walking in action
-
-    var loosers = mutableListOf<Int>()
-
-    val dice = Dice()
-
-    var currentExchange = ExchangeOffer()
-
-    val Ai = AiInstruction(this)
-
-    val event = Event(this)
 
     fun canExchange(sender: Player, receiver: Player): Boolean {
         if (sender.ai || currentPlayer.id != sender.id) return false
@@ -64,8 +52,6 @@ class Game {
         currentExchange.exchangePause = sender.id != receiver.id && receiver.id !in loosers
         return currentExchange.exchangePause
     }
-
-    var currentAct = FieldAction() // for action with realty
 
     fun canControl(number: Int): Boolean {
         if (board.fields[number].owner == currentPlayer && !currentPlayer.ai) {
@@ -75,9 +61,7 @@ class Game {
         return false
     }
 
-    var prisonByDouble = false
-
-    fun setBalance() {
+    private fun setBalance() {
         if (data.size == 2) {
             for (i in 0..1) data[i].moneyChange(10000)
         }
@@ -92,133 +76,10 @@ class Game {
         }
     }
 
-    private fun checkPrisonByDouble(): Boolean {
-        if ((dice.double && currentPlayer.doubleInARow == 2)) {
-            prisonByDouble = true
-            return true
-        }
-        prisonByDouble = false
-        return false
-    }
-
-    fun playerAcceptBuyRealty(): Boolean {
-        if (currentPlayer.money >= board.fields[currentPlayer.position].cost) {
-            currentPlayer.moneyChange(-board.fields[currentPlayer.position].cost)
-            currentPlayer.realty.add(board.fields[currentPlayer.position])
-            board.fields[currentPlayer.position].ownerUpdate(currentPlayer)
-            currentPlayer.checkForMonopoly(board.fields[currentPlayer.position])
-            board.fields[currentPlayer.position].penaltyUpdate()
-            return true
-        }
-        return false
-    }
-
-    fun playerPayPenalty(): Boolean {
-        if (currentPlayer.money >= board.fields[currentPlayer.position].penalty) {
-            currentPlayer.moneyChange(-board.fields[currentPlayer.position].penalty)
-            if (board.fields[currentPlayer.position].type != Type.Punisment) {
-                board.fields[currentPlayer.position].owner!!.moneyChange(board.fields[currentPlayer.position].penalty)
-            }
-            return true
-        }
-        return false
-    }
-
-    private fun playerLose() {
-        loosers.add(data.indexOf(currentPlayer))
-    }
-
-    private fun fieldClear(i: Field) {
-        board.fields[i.location].ownerUpdate(null)
-        board.fields[i.location].upgrade = 0
-        if (board.fields[i.location].hasMonopoly) board.fields[i.location].monopolyChange()
-        board.fields[i.location].penaltyUpdate()
-    }
-
-    private fun gameIsEnd() = cntPls - loosers.size == 1
-
-    fun negativePay(): Boolean {
-        when (dice.secret.second) {
-            SecretAction.Action1 -> if (currentPlayer.money >= 300) {
-                currentPlayer.moneyChange(-300)
-                return true
-            }
-            SecretAction.Action2 -> if (currentPlayer.money >= 500) {
-                currentPlayer.moneyChange(-500)
-                return true
-            }
-            SecretAction.Action3 -> if (currentPlayer.money >= 40) {
-                currentPlayer.moneyChange(-40)
-                return true
-            }
-            SecretAction.Action4 -> if (currentPlayer.money >= 750) {
-                currentPlayer.moneyChange(-750)
-                return true
-            }
-            else -> if (currentPlayer.money >= 250) {
-                currentPlayer.moneyChange(-250)
-                return true
-            }
-        }
-        return false
-    }
-
-    fun prisonPay(): Int {
-        if (currentPlayer.prisonDays == 4 && currentPlayer.money >= 750) {
-            currentPlayer.prisonDays = 0
-            currentPlayer.moneyChange(-750)
-            currentPlayer.justOutJail = true
-            view.notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, заплатив 750$.")
-            endMotion()
-            return 1
-        }
-        if (currentPlayer.prisonDays != 4 && currentPlayer.money >= 500) {
-            currentPlayer.prisonDays = 0
-            currentPlayer.moneyChange(-500)
-            currentPlayer.justOutJail = true
-            view.notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, заплатив 500$.")
-            endMotion()
-            return 2
-        }
-        return -1
-    }
-
-    fun prisonTryLogic() {
-        dice.roll()
-        runAsync { if (delay) Thread.sleep(600) } ui {
-            if (prisonTry()) {
-                view.notifyInView.value = ("${currentPlayer.name} выходит из тюрьмы, выбив дубль!")
-                playerMove(currentPlayer)
-            } else {
-                if (4 - currentPlayer.prisonDays + 1 != 1)
-                    view.notifyInView.value =
-                        ("Игрок остается в тюрьме еще на ${4 - currentPlayer.prisonDays + 1} хода.")
-                else
-                    view.notifyInView.value = ("Всего один ход отлучает ${currentPlayer.name}, от свободы!")
-                endMotion()
-            }
-        }
-    }
-
-    fun prisonPayDay(player: Player) = player.prisonDays == 4
-
-    private fun prisonTry(): Boolean {
-        if (dice.double) {
-            currentPlayer.prisonDays = 0
-            dice.double = false
-            return true
-        }
-        currentPlayer.prisonDays++
-        return false
-    }
-
-    fun fieldSellByHalf(player: Player, field: Field) {
-        player.moneyChange(field.cost / 2)
-        player.realty.remove(field)
-        field.ownerUpdate(null)
-        field.upgrade = 0
-        player.checkForMonopoly(field)
-        field.penaltyUpdate()
+    fun start(){
+        cntPlsUpdate()
+        setBalance()
+        if (data.first().ai) motion()
     }
 
     //---------------------------------------------------------------
@@ -238,7 +99,7 @@ class Game {
         }
         dice.roll()
         runAsync { if (delay) Thread.sleep(500) } ui {
-            if (checkPrisonByDouble()) {
+            if (event.checkPrisonByDouble(player)) {
                 event.playerToPrison(player)
             } else {
                 playerMove(player)
@@ -246,7 +107,7 @@ class Game {
         }
     }
 
-    private fun playerMove(player: Player) {
+    fun playerMove(player: Player) {
         runAsync {
             if (delay) Thread.sleep(250)
         } ui {
@@ -291,7 +152,7 @@ class Game {
         }
     }
 
-    private fun endMotionLogic() {
+    fun endMotionLogic() {
         currentPlayer.currentMotionUpgrade.clear()
         if (!dice.double && !currentPlayer.justOutJail) {
             motionPlayer++
@@ -306,7 +167,7 @@ class Game {
     }
 
     fun playerSurrender() {
-        playerLose()
+        playerLose(currentPlayer)
         for (i in currentPlayer.realty) {
             fieldClear(i)
         }
@@ -316,12 +177,31 @@ class Game {
         checkEndGame()
     }
 
+    fun playerLose(player: Player) {
+        loosers.add(data.indexOf(player))
+    }
+
+    private fun fieldClear(i: Field) {
+        board.fields[i.location].ownerUpdate(null)
+        board.fields[i.location].upgrade = 0
+        if (board.fields[i.location].hasMonopoly) board.fields[i.location].monopolyChange()
+        board.fields[i.location].penaltyUpdate()
+    }
+
     private fun checkEndGame() {
         runAsync { if (delay) Thread.sleep(350) } ui {
             if (gameIsEnd()) {
                 setGameStatus(false)
             }
         }
+    }
+
+    fun gameIsEnd() = cntPls - loosers.size == 1
+
+    private fun setGameStatus(status: Boolean) {
+        gameIsEnd = !status
+        gameWinner = data.first { data.indexOf(it) !in loosers }
+        endProperty.value = gameIsEnd
     }
 
 }

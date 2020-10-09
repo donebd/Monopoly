@@ -28,7 +28,7 @@ class Event(val game : Game) {
             return
         }
         //pay penalty
-        if (punishmentOrPenalty()) {
+        if (punishmentOrPenalty(currentPlayer)) {
             game.triggerProperty(view.penaltyInitProperty)
             if (player.ai) {
                 Ai.punisment(player)
@@ -70,7 +70,7 @@ class Event(val game : Game) {
     }
 
     //settings reward
-    private fun checkCircleComplete(): Boolean {
+    fun checkCircleComplete(): Boolean {
         if ((currentPlayer.finishCircle && currentPlayer.circlesCompleted < 5) ||
             (currentPlayer.finishCircle && currentPlayer.circlesCompleted < 10 && cntPls < 4)
         ) {
@@ -92,10 +92,10 @@ class Event(val game : Game) {
         return false
     }
 
-    private fun punishmentOrPenalty() = ifPunishment() ||
-            (board.fields[currentPlayer.position].owner != null && board.fields[currentPlayer.position].owner!!.id != currentPlayer.id)
+    fun punishmentOrPenalty(player: Player) = ifPunishment(player) ||
+            (board.fields[player.position].owner != null && board.fields[player.position].owner!!.id != player.id)
 
-    fun ifPunishment() = board.fields[currentPlayer.position].type == Type.Punisment
+    fun ifPunishment(player: Player) = board.fields[player.position].type == Type.Punisment
 
     private fun ifToPrison() = board.fields[currentPlayer.position].type == Type.ToPrison
 
@@ -105,6 +105,15 @@ class Event(val game : Game) {
         dice.double = false
         game.triggerProperty(view.toPrisonViewProperty)
         runAsync { if (game.delay) Thread.sleep(200) } ui { game.endMotion() }
+    }
+
+    fun checkPrisonByDouble(player: Player): Boolean {
+        if ((dice.double && player.doubleInARow == 2)) {
+            game.prisonByDouble = true
+            return true
+        }
+        game.prisonByDouble = false
+        return false
     }
 
     private fun stonksAction(): Boolean {
@@ -149,7 +158,7 @@ class Event(val game : Game) {
         }
     }
 
-    private fun startAction(): Boolean {
+    fun startAction(): Boolean {
         if (ifStart()) {
             currentPlayer.moneyChange(1000)
             return true

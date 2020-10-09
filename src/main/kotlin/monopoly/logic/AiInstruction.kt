@@ -1,6 +1,8 @@
 package monopoly.logic
 
 class AiInstruction(val game: Game) {
+    private val answer = FeedBackPlayer(game)
+
     fun instructions(player: Player): List<Int> {
         val tmp = mutableListOf<Int>()
         if (player.monopolyRealty.isNotEmpty() && (player.aiDifficulty == Difficulty.Hard || (player.aiDifficulty == Difficulty.Medium && (1..100).random() in (1..85))
@@ -24,16 +26,16 @@ class AiInstruction(val game: Game) {
     fun prisonInstructions(player: Player) {
         when (player.aiDifficulty) {
             Difficulty.Hard -> {
-                if (!game.prisonPayDay(player)) {
+                if (!player.isPrisonPayDay()) {
                     if ((player.money >= 10000 || (player.monopolyRealty.isEmpty() && playerNearlyHasSomeMonopoly(player))) && onBoardHasBuyableFields() && player.money >= 500) {
-                        game.prisonPay()
+                        answer.prisonPay(player)
                         return//buyOut
                     }
-                    game.prisonTryLogic()
+                    answer.prisonTryLogic(player)
                     return//prisonTry
                 } else {
                     if (player.money >= 750) {
-                        game.prisonPay()
+                        answer.prisonPay(player)
                         return//buyOut
                     }
                     if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1) {
@@ -45,7 +47,7 @@ class AiInstruction(val game: Game) {
                     }
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
-                        game.fieldSellByHalf(player, game.board.fields[selledFieldId])
+                        answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
                         game.view.fieldSelledProperty.value = selledFieldId
                         prisonInstructions(player)
                         return//sellField
@@ -53,25 +55,25 @@ class AiInstruction(val game: Game) {
                 }
             }
             else -> {
-                if (!game.prisonPayDay(player)) {
+                if (!player.isPrisonPayDay()) {
                     if (player.aiDifficulty == Difficulty.Easy && player.money >= 500 && (0..1).random() == 1) {
-                        game.prisonPay()
+                        answer.prisonPay(player)
                         return//buyOut
                     }
                     if (player.aiDifficulty == Difficulty.Medium && player.money >= 500 && player.monopolyRealty.isEmpty() && onBoardHasBuyableFields()) {
-                        game.prisonPay()
+                        answer.prisonPay(player)
                         return//buyOut
                     }
-                    game.prisonTryLogic()
+                    answer.prisonTryLogic(player)
                     return//prisonTry
                 } else {
                     if (player.money >= 750) {
-                        game.prisonPay()
+                        answer.prisonPay(player)
                         return//buyOut
                     }
                     if (player.hasSomeNotMonopoly()) {
                         val selledFieldId = sellSomeNotMonopolyField(player)
-                        game.fieldSellByHalf(player, game.board.fields[selledFieldId])
+                        answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
                         game.view.fieldSelledProperty.value = selledFieldId
                         prisonInstructions(player)
                         return//sellField
@@ -85,7 +87,7 @@ class AiInstruction(val game: Game) {
                     }
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
-                        game.fieldSellByHalf(player, game.board.fields[selledFieldId])
+                        answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
                         game.view.fieldSelledProperty.value = selledFieldId
                         prisonInstructions(player)
                         return//sellField
@@ -104,7 +106,7 @@ class AiInstruction(val game: Game) {
         when (player.aiDifficulty) {
             Difficulty.Hard -> {
                 if (player.money >= game.board.fields[player.position].cost + 500 && (player.monopolyRealty.isEmpty() || player.money >= 10000 || someOnBoardNearlyHasMonopoly())) {
-                    game.playerAcceptBuyRealty()
+                    answer.playerAcceptBuyRealty(player)
                     game.triggerProperty(game.view.fieldBoughtProperty)
                     return//buy
                 }
@@ -123,7 +125,7 @@ class AiInstruction(val game: Game) {
                     && player.realty.any { it.type != game.board.fields[player.position].type }
                 ) {
                     val selledFieldId = sellSomeOtherTypeField(player)
-                    game.fieldSellByHalf(player, game.board.fields[selledFieldId])
+                    answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
                     game.view.fieldSelledProperty.value = selledFieldId
                     buyInstructions(player)
                     return//sellField
@@ -131,14 +133,14 @@ class AiInstruction(val game: Game) {
             }
             Difficulty.Medium -> {
                 if (player.money >= game.board.fields[player.position].cost && (player.monopolyRealty.isEmpty() || someOnBoardNearlyHasMonopoly())) {
-                    game.playerAcceptBuyRealty()
+                    answer.playerAcceptBuyRealty(player)
                     game.triggerProperty(game.view.fieldBoughtProperty)
                     return//buy
                 }
 
             }
             else -> if (player.money >= game.board.fields[player.position].cost) {
-                game.playerAcceptBuyRealty()
+                answer.playerAcceptBuyRealty(player)
                 game.triggerProperty(game.view.fieldBoughtProperty)
                 return//buy
             }
@@ -189,27 +191,27 @@ class AiInstruction(val game: Game) {
      fun negativeEvent(player: Player) {
         when (game.dice.secret.second) {
             SecretAction.Action1 -> if (player.money >= 300) {
-                game.negativePay()
+                answer.negativePay(player)
                 game.endMotion()
                 return//pay
             }
             SecretAction.Action2 -> if (player.money >= 500) {
-                game.negativePay()
+                answer.negativePay(player)
                 game.endMotion()
                 return//pay
             }
             SecretAction.Action3 -> if (player.money >= 40) {
-                game.negativePay()
+                answer.negativePay(player)
                 game.endMotion()
                 return//pay
             }
             SecretAction.Action4 -> if (player.money >= 750) {
-                game.negativePay()
+                answer.negativePay(player)
                 game.endMotion()
                 return//pay
             }
             else -> if (player.money >= 250) {
-                game.negativePay()
+                answer.negativePay(player)
                 game.endMotion()
                 return//pay
             }
@@ -225,7 +227,7 @@ class AiInstruction(val game: Game) {
                 } else {
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
-                        game.fieldSellByHalf(player, game.board.fields[selledFieldId])
+                        answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
                         game.view.fieldSelledProperty.value = selledFieldId
                         negativeEvent(player)
                         return//sellField
@@ -235,7 +237,7 @@ class AiInstruction(val game: Game) {
             else -> {
                 if (player.hasSomeNotMonopoly()) {
                     val selledFieldId = sellSomeNotMonopolyField(player)
-                    game.fieldSellByHalf(player, game.board.fields[selledFieldId])
+                    answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
                     game.view.fieldSelledProperty.value = selledFieldId
                     negativeEvent(player)
                     return//sellNotMonopolyField
@@ -249,7 +251,7 @@ class AiInstruction(val game: Game) {
                 } else {
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
-                        game.fieldSellByHalf(player, game.board.fields[selledFieldId])
+                        answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
                         game.view.fieldSelledProperty.value = selledFieldId
                         negativeEvent(player)
                         return//sellField
@@ -263,7 +265,7 @@ class AiInstruction(val game: Game) {
 
      fun punisment(player: Player) {
         if (player.money >= game.board.fields[player.position].penalty) {
-            game.playerPayPenalty()
+            answer.playerPayPenalty(player)
             game.endMotion()
             return
         }
@@ -278,7 +280,7 @@ class AiInstruction(val game: Game) {
                 } else {
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
-                        game.fieldSellByHalf(player, game.board.fields[selledFieldId])
+                        answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
                         game.view.fieldSelledProperty.value = selledFieldId
                         punisment(player)
                         return//sellField
@@ -288,7 +290,7 @@ class AiInstruction(val game: Game) {
             else -> {
                 if (player.hasSomeNotMonopoly()) {
                     val selledFieldId = sellSomeNotMonopolyField(player)
-                    game.fieldSellByHalf(player, game.board.fields[selledFieldId])
+                    answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
                     game.view.fieldSelledProperty.value = selledFieldId
                     punisment(player)
                     return//sellNotMonopolyField
@@ -302,7 +304,7 @@ class AiInstruction(val game: Game) {
                 } else {
                     if (player.hasSomething()) {
                         val selledFieldId = sellSomeField(player)
-                        game.fieldSellByHalf(player, game.board.fields[selledFieldId])
+                        answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
                         game.view.fieldSelledProperty.value = selledFieldId
                         punisment(player)
                         return//sellField

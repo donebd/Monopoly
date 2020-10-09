@@ -42,6 +42,8 @@ class Player(val id: Int) {
 
     fun playerInPrison(): Boolean = prisonDays != 0
 
+    fun isPrisonPayDay(): Boolean = prisonDays == 4
+
     fun moneyChange(a: Int) {
         money += a
         moneyProperty.value = money

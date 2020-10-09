@@ -3,7 +3,7 @@ package monopoly.logic
 import javafx.embed.swing.JFXPanel
 
 fun main() {
-    testGamefivePlayers(1000, Difficulty.Easy)
+    testGameFivePlayers(1000, Difficulty.Easy)
     //testGameTwoPlayers(1000, Difficulty.Hard, Difficulty.Easy)
     //testGameTwoPlayers(1000, Difficulty.Easy, Difficulty.Hard   )
     //testGameThreePlayers(1000, Difficulty.Easy, Difficulty.Medium, Difficulty.Hard)
@@ -12,7 +12,7 @@ fun main() {
     //there is dependence in the order of the move in the approximation
 }
 
-fun testGamefivePlayers(countOfSimulation: Int,difficulty: Difficulty) {
+fun testGameFivePlayers(countOfSimulation: Int,difficulty: Difficulty) {
     val startTime = System.currentTimeMillis();
     val fxPanel = JFXPanel()
     var game = Game()
@@ -30,8 +30,7 @@ fun testGamefivePlayers(countOfSimulation: Int,difficulty: Difficulty) {
         game.data.add(Player(5))
         game.data.map { it.ai = true }
         game.data.map { it.aiDifficulty = difficulty }
-        game.cntPlsUpdate()
-        game.motion()
+        game.start()
         while (!game.gameIsEnd) Thread.sleep(50)
         when(game.gameWinner!!.id) {
             1 -> firstWin++
@@ -79,7 +78,7 @@ fun testGameTwoPlayers(countOfSimulation: Int, first : Difficulty, second : Diff
         game.data[1].ai = true
         game.data[0].aiDifficulty = first
         game.data[1].aiDifficulty = second
-        game.motion()
+        game.start()
         while (!game.gameIsEnd) Thread.sleep(50)
         if (game.gameWinner!!.aiDifficulty == Difficulty.Hard) hardWinCnt++
         else easyWinCnt++
@@ -111,8 +110,7 @@ fun testGameThreePlayers(countOfSimulation: Int, first: Difficulty, second: Diff
         game.data.add(Player(3))
         game.data[2].ai = true
         game.data[2].aiDifficulty = third
-        game.cntPlsUpdate()
-        game.motion()
+        game.start()
         while (!game.gameIsEnd) Thread.sleep(50)
         when (game.gameWinner!!.aiDifficulty) {
             Difficulty.Hard -> hardWinCnt++

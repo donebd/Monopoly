@@ -2,14 +2,15 @@ package monopoly.logic
 
 class FieldAction() {
 
+    lateinit var playerClicked : Player
+    lateinit var fieldClicked : Field
+    lateinit var type : Type
+
     constructor(owner : Player, field : Field) : this(){
         playerClicked = owner
         fieldClicked = field
+        type = field.type
     }
-
-    var playerClicked = Player(228) // for action with realty
-    var fieldClicked = Field(50, Type.Secret)
-    var type = fieldClicked.type
 
     fun fieldCantBeUpgraded() = fieldClicked.upgrade > 4 || playerClicked.currentMotionUpgrade.contains(type)
 

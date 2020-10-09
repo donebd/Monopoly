@@ -38,7 +38,7 @@ class Field(val location: Int, val type: Type) {
     fun penaltyUpdate() {
         penalty = if (hasMonopoly) {
             if (!particular) (cost / 3) + (cost / 6) * upgrade
-            else (cost / 3) + (cost / 6) * upgrade * 2
+            else (cost / 3) + (cost / 3) * upgrade
         } else {
             if (owner != null) (cost / 6)
             else cost
