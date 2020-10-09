@@ -76,7 +76,7 @@ class GamePlay : View("Monopoly") {
     private val textPunisment: Label by fxid()
 
     private fun penaltyInit(player: Player) {
-        if (!game.ifPunishment()) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
+        if (!game.event.ifPunishment()) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
         else sendln("${player.name}, вас уличили за неуплату налогов! Вы должны оплатить штраф 2000$.")
         if (!player.ai) {
             penaltyPlayer(player)
@@ -88,7 +88,7 @@ class GamePlay : View("Monopoly") {
         penaltyOwner.text = ""
         payPenalty.opacity = 1.0
         payPenalty.disableProperty().value = false
-        if (!game.ifPunishment()) {
+        if (!game.event.ifPunishment()) {
             penaltyOwner.text = game.board.fields[player.position].owner!!.name
         } else {
             textPunisment.text = "Вас уличили за неуплату налогов!"

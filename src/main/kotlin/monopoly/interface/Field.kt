@@ -35,7 +35,7 @@ class Field : Fragment() {
                 image.layoutX = 50.0
                 image.rotate = -90.0
             }
-            8,9,10,11,13,22,24,25,26,27 -> {
+            8, 9, 10, 11, 13, 22, 24, 25, 26, 27 -> {
                 image.layoutX = 25.0
                 image.layoutY = 25.0
             }
@@ -45,7 +45,7 @@ class Field : Fragment() {
                 image.rotate = 90.0
             }
         }
-        with(root) {this.add(image)}
+        with(root) { this.add(image) }
         player.text = act.playerClicked.name
         costLabel.text = "${act.fieldClicked.cost}"
         costOfUpgrade.text = "${act.fieldClicked.upgradeCost}"

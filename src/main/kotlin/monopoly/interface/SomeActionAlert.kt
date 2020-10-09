@@ -27,11 +27,11 @@ class SomeActionAlert : Fragment() {
             }
         }
         //stonks
-        if (game.ifStonks()) {
+        if (game.event.ifStonks()) {
             message.text = "Вы выйграли 3000 в лотерее!"
         }
         //secret only positive
-        if (game.ifSecret()) {
+        if (game.event.ifSecret()) {
             when (game.dice.secret.second) {
                 SecretAction.Action1 -> message.text = "Вы нашли в зимней куртке забытые 250"
                 SecretAction.Action2 -> message.text = "Вы выйграли на ставках 500"
@@ -41,7 +41,7 @@ class SomeActionAlert : Fragment() {
             }
         }
         //start bonus
-        if (game.ifStart()) message.text = "За попадание на поле СТАРТ, вы получаете 1000"
+        if (game.event.ifStart()) message.text = "За попадание на поле СТАРТ, вы получаете 1000"
     }
 
     fun exit() {

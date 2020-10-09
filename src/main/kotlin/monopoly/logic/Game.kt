@@ -52,9 +52,11 @@ class Game {
 
     val dice = Dice()
 
-    var currentExchange =  ExchangeOffer()
+    var currentExchange = ExchangeOffer()
 
-    private val Ai = AiInstruction(this)
+    val Ai = AiInstruction(this)
+
+    val event = Event(this)
 
     fun canExchange(sender: Player, receiver: Player): Boolean {
         if (sender.ai || currentPlayer.id != sender.id) return false
@@ -76,21 +78,18 @@ class Game {
     var prisonByDouble = false
 
     fun setBalance() {
-        if (data.size == 2) { for (i in 0..1) data[i].moneyChange(10000) }
-        if (data.size == 3) { for (i in 0..2) data[i].moneyChange(1000) }
-        if (data.size == 4) { for (i in 0..2) data[i].moneyChange(-2000) }
-        if (data.size == 5) { for (i in 0..4) data[i].moneyChange(-5000) }
-    }
-
-    //settings reward
-    fun checkCircleComplete(): Boolean {
-        if ((currentPlayer.finishCircle && currentPlayer.circlesCompleted < 5) ||
-            (currentPlayer.finishCircle && currentPlayer.circlesCompleted < 10 && cntPls < 4)
-        ) {
-            currentPlayer.moneyChange(2000)
-            return true
+        if (data.size == 2) {
+            for (i in 0..1) data[i].moneyChange(10000)
         }
-        return false
+        if (data.size == 3) {
+            for (i in 0..2) data[i].moneyChange(1000)
+        }
+        if (data.size == 4) {
+            for (i in 0..2) data[i].moneyChange(-2000)
+        }
+        if (data.size == 5) {
+            for (i in 0..4) data[i].moneyChange(-5000)
+        }
     }
 
     private fun checkPrisonByDouble(): Boolean {
@@ -101,61 +100,6 @@ class Game {
         prisonByDouble = false
         return false
     }
-
-    fun endMotionLogic() {
-        currentPlayer.currentMotionUpgrade.clear()
-        if (!dice.double && !currentPlayer.justOutJail) {
-            motionPlayer++
-            motionPlayer %= cntPls
-            statsCntOfMotion++
-        }
-        while (motionPlayer in loosers) {
-            motionPlayer++
-            motionPlayer %= cntPls
-        }
-        currentPlayer = data[motionPlayer]
-    }
-
-    private fun diceDoubleCheck(): Boolean {
-        if (dice.double) {
-            currentPlayer.doubleInARow++
-            return true
-        }
-        currentPlayer.doubleInARow = 0
-        return false
-    }
-
-    private fun realtyCanBuy() =
-        board.fields[currentPlayer.position].couldBuy && board.fields[currentPlayer.position].owner == null
-
-    fun punishmentOrPenalty() = ifPunishment() ||
-            (board.fields[currentPlayer.position].owner != null && board.fields[currentPlayer.position].owner!!.id != currentPlayer.id)
-
-    fun ifPunishment() = board.fields[currentPlayer.position].type == Type.Punisment
-
-    private fun ifToPrison() = board.fields[currentPlayer.position].type == Type.ToPrison
-
-    private fun stonksAction(): Boolean {
-        if (ifStonks()) {
-            currentPlayer.moneyChange(3000)
-            return true
-        }
-        return false
-    }
-
-    fun ifStonks() = board.fields[currentPlayer.position].type == Type.Stonks
-
-    fun ifSecret() = board.fields[currentPlayer.position].type == Type.Secret
-
-    fun startAction(): Boolean {
-        if (ifStart()) {
-            currentPlayer.moneyChange(1000)
-            return true
-        }
-        return false
-    }
-
-    fun ifStart(): Boolean = board.fields[currentPlayer.position].type == Type.Start
 
     fun playerAcceptBuyRealty(): Boolean {
         if (currentPlayer.money >= board.fields[currentPlayer.position].cost) {
@@ -180,18 +124,8 @@ class Game {
         return false
     }
 
-    fun playerLose() {
+    private fun playerLose() {
         loosers.add(data.indexOf(currentPlayer))
-    }
-
-    private fun positiveSecret() {
-        when (dice.secret.second) {
-            SecretAction.Action1 -> currentPlayer.moneyChange(250)
-            SecretAction.Action2 -> currentPlayer.moneyChange(500)
-            SecretAction.Action3 -> currentPlayer.moneyChange(300)
-            SecretAction.Action4 -> currentPlayer.moneyChange(750)
-            else -> currentPlayer.moneyChange(100)
-        }
     }
 
     private fun fieldClear(i: Field) {
@@ -201,13 +135,7 @@ class Game {
         board.fields[i.location].penaltyUpdate()
     }
 
-    fun gameIsEnd() = cntPls - loosers.size == 1
-
-    private fun secretIsPositive(): Boolean {
-        dice.secretAction()
-        if (dice.secret.first) return true
-        return false
-    }
+    private fun gameIsEnd() = cntPls - loosers.size == 1
 
     fun negativePay(): Boolean {
         when (dice.secret.second) {
@@ -263,7 +191,8 @@ class Game {
                 playerMove(currentPlayer)
             } else {
                 if (4 - currentPlayer.prisonDays + 1 != 1)
-                    view.notifyInView.value = ("Игрок остается в тюрьме еще на ${4 - currentPlayer.prisonDays + 1} хода.")
+                    view.notifyInView.value =
+                        ("Игрок остается в тюрьме еще на ${4 - currentPlayer.prisonDays + 1} хода.")
                 else
                     view.notifyInView.value = ("Всего один ход отлучает ${currentPlayer.name}, от свободы!")
                 endMotion()
@@ -310,7 +239,7 @@ class Game {
         dice.roll()
         runAsync { if (delay) Thread.sleep(500) } ui {
             if (checkPrisonByDouble()) {
-                playerToPrison(player)
+                event.playerToPrison(player)
             } else {
                 playerMove(player)
             }
@@ -327,65 +256,9 @@ class Game {
             runAsync {
                 if (delay) Thread.sleep(500)
             } ui {
-                fieldEvent(player)
+                event.handling(player)
             }
         }
-    }
-
-    private fun fieldEvent(player: Player) {
-        //check cycle completed and reward according to the settings
-        if (checkCircleComplete()) {
-            triggerProperty(view.cycleCompleteProperty)
-        }
-        //buy realty
-        if (realtyCanBuy()) {
-            triggerProperty(view.offerToBuyInitProperty)
-            if (player.ai) {
-                Ai.buyInstructions(player)
-                endMotion()
-            }
-            if (diceDoubleCheck()) triggerProperty(view.diceDoubleProperty)
-            return
-        }
-        //pay penalty
-        if (punishmentOrPenalty()) {
-            triggerProperty(view.penaltyInitProperty)
-            if (player.ai) {
-                Ai.punisment(player)
-            }
-            if (diceDoubleCheck()) triggerProperty(view.diceDoubleProperty)
-            return
-        }
-        //player to prison
-        if (ifToPrison()) {
-            playerToPrison(player)
-            return
-        }
-        //get stonks
-        if (stonksAction()) {
-            triggerProperty(view.stonksActionProperty)
-        }
-        //secret action
-        if (ifSecret()) {
-            secretAction()
-            if (diceDoubleCheck()) triggerProperty(view.diceDoubleProperty)
-            return
-        }
-        //start field
-        if (startAction()) {
-            triggerProperty(view.startActionProperty)
-        }
-        //player owner field
-        if (board.fields[player.position].owner != null && board.fields[player.position].owner!!.id == player.id) {
-            view.notifyInView.value = "Игрок пришел с проверкой на свое поле"
-        }
-
-        if (player.position == 7) view.notifyInView.value = (player.name + " решил прогуляться в парке, рядом с темницей.")
-
-        if (player.position == 14) view.notifyInView.value = (player.name + " наслаждается отдыхом на природе.")
-
-        if (diceDoubleCheck()) triggerProperty(view.diceDoubleProperty)
-        endMotion()
     }
 
     fun endMotion() {
@@ -418,26 +291,18 @@ class Game {
         }
     }
 
-    private fun playerToPrison(current: Player) {
-        current.goToPrison()
-        statsVisitedField[current.position]++
-        dice.double = false
-        triggerProperty(view.toPrisonViewProperty)
-        runAsync { if (delay) Thread.sleep(200) } ui { endMotion() }
-    }
-
-    private fun secretAction() {
-        //positive
-        if (secretIsPositive()) {
-            positiveSecret()
-            triggerProperty(view.positiveEventInitProperty)
-            endMotion()
-        } else {//negative
-            triggerProperty(view.negativeEventInitProperty)
-            if (currentPlayer.ai) {
-                Ai.negativeEvent(currentPlayer)
-            }
+    private fun endMotionLogic() {
+        currentPlayer.currentMotionUpgrade.clear()
+        if (!dice.double && !currentPlayer.justOutJail) {
+            motionPlayer++
+            motionPlayer %= cntPls
+            statsCntOfMotion++
         }
+        while (motionPlayer in loosers) {
+            motionPlayer++
+            motionPlayer %= cntPls
+        }
+        currentPlayer = data[motionPlayer]
     }
 
     fun playerSurrender() {
