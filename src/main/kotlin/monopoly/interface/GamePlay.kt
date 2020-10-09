@@ -353,6 +353,7 @@ class GamePlay : View("Monopoly") {
         primaryStage.height = 1048.0
         primaryStage.centerOnScreen()
 
+        game.cntPlsUpdate()
         checkSettings()
         connectToModel()
 

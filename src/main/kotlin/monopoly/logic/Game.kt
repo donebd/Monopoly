@@ -38,7 +38,7 @@ class Game {
         cntPlsUpdate()
     }
 
-    private fun cntPlsUpdate() {
+    fun cntPlsUpdate() {
         cntPls = data.size
     }
 
