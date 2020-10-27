@@ -39,11 +39,11 @@ class AnalysisGame {
         0.0,//for convenience
         0.0,
         0.125,//2
-        0.25,//3
-        0.375,//4
-        0.5,//5
-        0.375,//6
-        0.25,//7
+        0.125,//3
+        0.25,//4
+        0.25,//5
+        0.25,//6
+        0.125,//7
         0.125//8
     )
 
@@ -58,7 +58,7 @@ class AnalysisGame {
         var fifthWin = 5.0
         val visitFieldsAnalyse = IntArray(28)
         var cntOfMotion = 0
-        for (i in 1..countOfSimulation) {// 100 game about 19 seconds
+        for (i in 1..countOfSimulation) {// 100 game about 14 seconds
             game.delay = false
             game.data.add(Player(3))
             game.data.add(Player(4))
@@ -66,7 +66,7 @@ class AnalysisGame {
             game.data.map { it.ai = true }
             game.data.map { it.aiDifficulty = difficulty }
             game.start()
-            while (!game.gameIsEnd) Thread.sleep(50)
+            while (!game.gameIsEnd) Thread.sleep(10)
             when (game.gameWinner!!.id) {
                 1 -> firstWin++
                 2 -> secondWin++
@@ -107,15 +107,14 @@ class AnalysisGame {
         var game = Game()
         var firstWinCnt = 0.0
         var secondWinCnt = 0.0
-        for (i in 1..countOfSimulation) {// 100 game about 8.5 seconds
-            println("game $i")
+        for (i in 1..countOfSimulation) {// 100 game about 6 seconds
             game.delay = false
             game.data[0].ai = true
             game.data[1].ai = true
             game.data[0].aiDifficulty = first
             game.data[1].aiDifficulty = second
             game.start()
-            while (!game.gameIsEnd) Thread.sleep(50)
+            while (!game.gameIsEnd) Thread.sleep(1)
             if (game.gameWinner!!.id == 2) secondWinCnt++
             else firstWinCnt++
             game = Game()
@@ -127,7 +126,6 @@ class AnalysisGame {
         val endTime = System.currentTimeMillis();
         val executionTime = (endTime - startTime) / 1000
         println("Время выполнения $executionTime секунд")
-        return
     }
 
     fun testGameThreePlayers(countOfSimulation: Int, first: Difficulty, second: Difficulty, third: Difficulty) {
@@ -137,7 +135,7 @@ class AnalysisGame {
         var firstWinCnt = 0.0
         var secondWinCnt = 0.0
         var thirdWinCnt = 0.0
-        for (i in 1..countOfSimulation) {// 100 game about 12 seconds
+        for (i in 1..countOfSimulation) {// 100 game about 10 seconds
             game.delay = false
             game.data[0].ai = true
             game.data[1].ai = true
@@ -147,11 +145,11 @@ class AnalysisGame {
             game.data[2].ai = true
             game.data[2].aiDifficulty = third
             game.start()
-            while (!game.gameIsEnd) Thread.sleep(50)
-            when (game.gameWinner!!.aiDifficulty) {
-                third -> thirdWinCnt++
-                second -> secondWinCnt++
-                else -> firstWinCnt++
+            while (!game.gameIsEnd) Thread.sleep(5)
+            when (game.gameWinner!!.id) {
+                1 -> firstWinCnt++
+                2 -> secondWinCnt++
+                else -> thirdWinCnt++
             }
             game = Game()
         }
@@ -172,8 +170,10 @@ class AnalysisGame {
 fun main() {
     val analysis = AnalysisGame()
     //analysis.testGameFivePlayers(1000, Difficulty.EASY)
-    analysis.testGameTwoPlayers(100, Difficulty.HARDEST, Difficulty.HARD)
-    analysis.testGameTwoPlayers(100, Difficulty.HARD, Difficulty.HARDEST)
+    analysis.testGameTwoPlayers(10000, Difficulty.HARDEST, Difficulty.MEDIUM)
+    analysis.testGameTwoPlayers(10000, Difficulty.MEDIUM, Difficulty.HARDEST)
+    analysis.testGameTwoPlayers(10000, Difficulty.HARD, Difficulty.MEDIUM)
+    analysis.testGameTwoPlayers(10000, Difficulty.MEDIUM, Difficulty.HARD)
     //analysis.testGameTwoPlayers(1000, Difficulty.Hard, Difficulty.Easy)
     //analysis.testGameTwoPlayers(1000, Difficulty.Easy, Difficulty.Hard   )
     //analysis.testGameThreePlayers(1000, Difficulty.Easy, Difficulty.Medium, Difficulty.Hard)

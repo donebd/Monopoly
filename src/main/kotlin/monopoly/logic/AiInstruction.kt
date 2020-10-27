@@ -45,7 +45,50 @@ class AiInstruction(val game: Game) {
 
     fun prisonInstructions(player: Player) {
         when (player.aiDifficulty) {
-            Difficulty.HARD, Difficulty.HARDEST -> {
+            Difficulty.HARDEST -> {
+                if (!player.isPrisonPayDay()) {
+                    if ((player.money >= 10000 || (player.monopolyRealty.isEmpty() && playerNearlyHasSomeMonopoly(player))) && onBoardHasBuyableFields() && player.money >= 500) {
+                        answer.prisonPay(player)
+                        return//buyOut
+                    }
+                    answer.prisonTryLogic(player)
+                    return//prisonTry
+                } else {
+                    if (player.money >= 750) {
+                        answer.prisonPay(player)
+                        return//buyOut
+                    }
+                    if (player.realty.isNotEmpty()) {
+                        if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1) {
+                            val benefits =
+                                calculateCurrentBenefitOfFields(player, null, monopoly = true, default = false)
+                            var minValuableField: Field
+                            while (benefits.isNotEmpty()) {
+                                minValuableField = game.board.fields[benefits.minBy { it.value }?.key ?: -1]
+                                benefits.remove(minValuableField.location)
+                                if (minValuableField.upgrade != 0) {
+                                    sellUpgrade(player, minValuableField)
+                                    game.view.fieldDegradeProperty.value = minValuableField.location
+                                    game.triggerProperty(game.view.sellUpgradeViewProperty)
+                                    prisonInstructions(player)
+                                    return//sellUpgrade
+                                }
+                            }
+                        } else {
+                            var benefits =
+                                calculateCurrentBenefitOfFields(player, null, monopoly = false, default = true)
+                            if (benefits.isEmpty()) benefits =
+                                calculateCurrentBenefitOfFields(player, null, monopoly = true, default = true)
+                            val minValuableField = game.board.fields[benefits.minBy { it.value }?.key ?: -1]
+                            answer.fieldSellByHalf(player, minValuableField)
+                            game.view.fieldSelledProperty.value = minValuableField.location
+                            prisonInstructions(player)
+                            return//sellField
+                        }
+                    }
+                }
+            }
+            Difficulty.HARD -> {
                 if (!player.isPrisonPayDay()) {
                     if ((player.money >= 10000 || (player.monopolyRealty.isEmpty() && playerNearlyHasSomeMonopoly(player))) && onBoardHasBuyableFields() && player.money >= 500) {
                         answer.prisonPay(player)
@@ -122,18 +165,21 @@ class AiInstruction(val game: Game) {
         return game.board.fields.any { it.couldBuy && it.owner == null }
     }
 
-    fun buyInstructions(player: Player) {//(calculateBenefitOfField(game.board.fields[player.position], player) + calculateUpgradeCost(player) + player.money >= 0)
+    fun buyInstructions(player: Player) {
         when (player.aiDifficulty) {
             Difficulty.HARDEST -> {
-                if (player.money >= game.board.fields[player.position].cost + 500 &&
-                    (player.monopolyRealty.isEmpty() || player.money >= 10000 || playerNotNeedUpgrade(player) || someOnBoardNearlyHasMonopoly())
+                if (
+                    player.money >= game.board.fields[player.position].cost &&
+                    ((calculateBenefitOfField(game.board.fields[player.position], player) + calculateUpgradeCost(player) + player.money >= 0)
+                            || playerNearlyHasMonopoly(player, game.board.fields[player.position])) &&
+                    (player.monopolyRealty.isEmpty() || playerNotNeedUpgrade(player) || someOnBoardNearlyHasMonopoly())
                 ) {
                     answer.playerAcceptBuyRealty(player)
                     game.triggerProperty(game.view.fieldBoughtProperty)
                     return//buy
                 }
                 if (playerNearlyHasMonopoly(player, game.board.fields[player.position])
-                    && calculateRealtyCost(player) + player.money >= game.board.fields[player.position].cost + 500
+                    && calculateRealtyCost(player) + player.money >= game.board.fields[player.position].cost
                 ) {
                     if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(player, false) != -1) {
                         val benefits = calculateCurrentBenefitOfFields(
@@ -522,35 +568,51 @@ class AiInstruction(val game: Game) {
         val analysis = AnalysisGame()
         val fieldEffectiveness = analysis.fieldEffectiveness
         val chanceDiceDrop = analysis.chanceDiceDrop
-        var benefit = 0.0
+        var benefit = -field.cost.toDouble()
 
         for (other in players) {//earnings
             val newPosition = other.position
             for (first in 2..8) {//first mov
                 val firstMovePos = (newPosition + first) % 28
                 val firstField = game.board.fields[firstMovePos]
-                if (firstField.location == field.location) benefit += chanceDiceDrop[first] * field.penalty * fieldEffectiveness[firstMovePos]
+                if (firstField in owner.realty) benefit += chanceDiceDrop[first] * firstField.penalty
 
-                for (second in 2..8) {//second move
+                for (second in 2..8) {
                     val secondMovePos = (firstMovePos + second) % 28
                     val secondField = game.board.fields[secondMovePos]
-                    if (secondField.location == field.location) benefit += chanceDiceDrop[first] * chanceDiceDrop[second] *
-                            secondField.penalty * fieldEffectiveness[secondMovePos]
+                    if (secondField in owner.realty) benefit += chanceDiceDrop[first] * secondField.penalty *
+                            chanceDiceDrop[second]
                 }
             }
         }
         for (first in 2..8) {//loss
+            val firstDouble =
+                first == 2 || (first == 4 && (1..2).random() == 1) || (first == 6 && (1..2).random() == 1) || first == 8
             val firstMovePos = (owner.position + first) % 28
             val firstField = game.board.fields[firstMovePos]
+            if (firstField.type == Type.STONKS) benefit += 3000 * chanceDiceDrop[first]
+            if (firstField.type == Type.TOPRISON) benefit -= 500 * chanceDiceDrop[first]
             if ((firstField.owner != null && firstField.owner!!.id != owner.id) || firstField.type == Type.PUNISMENT) {
                 benefit -= firstField.penalty * chanceDiceDrop[first]
             }
 
             for (second in 2..8) {
+                val secondDouble =
+                    second == 2 || (second == 4 && (1..2).random() == 1) || (second == 6 && (1..2).random() == 1) || second == 8
                 val secondMovePos = (firstMovePos + second) % 28
                 val secondField = game.board.fields[secondMovePos]
+                if (secondField.type == Type.STONKS) benefit += 3000 * chanceDiceDrop[first] * chanceDiceDrop[second]
+                if (secondField.type == Type.TOPRISON) benefit -= 500 * chanceDiceDrop[first] * chanceDiceDrop[second]
                 if ((secondField.owner != null && secondField.owner!!.id != owner.id) || secondField.type == Type.PUNISMENT) {
                     benefit -= secondField.penalty * chanceDiceDrop[first] * chanceDiceDrop[second]
+                }
+
+                for (third in 2..8) {
+                    val thirdDouble =
+                        third == 2 || (third == 4 && (1..2).random() == 1) || (third == 6 && (1..2).random() == 1) || third == 8
+                    if (firstDouble && secondDouble && thirdDouble) {
+                        benefit -= 500 * chanceDiceDrop[first] * chanceDiceDrop[second] * chanceDiceDrop[third]
+                    }
                 }
             }
         }
@@ -577,7 +639,8 @@ class AiInstruction(val game: Game) {
         if (default) {
             player.realty.filter { it.type !in player.monopolyRealty }.map {
                 benefits[it.location] = 0.0
-                if (somePlayerNearlyHasMonopoly(null, it)) benefits[it.location] = 1000.0
+                if (playerNearlyHasMonopoly(player, it)) benefits[it.location] = 1250.0
+                else if (somePlayerNearlyHasMonopoly(null, it)) benefits[it.location] = 750.0
             }
         }
 
@@ -590,13 +653,12 @@ class AiInstruction(val game: Game) {
                 if (field.location in benefits.keys) benefits[firstMovePos] =
                     benefits[firstMovePos]!! + chanceDiceDrop[first] * field.penalty * fieldEffectiveness[firstMovePos]
 
-                for (second in 2..8) {//second move
+                for (second in 2..8) {
                     val secondMovePos = (firstMovePos + second) % 28
                     val secondField = game.board.fields[secondMovePos]
                     if (secondField.location in benefits.keys) benefits[secondMovePos] =
-                        benefits[secondMovePos]!! + chanceDiceDrop[first] * chanceDiceDrop[second] *
-                                secondField.penalty * fieldEffectiveness[secondMovePos]
-
+                        benefits[secondMovePos]!! + chanceDiceDrop[first] * secondField.penalty * fieldEffectiveness[secondMovePos] *
+                                chanceDiceDrop[second]
                 }
             }
         }

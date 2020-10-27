@@ -199,8 +199,8 @@ class Game {
     fun gameIsEnd() = cntPls - loosers.size == 1
 
     private fun setGameStatus(status: Boolean) {
-        gameIsEnd = !status
         gameWinner = data.first { data.indexOf(it) !in loosers }
+        gameIsEnd = !status
         endProperty.value = gameIsEnd
     }
 
