@@ -25,7 +25,7 @@ class Player(val id: Int) {
     }
 
     override fun toString(): String {
-        return "[Id = $id] [Name = $name] [Money = $money] [Ai = $ai] [Difficulty = $aiDifficulty]"
+        return "[Id = $id] [Name = $name] [Money = $money] [Position = $position] [Ai = $ai] [Difficulty = $aiDifficulty]"
     }
 
     fun hasSomething(): Boolean {

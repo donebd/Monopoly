@@ -25,6 +25,10 @@ class Field(val location: Int, val type: Type) {
         penaltyUpdate()
     }
 
+    override fun toString(): String {
+        return "Field [$location] [$name] [Owner = ${owner?.name}] [Could buy = $couldBuy] [upgrade = $upgrade]"
+    }
+
     fun ownerUpdate(new : Player?) {
         owner = new
         ownerProperty.value = new?.name ?: "null"

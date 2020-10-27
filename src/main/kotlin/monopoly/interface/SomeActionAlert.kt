@@ -33,10 +33,10 @@ class SomeActionAlert : Fragment() {
         //secret only positive
         if (game.event.ifSecret()) {
             when (game.dice.secret.second) {
-                SecretAction.Action1 -> message.text = "Вы нашли в зимней куртке забытые 250"
-                SecretAction.Action2 -> message.text = "Вы выйграли на ставках 500"
-                SecretAction.Action3 -> message.text = "Вам вернули долг 300"
-                SecretAction.Action4 -> message.text = "В банке произошла ошибка, на ваш счет перечислено 750"
+                SecretAction.ACTION1 -> message.text = "Вы нашли в зимней куртке забытые 250"
+                SecretAction.ACTION2 -> message.text = "Вы выйграли на ставках 500"
+                SecretAction.ACTION3 -> message.text = "Вам вернули долг 300"
+                SecretAction.ACTION4 -> message.text = "В банке произошла ошибка, на ваш счет перечислено 750"
                 else -> message.text = "Ваша собака принесла вам 100"
             }
         }

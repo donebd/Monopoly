@@ -95,9 +95,9 @@ class Event(val game : Game) {
     fun punishmentOrPenalty(player: Player) = ifPunishment(player) ||
             (board.fields[player.position].owner != null && board.fields[player.position].owner!!.id != player.id)
 
-    fun ifPunishment(player: Player) = board.fields[player.position].type == Type.Punisment
+    fun ifPunishment(player: Player) = board.fields[player.position].type == Type.PUNISMENT
 
-    private fun ifToPrison() = board.fields[currentPlayer.position].type == Type.ToPrison
+    private fun ifToPrison() = board.fields[currentPlayer.position].type == Type.TOPRISON
 
     fun playerToPrison(current: Player) {
         current.goToPrison()
@@ -124,9 +124,9 @@ class Event(val game : Game) {
         return false
     }
 
-    fun ifStonks() = board.fields[currentPlayer.position].type == Type.Stonks
+    fun ifStonks() = board.fields[currentPlayer.position].type == Type.STONKS
 
-    fun ifSecret() = board.fields[currentPlayer.position].type == Type.Secret
+    fun ifSecret() = board.fields[currentPlayer.position].type == Type.SECRET
 
     private fun secretAction() {
         //positive
@@ -150,10 +150,10 @@ class Event(val game : Game) {
 
     private fun positiveSecret() {
         when (dice.secret.second) {
-            SecretAction.Action1 -> currentPlayer.moneyChange(250)
-            SecretAction.Action2 -> currentPlayer.moneyChange(500)
-            SecretAction.Action3 -> currentPlayer.moneyChange(300)
-            SecretAction.Action4 -> currentPlayer.moneyChange(750)
+            SecretAction.ACTION1 -> currentPlayer.moneyChange(250)
+            SecretAction.ACTION2 -> currentPlayer.moneyChange(500)
+            SecretAction.ACTION3 -> currentPlayer.moneyChange(300)
+            SecretAction.ACTION4 -> currentPlayer.moneyChange(750)
             else -> currentPlayer.moneyChange(100)
         }
     }
@@ -166,5 +166,5 @@ class Event(val game : Game) {
         return false
     }
 
-    fun ifStart(): Boolean = board.fields[currentPlayer.position].type == Type.Start
+    fun ifStart(): Boolean = board.fields[currentPlayer.position].type == Type.START
 }

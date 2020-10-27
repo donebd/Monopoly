@@ -1,9 +1,9 @@
 package monopoly.logic
 
 enum class SecretAction {
-    Action1,
-    Action2,
-    Action3,
-    Action4,
-    Action5,
+    ACTION1,
+    ACTION2,
+    ACTION3,
+    ACTION4,
+    ACTION5,
 }

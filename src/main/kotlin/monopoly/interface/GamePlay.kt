@@ -125,10 +125,10 @@ class GamePlay : View("Monopoly") {
     private fun negativeEventInit(player: Player) {
         send(
             when (game.dice.secret.second) {
-                SecretAction.Action1 -> "Вас обокрали на 300$"
-                SecretAction.Action2 -> "Вы попали на распродажу и потратили там 500$"
-                SecretAction.Action3 -> "Вы испортили свои любимые штаны за 40$"
-                SecretAction.Action4 -> "В банке произошла ошибка, и с вас списали 750$"
+                SecretAction.ACTION1 -> "Вас обокрали на 300$"
+                SecretAction.ACTION2 -> "Вы попали на распродажу и потратили там 500$"
+                SecretAction.ACTION3 -> "Вы испортили свои любимые штаны за 40$"
+                SecretAction.ACTION4 -> "В банке произошла ошибка, и с вас списали 750$"
                 else -> "Вы простудились, и потратили 250$ в аптеке"
             }
         )
@@ -140,10 +140,10 @@ class GamePlay : View("Monopoly") {
         send(player.name + ", ")
         sendln(
             when (game.dice.secret.second) {
-                SecretAction.Action1 -> "вы нашли в зимней куртке забытые 250$"
-                SecretAction.Action2 -> "вы выйграли на ставках 500$"
-                SecretAction.Action3 -> "вам вернули долг 300$"
-                SecretAction.Action4 -> "в банке произошла ошибка, на ваш счет перечислено 750$"
+                SecretAction.ACTION1 -> "вы нашли в зимней куртке забытые 250$"
+                SecretAction.ACTION2 -> "вы выйграли на ставках 500$"
+                SecretAction.ACTION3 -> "вам вернули долг 300$"
+                SecretAction.ACTION4 -> "в банке произошла ошибка, на ваш счет перечислено 750$"
                 else -> "ваша собака принесла вам 100$"
             }
         )
@@ -154,10 +154,10 @@ class GamePlay : View("Monopoly") {
         negativeAction.opacity = 1.0
         negativeAction.disableProperty().value = false
         when (game.dice.secret.second) {
-            SecretAction.Action1 -> negativeText.text = "Вас обокрали на 300"
-            SecretAction.Action2 -> negativeText.text = "Вы попали на распродажу и потратили там 500"
-            SecretAction.Action3 -> negativeText.text = "Вы испортили свои любимые штаны за 40"
-            SecretAction.Action4 -> negativeText.text = "В банке произошла ошибка, и с вас списали 750"
+            SecretAction.ACTION1 -> negativeText.text = "Вас обокрали на 300"
+            SecretAction.ACTION2 -> negativeText.text = "Вы попали на распродажу и потратили там 500"
+            SecretAction.ACTION3 -> negativeText.text = "Вы испортили свои любимые штаны за 40"
+            SecretAction.ACTION4 -> negativeText.text = "В банке произошла ошибка, и с вас списали 750"
             else -> negativeText.text = "Вы простудились, и потратили 250 в аптеке"
         }
     }

@@ -1,18 +1,18 @@
 package monopoly.logic
 
 enum class Type {
-    Start,
-    ToPrison,
-    Secret,
-    Punisment,
-    Free,
-    Perfume,
-    Clothes,
-    SocialNetwork,
-    Soda,
-    Airlanes,
-    FastFood,
-    Car,
-    Software,
-    Stonks
+    START,
+    TOPRISON,
+    SECRET,
+    PUNISMENT,
+    FREE,
+    PERFUME,
+    CLOTHES,
+    NETWORK,
+    SODA,
+    AIRLINES,
+    FASTFOOD,
+    CAR,
+    SOFTWARE,
+    STONKS
 }

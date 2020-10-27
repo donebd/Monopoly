@@ -9,7 +9,7 @@ class Tests{
     fun boardLogic(){
         val board = GameBoard()
         assertEquals(28, board.fields.size)
-        assertEquals(Type.Start, board.fields[0].type)
+        assertEquals(Type.START, board.fields[0].type)
     }
 
     @Test
@@ -61,7 +61,7 @@ class Tests{
         assertEquals(10700 - 1100,game.data[0].money)
         assertEquals(1,game.board.fields[2].upgrade)
         println(game.board.fields[1].type)
-        assertEquals(Type.Perfume, game.data[0].currentMotionUpgrade[0])
+        assertEquals(Type.PERFUME, game.data[0].currentMotionUpgrade[0])
         game.currentAct.fieldSellUpgrade()
         assertEquals(10700 ,game.data[0].money)
         assertEquals(0,game.board.fields[0].upgrade)

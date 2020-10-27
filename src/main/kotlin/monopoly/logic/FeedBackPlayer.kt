@@ -10,19 +10,19 @@ class FeedBackPlayer(val game: Game) {
 
     fun negativePay(player: Player): Boolean {
         when (dice.secret.second) {
-            SecretAction.Action1 -> if (player.money >= 300) {
+            SecretAction.ACTION1 -> if (player.money >= 300) {
                 player.moneyChange(-300)
                 return true
             }
-            SecretAction.Action2 -> if (player.money >= 500) {
+            SecretAction.ACTION2 -> if (player.money >= 500) {
                 player.moneyChange(-500)
                 return true
             }
-            SecretAction.Action3 -> if (player.money >= 40) {
+            SecretAction.ACTION3 -> if (player.money >= 40) {
                 player.moneyChange(-40)
                 return true
             }
-            SecretAction.Action4 -> if (player.money >= 750) {
+            SecretAction.ACTION4 -> if (player.money >= 750) {
                 player.moneyChange(-750)
                 return true
             }
@@ -105,7 +105,7 @@ class FeedBackPlayer(val game: Game) {
     fun playerPayPenalty(player: Player): Boolean {
         if (player.money >= board.fields[player.position].penalty) {
             player.moneyChange(-board.fields[player.position].penalty)
-            if (board.fields[player.position].type != Type.Punisment) {
+            if (board.fields[player.position].type != Type.PUNISMENT) {
                 board.fields[player.position].owner!!.moneyChange(board.fields[player.position].penalty)
             }
             return true

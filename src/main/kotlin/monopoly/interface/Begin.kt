@@ -67,7 +67,8 @@ class Begin : View("Monopoly") {
         playField.text = when (aiDifficulty.value) {
             "Легкий" -> "EasyAI ${num + 1}"
             "Средний" -> "MediumAI ${num + 1}"
-            "0 Ошибок" -> "HardAI ${num + 1}"
+            "Сложный" -> "HardAI ${num + 1}"
+            "Серьезный" -> "HardestAI ${num + 1}"
             else -> "Player ${num + 1}"
         }
     }
@@ -81,7 +82,7 @@ class Begin : View("Monopoly") {
             (box.getChildList()!![0] as CheckBox).setOnAction { active(box, i) }
             (box.getChildList()!![2] as CheckBox).setOnAction { botAction(box, i) }
             (box.getChildList()!![3] as ComboBox<*>).items =
-                FXCollections.observableArrayList("Легкий", "Средний", "0 Ошибок")
+                FXCollections.observableArrayList("Легкий", "Средний", "Сложный", "Серьезный")
             (box.getChildList()!![3] as ComboBox<*>).setOnAction { difficultyAct(box, i) }
         }
     }
@@ -92,9 +93,10 @@ class Begin : View("Monopoly") {
         game.data[0].name = (playerPane.children[0].getChildList()!![1] as TextField).text
         game.data[0].ai = (playerPane.children[0].getChildList()!![2] as CheckBox).isSelected
         game.data[0].aiDifficulty = when ((playerPane.children[0].getChildList()!![3] as ComboBox<*>).value) {
-            "Легкий" -> Difficulty.Easy
-            "Средний" -> Difficulty.Medium
-            else -> Difficulty.Hard
+            "Легкий" -> Difficulty.EASY
+            "Средний" -> Difficulty.MEDIUM
+            "Сложный" -> Difficulty.HARD
+            else -> Difficulty.HARDEST
         }
 
         for (i in 1..4) {
@@ -111,9 +113,10 @@ class Begin : View("Monopoly") {
                 if (aiBox.isSelected) {
                     game.data.last().ai = true
                     game.data.last().aiDifficulty = when (aiDifficulty.value) {
-                        "Легкий" -> Difficulty.Easy
-                        "Средний" -> Difficulty.Medium
-                        else -> Difficulty.Hard
+                        "Легкий" -> Difficulty.EASY
+                        "Средний" -> Difficulty.MEDIUM
+                        "Сложный" -> Difficulty.HARD
+                        else -> Difficulty.HARDEST
                     }
                 }
             }
