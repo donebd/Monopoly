@@ -100,7 +100,7 @@
                                           <Image url="@../fields/Lacoste.png" />
                                        </image>
                                     </ImageView>
-                                    <Label alignment="CENTER" layoutX="2.0" layoutY="182.0" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #7a7996;" text="2.200K">
+                                    <Label alignment="CENTER" layoutX="1.0" layoutY="182.0" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: #7a7996;" text="2.200K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -119,7 +119,7 @@
                                           <Image url="@../fields/Adidas.png" />
                                        </image>
                                     </ImageView>
-                                    <Label alignment="CENTER" layoutX="2.0" layoutY="182.0" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #2ebfe6;" text="2.300K">
+                                    <Label alignment="CENTER" layoutX="1.0" layoutY="182.0" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: #2ebfe6;" text="2.300K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -150,7 +150,7 @@
                                           <Image url="@../fields/Puma.png" />
                                        </image>
                                     </ImageView>
-                                    <Label alignment="CENTER" layoutX="2.0" layoutY="182.0" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: #2ebfe6;" text="2.500K">
+                                    <Label alignment="CENTER" layoutX="1.0" layoutY="182.0" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #2ebfe6;" text="2.500K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -169,7 +169,7 @@
                                           <Image url="@../fields/Nike.png" />
                                        </image>
                                     </ImageView>
-                                    <Label alignment="CENTER" layoutX="2.0" layoutY="182.0" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: #2ebfe6;" text="2.600K">
+                                    <Label alignment="CENTER" layoutX="1.0" layoutY="182.0" prefHeight="30.0" prefWidth="99.0" style="-fx-background-color: #2ebfe6;" text="2.600K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -361,7 +361,7 @@
                                           <Image url="@../fields/Facebook.png" />
                                        </image>
                                     </ImageView>
-                                    <Label layoutX="-22.0" layoutY="24.0" prefHeight="47.0" prefWidth="92.0" rotate="90.0" style="-fx-background-color: #e6ce2e;" text="2.800K">
+                                    <Label layoutX="-22.0" layoutY="24.0" prefHeight="47.0" prefWidth="93.0" rotate="90.0" style="-fx-background-color: #e6ce2e;" text="2.800K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -383,7 +383,7 @@
                                           <Image url="@../fields/Twitter.png" />
                                        </image>
                                     </ImageView>
-                                    <Label layoutX="-22.0" layoutY="24.0" prefHeight="47.0" prefWidth="92.0" rotate="90.0" style="-fx-background-color: #e6ce2e;" text="2.900K">
+                                    <Label layoutX="-22.0" layoutY="24.0" prefHeight="47.0" prefWidth="93.0" rotate="90.0" style="-fx-background-color: #e6ce2e;" text="2.900K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -405,7 +405,7 @@
                                           <Image url="@../fields/Mercedes-Benz.png" />
                                        </image>
                                     </ImageView>
-                                    <Label layoutX="-22.0" layoutY="24.0" prefHeight="47.0" prefWidth="94.0" rotate="90.0" style="-fx-background-color: #e43c3c;" text="3.000K">
+                                    <Label layoutX="-22.0" layoutY="24.0" prefHeight="47.0" prefWidth="95.0" rotate="90.0" style="-fx-background-color: #e43c3c;" text="3.000K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -427,7 +427,7 @@
                                           <Image url="@../fields/Coca-cola.png" />
                                        </image>
                                     </ImageView>
-                                    <Label layoutX="-22.0" layoutY="24.0" prefHeight="47.0" prefWidth="92.0" rotate="90.0" style="-fx-background-color: #3dab53;" text="3.100K">
+                                    <Label layoutX="-22.0" layoutY="24.0" prefHeight="47.0" prefWidth="94.0" rotate="90.0" style="-fx-background-color: #3dab53;" text="3.100K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -461,7 +461,7 @@
                                           <Image url="@../fields/Pepsi.png" />
                                        </image>
                                     </ImageView>
-                                    <Label layoutX="-22.0" layoutY="25.0" prefHeight="47.0" prefWidth="94.0" rotate="90.0" style="-fx-background-color: #3dab53;" text="3.200K">
+                                    <Label layoutX="-21.0" layoutY="25.0" prefHeight="47.0" prefWidth="95.0" rotate="90.0" style="-fx-background-color: #3dab53;" text="3.200K">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
