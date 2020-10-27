@@ -30,6 +30,7 @@ class Game {
     var currentExchange = ExchangeOffer()
     var currentAct = FieldAction() // for action with realty
     var prisonByDouble = false
+    var pause = false
 
     init {
         data.add(currentPlayer)
@@ -140,7 +141,7 @@ class Game {
             }
             player.justOutJail = false
             runAsync {
-                while (currentExchange.exchangePause) {
+                while (currentExchange.exchangePause || pause) {
                     Thread.sleep(100)
                 }
                 runAsync { if (delay) Thread.sleep(500) } ui {

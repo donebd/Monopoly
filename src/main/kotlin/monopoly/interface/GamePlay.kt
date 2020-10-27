@@ -1,9 +1,6 @@
 package monopoly.`interface`
 
-import javafx.scene.control.Button
-import javafx.scene.control.CheckMenuItem
-import javafx.scene.control.Label
-import javafx.scene.control.TextArea
+import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.GridPane
@@ -20,7 +17,8 @@ class GamePlay : View("Monopoly") {
     override val root: AnchorPane by fxml()
 
     private val alertCheck: CheckMenuItem by fxid()
-    private val actionLogChek: CheckMenuItem by fxid()
+    private val actionLogCheck: CheckMenuItem by fxid()
+    private val pauseCheck: RadioButton by fxid()
 
     private val textArea: TextArea by fxid()
 
@@ -417,8 +415,8 @@ class GamePlay : View("Monopoly") {
 
     private fun checkSettings() {
         alertCheck.isSelected = showAlerts
-        actionLogChek.isSelected = showActionLog
-        if (actionLogChek.isSelected) {
+        actionLogCheck.isSelected = showActionLog
+        if (actionLogCheck.isSelected) {
             textArea.opacity = 1.0
             textArea.disableProperty().value = false
         } else {
@@ -530,14 +528,18 @@ class GamePlay : View("Monopoly") {
     }
 
     fun actionLogSwitch() {
-        showActionLog = actionLogChek.isSelected
-        if (actionLogChek.isSelected) {
+        showActionLog = actionLogCheck.isSelected
+        if (actionLogCheck.isSelected) {
             textArea.opacity = 1.0
             textArea.disableProperty().value = false
         } else {
             textArea.opacity = 0.0
             textArea.disableProperty().value = true
         }
+    }
+
+    fun pause() {
+        game.pause = pauseCheck.isSelected
     }
 
     fun exit() {

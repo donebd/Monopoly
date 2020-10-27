@@ -170,8 +170,6 @@ class AnalysisGame {
 fun main() {
     val analysis = AnalysisGame()
     //analysis.testGameFivePlayers(1000, Difficulty.EASY)
-    analysis.testGameTwoPlayers(10000, Difficulty.HARDEST, Difficulty.MEDIUM)
-    analysis.testGameTwoPlayers(10000, Difficulty.MEDIUM, Difficulty.HARDEST)
     analysis.testGameTwoPlayers(10000, Difficulty.HARD, Difficulty.MEDIUM)
     analysis.testGameTwoPlayers(10000, Difficulty.MEDIUM, Difficulty.HARD)
     //analysis.testGameTwoPlayers(1000, Difficulty.Hard, Difficulty.Easy)
