@@ -347,6 +347,9 @@ class GamePlay : View("Monopoly") {
         this.currentStage!!.setOnCloseRequest {
             game.currentExchange.exchangePause = false
         }
+        this.primaryStage.setOnCloseRequest {
+            game.setGameStatus(false)
+    }
         primaryStage.width = 1024.0
         primaryStage.height = 1048.0
         primaryStage.centerOnScreen()
@@ -368,7 +371,7 @@ class GamePlay : View("Monopoly") {
 
     private fun viewEndMotion(player: Player) {
         idMotion.text = "Ход игрока ${game.data[game.data.indexOf(player)].name}"
-        if (!game.gameIsEnd && !player.ai && !player.playerInPrison()) buttonRoll.disableProperty().value = false
+        if (!game.gameIsEnd && !player.ai && !player.playerInPrison() && !game.pause) buttonRoll.disableProperty().value = false
     }
 
 
@@ -424,6 +427,7 @@ class GamePlay : View("Monopoly") {
             textArea.disableProperty().value = true
         }
 
+        if (game.data.first().ai) buttonRoll.disableProperty().value = true
         if (game.data.filter { it.ai }.size == game.data.size) buttonRoll.opacity = 0.0
     }
 
@@ -540,6 +544,7 @@ class GamePlay : View("Monopoly") {
 
     fun pause() {
         game.pause = pauseCheck.isSelected
+        buttonRoll.disableProperty().value = game.pause
     }
 
     fun exit() {

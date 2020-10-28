@@ -142,7 +142,7 @@ class Game {
             player.justOutJail = false
             runAsync {
                 while (currentExchange.exchangePause || pause) {
-                    Thread.sleep(100)
+                    Thread.sleep(10)
                 }
                 runAsync { if (delay) Thread.sleep(500) } ui {
                     if ((player.playerInPrison() || player.ai) && !gameIsEnd) {
@@ -199,7 +199,9 @@ class Game {
 
     fun gameIsEnd() = cntPls - loosers.size == 1
 
-    private fun setGameStatus(status: Boolean) {
+    fun setGameStatus(status: Boolean) {
+        currentExchange.exchangePause = false
+        pause = false
         gameWinner = data.first { data.indexOf(it) !in loosers }
         gameIsEnd = !status
         endProperty.value = gameIsEnd
