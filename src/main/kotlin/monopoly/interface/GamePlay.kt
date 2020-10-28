@@ -14,8 +14,9 @@ import tornadofx.*
 
 class GamePlay : View("Monopoly") {
 
-    override val root: AnchorPane by fxml()
+    private val sounds = Sound()
 
+    override val root: AnchorPane by fxml()
     private val alertCheck: CheckMenuItem by fxid()
     private val actionLogCheck: CheckMenuItem by fxid()
     private val pauseCheck: RadioButton by fxid()
@@ -77,6 +78,7 @@ class GamePlay : View("Monopoly") {
         if (!game.event.ifPunishment(player)) sendln("Игрок попал на поле ${game.board.fields[player.position].owner!!.name}, и должен ему ${game.board.fields[player.position].penalty}$!")
         else sendln("${player.name}, вас уличили за неуплату налогов! Вы должны оплатить штраф 2000$.")
         if (!player.ai) {
+            sounds.penalty()
             penaltyPlayer(player)
         }
     }
@@ -131,7 +133,10 @@ class GamePlay : View("Monopoly") {
             }
         )
         sendln(", " + player.name)
-        if (!player.ai) playerNegativeSecret()
+        if (!player.ai) {
+            sounds.secret()
+            playerNegativeSecret()
+        }
     }
 
     private fun positiveEventInit(player: Player) {
@@ -145,7 +150,10 @@ class GamePlay : View("Monopoly") {
                 else -> "ваша собака принесла вам 100$"
             }
         )
-        if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+        if (!player.ai) {
+            sounds.secret()
+            if (showAlerts)find<SomeActionAlert>().openModal(resizable = false)
+        }
     }
 
     private fun playerNegativeSecret() {
@@ -238,23 +246,38 @@ class GamePlay : View("Monopoly") {
 
     private fun cycleComplete(player: Player) {
         sendln("Положенная награда в 2000$ за проход круга ваша, " + player.name)
-        if (!player.ai && showAlerts) runAsync { Thread.sleep(300) } ui { find<CycleComplete>().openModal(resizable = false) }
+        if (!player.ai) {
+            sounds.collect()
+            if (showAlerts) runAsync { Thread.sleep(300) } ui { find<CycleComplete>().openModal(resizable = false) }
+        }
     }
 
     private fun stonksAction(player: Player) {
         sendln("Выигрышь в лотерею в размере 3000$!")
-        if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+        if (!player.ai) {
+            sounds.stonks()
+            if (showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+        }
     }
 
     private fun startAction(player: Player) {
         sendln("Получите и распишитесь, ${player.name}, 1000$ за попадание на поле Старт!")
-        if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+        if (!player.ai) {
+            sounds.stonks()
+            if (showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+        }
     }
 
     private fun playerToPrisonView(player: Player) {
-        if (game.prisonByDouble) { sendln("Вы отправляетесь в тюрьму, за махинации с кубиками, ${game.currentPlayer.name}!") }
-        else { sendln("Вы отправляетесь в тюрьму, за неуплату налогов, ${game.currentPlayer.name}.") }
-        if (!player.ai && showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+        if (game.prisonByDouble) {
+            sendln("Вы отправляетесь в тюрьму, за махинации с кубиками, ${game.currentPlayer.name}!")
+        } else {
+            sendln("Вы отправляетесь в тюрьму, за неуплату налогов, ${game.currentPlayer.name}.")
+        }
+        if (!player.ai) {
+            sounds.prison()
+            if (showAlerts) find<SomeActionAlert>().openModal(resizable = false)
+        }
     }
 
     //Board functional
@@ -272,12 +295,20 @@ class GamePlay : View("Monopoly") {
     private val arrayModel = arrayListOf(model1, model2, model3, model4, model5)
     //animation
     private val prisonPosition = Pair(810.0, 50.0)
-    private val arrayPosition = arrayOf(Pair(10.0, 30.0), Pair(10.0, 40.0), Pair(30.0, 30.0), Pair(30.0, 40.0), Pair(10.0, 50.0))
+    private val arrayPosition =
+        arrayOf(Pair(10.0, 30.0), Pair(10.0, 40.0), Pair(30.0, 30.0), Pair(30.0, 40.0), Pair(10.0, 50.0))
+
     private fun movePlayer(a: Int, prison: Boolean, player: Int) {
         timeline {
             keyframe(Duration.seconds(0.5)) {
-                keyvalue(arrayModel[player].layoutXProperty(), arrayPosition[player].first + if (prison) prisonPosition.first else game.board.fields[a].layoutX)
-                keyvalue(arrayModel[player].layoutYProperty(), arrayPosition[player].second + if (prison) prisonPosition.second else game.board.fields[a].layoutY)
+                keyvalue(
+                    arrayModel[player].layoutXProperty(),
+                    arrayPosition[player].first + if (prison) prisonPosition.first else game.board.fields[a].layoutX
+                )
+                keyvalue(
+                    arrayModel[player].layoutYProperty(),
+                    arrayPosition[player].second + if (prison) prisonPosition.second else game.board.fields[a].layoutY
+                )
             }
         }
     }
@@ -322,7 +353,9 @@ class GamePlay : View("Monopoly") {
     private val secondDice2: ImageView by fxid()
     private val secondDice3: ImageView by fxid()
     private val secondDice4: ImageView by fxid()
-    private val arrayDice = arrayOf(firstDice1, firstDice2, firstDice3, firstDice4, secondDice1, secondDice2, secondDice3, secondDice4)
+    private val arrayDice =
+        arrayOf(firstDice1, firstDice2, firstDice3, firstDice4, secondDice1, secondDice2, secondDice3, secondDice4)
+
     //animation
     private fun diceRoll(a: Int, b: Int) {
         if (a == b) sendln("Поздравляем, на кубиках выпало ${a + b}, дублем!")
@@ -349,7 +382,7 @@ class GamePlay : View("Monopoly") {
         }
         this.primaryStage.setOnCloseRequest {
             game.setGameStatus(false)
-    }
+        }
         primaryStage.width = 1024.0
         primaryStage.height = 1048.0
         primaryStage.centerOnScreen()
@@ -371,7 +404,10 @@ class GamePlay : View("Monopoly") {
 
     private fun viewEndMotion(player: Player) {
         idMotion.text = "Ход игрока ${game.data[game.data.indexOf(player)].name}"
-        if (!game.gameIsEnd && !player.ai && !player.playerInPrison() && !game.pause) buttonRoll.disableProperty().value = false
+        if (!player.ai) {
+            sounds.motion()
+            if (!game.gameIsEnd && !player.playerInPrison() && !game.pause) buttonRoll.disableProperty().value = false
+        }
     }
 
 
@@ -385,7 +421,13 @@ class GamePlay : View("Monopoly") {
             game.data[i].positionProperty.onChange {
                 movePlayer(game.data[i].position, game.data[i].playerInPrison(), i)
             }
-            playerPane.children[i].setOnMouseClicked { if (game.canExchange(game.currentPlayer, game.data[i])) openOfferWindow() }
+            playerPane.children[i].setOnMouseClicked {
+                if (game.canExchange(
+                        game.currentPlayer,
+                        game.data[i]
+                    )
+                ) openOfferWindow()
+            }
         }//connect info about players
 
         linkFieldInfo()//connect field info
@@ -453,14 +495,22 @@ class GamePlay : View("Monopoly") {
         for (i in 15..19) {
             if (game.board.fields[i].couldBuy) {
                 (bottomPane.children.reversed()[i - 14].getChildList()!![0] as Label).bind(game.board.fields[i].penaltyProperty)
-                bottomPane.children.reversed()[i - 14].setOnMouseClicked { if (game.canControl(i)) find<Field>().openModal(resizable = false) }
+                bottomPane.children.reversed()[i - 14].setOnMouseClicked {
+                    if (game.canControl(i)) find<Field>().openModal(
+                        resizable = false
+                    )
+                }
                 (bottomPane.children.reversed()[i - 14].getChildList()!![2] as Label).bind(game.board.fields[i].view)
             }
         }
         for (i in 22..27) {
             if (game.board.fields[i].couldBuy) {
                 (leftPane.children.reversed()[i - 22].getChildList()!![1] as Label).bind(game.board.fields[i].penaltyProperty)
-                leftPane.children.reversed()[i - 22].setOnMouseClicked { if (game.canControl(i)) find<Field>().openModal(resizable = false) }
+                leftPane.children.reversed()[i - 22].setOnMouseClicked {
+                    if (game.canControl(i)) find<Field>().openModal(
+                        resizable = false
+                    )
+                }
                 (leftPane.children.reversed()[i - 22].getChildList()!![2] as Label).bind(game.board.fields[i].view)
             }
         }
@@ -469,7 +519,8 @@ class GamePlay : View("Monopoly") {
     private val defaultColor = c("#d2edd7")
     private val arrayPlayerColor = arrayOf(c("#f13030"), c("#f27330"), c("green"), c("#03a3d1"), c("#eb15dc"))
     private fun paintField(field: monopoly.logic.Field) {
-        val color =  if (game.data.indexOf(field.owner) == -1) defaultColor else arrayPlayerColor[game.data.indexOf(field.owner)]
+        val color =
+            if (game.data.indexOf(field.owner) == -1) defaultColor else arrayPlayerColor[game.data.indexOf(field.owner)]
         when (field.location) {
             in 0..7 -> upperPane.children[field.location].style(append = true) { backgroundColor += color }
             in 8..13 -> rightPane.children[field.location - 8].style(append = true) { backgroundColor += color }
@@ -515,6 +566,7 @@ class GamePlay : View("Monopoly") {
 
     private fun endGame() {
         sendln("${game.gameWinner!!.name}, вы переиграли всех своих оппонентов!")
+        sounds.win()
         find<FinishGame>().openModal(resizable = false)
     }
 
