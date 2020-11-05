@@ -5,7 +5,6 @@ import tornadofx.ui
 
 class Event(val game : Game) {
     private val view = game.view
-    private val Ai = game.Ai
     private val board = game.board
     private var currentPlayer = game.currentPlayer
     private val dice = game.dice
@@ -21,17 +20,17 @@ class Event(val game : Game) {
         if (realtyCanBuy()) {
             game.triggerProperty(view.offerToBuyInitProperty)
             if (player.ai) {
-                Ai.buyInstructions(player)
+                player.aiInstruction.buyInstructions()
                 game.endMotion()
             }
             if (diceDoubleCheck()) game.triggerProperty(view.diceDoubleProperty)
             return
         }
         //pay penalty
-        if (punishmentOrPenalty(currentPlayer)) {
+        if (punishmentOrPenalty(player)) {
             game.triggerProperty(view.penaltyInitProperty)
             if (player.ai) {
-                Ai.punisment(player)
+                player.aiInstruction.punisment()
             }
             if (diceDoubleCheck()) game.triggerProperty(view.diceDoubleProperty)
             return
@@ -137,7 +136,7 @@ class Event(val game : Game) {
         } else {//negative
             game.triggerProperty(view.negativeEventInitProperty)
             if (currentPlayer.ai) {
-                Ai.negativeEvent(currentPlayer)
+                currentPlayer.aiInstruction.negativeEvent()
             }
         }
     }

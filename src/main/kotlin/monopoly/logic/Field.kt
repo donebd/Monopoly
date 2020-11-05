@@ -26,7 +26,7 @@ class Field(val location: Int, val type: Type) {
     }
 
     override fun toString(): String {
-        return "Field [$location] [$name] [Owner = ${owner?.name}] [Could buy = $couldBuy] [upgrade = $upgrade]"
+        return "Field [$location] [$name] [upgrade = $upgrade]"
     }
 
     fun ownerUpdate(new : Player?) {

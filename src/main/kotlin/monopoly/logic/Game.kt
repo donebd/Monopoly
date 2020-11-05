@@ -24,7 +24,6 @@ class Game {
     var currentPlayer = Player(1) //the player who is currently walking in action
     var loosers = mutableListOf<Int>()
     val dice = Dice()
-    var Ai = AiInstruction(this)
     var event = Event(this)
     var playerAnswer = FeedBackPlayer(this)
     var currentExchange = ExchangeOffer()
@@ -80,6 +79,14 @@ class Game {
     fun start(){
         cntPlsUpdate()
         setBalance()
+        data.map {
+            it.aiInstruction = when(it.aiDifficulty) {
+            Difficulty.EASY -> AIEasy(this, it)
+            Difficulty.MEDIUM -> AIMedium(this, it)
+            Difficulty.HARD -> AIHard(this,it)
+            else -> AIHardest(this, it)
+        }
+        }//initialize ai instruction depending on the difficulty
         if (data.first().ai) motion()
     }
 
@@ -94,7 +101,7 @@ class Game {
         if (player.playerInPrison()) {
             triggerProperty(view.prisonInitProperty)
             if (player.ai) {
-                Ai.prisonInstructions(player)
+                player.aiInstruction.prisonInstructions()
             }
             return
         }
@@ -128,18 +135,18 @@ class Game {
             endMotionLogic()
             triggerProperty(view.viewEndMotionProperty)
             val player = currentPlayer
-            if (player.ai) {
-                for (i in Ai.instructions(player)) {
-                    view.notifyInView.value =
-                        (player.name + " строит филиал. Количество филиалов на поле " + board.fields[i].name + " - " + board.fields[i].upgrade)
-                }
-                triggerProperty(view.updateUpgradeView)
-            }
             if (!dice.double && !player.justOutJail) {
                 view.notifyInView.value = ""
                 view.notifyInView.value = ("Ваш ход, ${player.name} !")
             }
             player.justOutJail = false
+            if (player.ai) {
+                for (i in player.aiInstruction.instructions()) {
+                    view.notifyInView.value =
+                        (player.name + " строит филиал. Количество филиалов на поле " + board.fields[i].name + " - " + board.fields[i].upgrade)
+                }
+                triggerProperty(view.updateUpgradeView)
+            }
             runAsync {
                 while (currentExchange.exchangePause || pause) {
                     Thread.sleep(10)

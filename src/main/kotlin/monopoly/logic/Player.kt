@@ -19,6 +19,7 @@ class Player(val id: Int) {
     var ai = false
     var aiDifficulty: Difficulty? = null
     var justOutJail = false
+    lateinit var aiInstruction : AI
 
     init {
         moneyChange(0)
