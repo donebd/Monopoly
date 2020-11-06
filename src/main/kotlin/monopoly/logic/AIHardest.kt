@@ -113,7 +113,7 @@ class AIHardest(game: Game, player: Player) : AI(game, player) {
     }
 
     override fun negativeEvent() {
-        payNegative()
+        if (payNegative()) return
         if (player.realty.isNotEmpty()) {
             if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(false) != -1) {
                 val benefits = calculateCurrentBenefitOfFields(player, null, monopoly = true, default = false)
@@ -145,7 +145,7 @@ class AIHardest(game: Game, player: Player) : AI(game, player) {
     }
 
     override fun punisment() {
-        payPunishment()
+        if (payPunishment()) return
         if (player.realty.isNotEmpty()) {
             if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(false) != -1) {
                 val benefits = calculateCurrentBenefitOfFields(player, null, monopoly = true, default = false)
@@ -271,7 +271,7 @@ class AIHardest(game: Game, player: Player) : AI(game, player) {
             val firstField = game.board.fields[firstMovePos]
             if (firstField.type == Type.STONKS) benefit += 3000 * chanceDiceDrop[first]
             if (firstField.type == Type.TOPRISON) benefit -= 500 * chanceDiceDrop[first]
-            if ((firstField.owner != null && firstField.owner!!.id != owner.id) || firstField.type == Type.PUNISMENT) {
+            if ((firstField.owner != null && firstField.owner!!.id != owner.id) || firstField.type == Type.PUNISHMENT) {
                 benefit -= firstField.penalty * chanceDiceDrop[first]
             }
 
@@ -282,7 +282,7 @@ class AIHardest(game: Game, player: Player) : AI(game, player) {
                 val secondField = game.board.fields[secondMovePos]
                 if (secondField.type == Type.STONKS) benefit += 3000 * chanceDiceDrop[first] * chanceDiceDrop[second]
                 if (secondField.type == Type.TOPRISON) benefit -= 500 * chanceDiceDrop[first] * chanceDiceDrop[second]
-                if ((secondField.owner != null && secondField.owner!!.id != owner.id) || secondField.type == Type.PUNISMENT) {
+                if ((secondField.owner != null && secondField.owner!!.id != owner.id) || secondField.type == Type.PUNISHMENT) {
                     benefit -= secondField.penalty * chanceDiceDrop[first] * chanceDiceDrop[second]
                 }
 

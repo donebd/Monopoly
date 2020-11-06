@@ -94,7 +94,7 @@ class Event(val game : Game) {
     fun punishmentOrPenalty(player: Player) = ifPunishment(player) ||
             (board.fields[player.position].owner != null && board.fields[player.position].owner!!.id != player.id)
 
-    fun ifPunishment(player: Player) = board.fields[player.position].type == Type.PUNISMENT
+    fun ifPunishment(player: Player) = board.fields[player.position].type == Type.PUNISHMENT
 
     private fun ifToPrison() = board.fields[currentPlayer.position].type == Type.TOPRISON
 

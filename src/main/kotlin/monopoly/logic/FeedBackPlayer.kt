@@ -105,7 +105,7 @@ class FeedBackPlayer(val game: Game) {
     fun playerPayPenalty(player: Player): Boolean {
         if (player.money >= board.fields[player.position].penalty) {
             player.moneyChange(-board.fields[player.position].penalty)
-            if (board.fields[player.position].type != Type.PUNISMENT) {
+            if (board.fields[player.position].type != Type.PUNISHMENT) {
                 board.fields[player.position].owner!!.moneyChange(board.fields[player.position].penalty)
             }
             return true

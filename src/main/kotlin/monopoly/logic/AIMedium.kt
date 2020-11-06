@@ -67,7 +67,7 @@ class AIMedium(game: Game, player: Player) : AI(game, player) {
     }
 
     override fun negativeEvent() {
-        payNegative()
+        if (payNegative()) return
         if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(false) != -1) {
             val idDegradeField = sellSomeUpgrade(true)
             game.view.fieldDegradeProperty.value = idDegradeField
@@ -87,7 +87,7 @@ class AIMedium(game: Game, player: Player) : AI(game, player) {
     }
 
     override fun punisment() {
-        payPunishment()
+        if (payPunishment()) return
         if (player.monopolyRealty.isNotEmpty() && sellSomeUpgrade(false) != -1) {
             val idDegradeField = sellSomeUpgrade(true)
             game.view.fieldDegradeProperty.value = idDegradeField

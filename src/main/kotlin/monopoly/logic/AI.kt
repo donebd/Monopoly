@@ -106,42 +106,44 @@ abstract class AI(val game: Game, val player: Player) {
         return sum
     }
 
-    protected fun payNegative() {
+    protected fun payNegative() : Boolean {
         when (game.dice.secret.second) {
             SecretAction.ACTION1 -> if (player.money >= 300) {
                 answer.negativePay(player)
                 game.endMotion()
-                return//pay
+                return true
             }
             SecretAction.ACTION2 -> if (player.money >= 500) {
                 answer.negativePay(player)
                 game.endMotion()
-                return//pay
+                return true
             }
             SecretAction.ACTION3 -> if (player.money >= 40) {
                 answer.negativePay(player)
                 game.endMotion()
-                return//pay
+                return true
             }
             SecretAction.ACTION4 -> if (player.money >= 750) {
                 answer.negativePay(player)
                 game.endMotion()
-                return//pay
+                return true
             }
             else -> if (player.money >= 250) {
                 answer.negativePay(player)
                 game.endMotion()
-                return//pay
+                return true
             }
         }
+        return false
     }
 
-    protected fun payPunishment() {
+    protected fun payPunishment() : Boolean {
         if (player.money >= game.board.fields[player.position].penalty) {
             answer.playerPayPenalty(player)
             game.endMotion()
-            return
+            return true
         }
+        return false
     }
 
     protected fun sellSomeOtherTypeField(player: Player): Int {

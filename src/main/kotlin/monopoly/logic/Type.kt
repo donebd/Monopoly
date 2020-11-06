@@ -4,7 +4,7 @@ enum class Type {
     START,
     TOPRISON,
     SECRET,
-    PUNISMENT,
+    PUNISHMENT,
     FREE,
     PERFUME,
     CLOTHES,

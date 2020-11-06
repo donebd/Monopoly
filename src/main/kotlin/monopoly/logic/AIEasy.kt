@@ -67,7 +67,7 @@ class AIEasy(game: Game,  player: Player) : AI(game, player) {
     }
 
     override fun negativeEvent() {
-        payNegative()
+        if (payNegative()) return
         if (player.hasSomeNotMonopoly()) {
             val selledFieldId = sellSomeNotMonopolyField()
             answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
@@ -94,7 +94,7 @@ class AIEasy(game: Game,  player: Player) : AI(game, player) {
     }
 
     override fun punisment() {
-        payPunishment()
+        if (payPunishment()) return
         if (player.hasSomeNotMonopoly()) {
             val selledFieldId = sellSomeNotMonopolyField()
             answer.fieldSellByHalf(player, game.board.fields[selledFieldId])
